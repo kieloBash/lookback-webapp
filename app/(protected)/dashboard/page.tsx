@@ -1,13 +1,15 @@
 'use client'
-import { signOut } from 'next-auth/react'
-import React from 'react'
+import { useCurrentRole } from '@/lib/hooks'
+import { useRouter } from 'next/navigation'
 
 const DashboardPage = () => {
-    return (
-        <div>DashboardPage
-            <button onClick={() => signOut()}>log out</button>
-        </div>
-    )
+    const router = useRouter();
+    const role = useCurrentRole();
+
+    if (!role) router.push("/auth/error")
+
+    if (role === "ADMIN") router.push("/dashboard/admin")
+    else if (role === "STAFF") router.push("/dashboard/staff")
 }
 
 export default DashboardPage
