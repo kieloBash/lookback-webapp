@@ -27,7 +27,7 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                 title: "Categories",
                 url: "/categories/admin/overview",
                 icon: BandageIcon,
-                isActive: pathname.includes("/categories/admin/overview"),
+                isActive: pathname.includes("/categories/admin"),
                 items: [
                     {
                         title: "Overview",
@@ -43,7 +43,7 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                 title: "Inventory",
                 url: "/inventory/admin/overview",
                 icon: BoxIcon,
-                isActive: pathname.includes("/inventory/admin/overview"),
+                isActive: pathname.includes("/inventory/admin"),
                 items: [
                     {
                         title: "Overview",
@@ -59,7 +59,7 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                 title: "Transactions",
                 url: "/transactions/admin/overview",
                 icon: TruckIcon,
-                isActive: pathname.includes("/transactions/admin/overview"),
+                isActive: pathname.includes("/transactions/admin"),
                 items: [
                     {
                         title: "Overview",
