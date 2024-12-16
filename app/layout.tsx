@@ -15,8 +15,10 @@ const poppins = Poppins({
   weight: ["100", "200", "300", "400", "500", "600", "700", "800"]
 });
 
+const APP_NAME = process.env.APP_NAME;
+
 export const metadata: Metadata = {
-  title: "Inventory Management",
+  title: APP_NAME,
   description: "Created by Kielo Mercado",
 };
 

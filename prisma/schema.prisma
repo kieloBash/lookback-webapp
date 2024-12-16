@@ -40,13 +40,16 @@ model User {
   password      String?
   image         String?
   contactNumber String?
-  role          UserRole
+  role          UserRole? @default(STAFF)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   isOnboarded Boolean   @default(false)
   accounts    Account[]
+
+  //added
+  transactions Transaction[]
 
   @@map("users")
 }
@@ -71,3 +74,82 @@ model PasswordResetToken {
   @@map("password-reset-tokens")
 }
 
+// ACTUAL INVENTORY
+//    |
+//    |
+//    |
+//    |
+//    |
+//    |
+//   \ /
+//    V
+
+model Category {
+  id        String   @id @default(auto()) @map("_id") @db.ObjectId
+  name      String   @unique
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  items Item[]
+
+  @@map("categories")
+}
+
+model Item {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  sku         String  @unique
+  description String?
+
+  categoryId String   @db.ObjectId
+  category   Category @relation(fields: [categoryId], references: [id])
+
+  transaction TransactionItem?
+
+  quantity     Int    @default(0)
+  reorderLevel Int    @default(10)
+  price        Float  @default(0.0)
+  supplierId   String @db.ObjectId
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("items")
+}
+
+enum TransactionType {
+  SALE
+  PURCHASE
+}
+
+model Transaction {
+  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  transactionType TransactionType
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id])
+
+  items       TransactionItem[]
+  totalAmount Float             @default(0.0)
+  createdAt   DateTime          @default(now())
+  updatedAt   DateTime          @updatedAt
+
+  @@map("transactions")
+}
+
+model TransactionItem {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  transactionId String      @db.ObjectId
+  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
+  itemId        String      @unique @db.ObjectId
+  item          Item        @relation(fields: [itemId], references: [id])
+
+  quantity Int   @default(1)
+  price    Float @default(0.0)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("transaction-items")
+}
