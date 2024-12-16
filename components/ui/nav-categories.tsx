@@ -26,27 +26,23 @@ import {
     useSidebar,
 } from "@/components/ui/sidebar"
 import Link from "next/link"
+import useAdminCategories from "@/hooks/admin/use-categories"
 
 export function NavCategories() {
     const { isMobile } = useSidebar()
-    const categories = [
-        {
-            id: "",
-            name: "Supplies",
-            count: 5,
-        }
-    ]; //useCategories
+    const categories = useAdminCategories({})
+    if (categories.isLoading || categories.isFetching) return null;
 
     return (
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
             <SidebarGroupLabel>Categories</SidebarGroupLabel>
             <SidebarMenu>
-                {categories.map((item) => (
+                {categories?.payload?.map((item) => (
                     <SidebarMenuItem key={item.id}>
                         <SidebarMenuButton asChild>
                             <Link href={`/category/admin/view/${item.id}`}>
                                 <span>{item.name}</span>
-                                <span className="font-bold">{item.count}</span>
+                                {/* <span className="font-bold">{item.count}</span> */}
                             </Link>
                         </SidebarMenuButton>
                         <DropdownMenu>

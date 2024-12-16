@@ -15,10 +15,15 @@ import { FormInput } from '@/components/forms/form-input';
 import { cn } from '@/lib/utils';
 import { Form } from '@/components/ui/form';
 import LoadingIcon from '@/components/ui/loading-icon';
+import { signIn } from 'next-auth/react';
+import { useSearchParams } from 'next/navigation';
+import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 const RegisterForm = () => {
 
     const [isLoading, setIsLoading] = useState(false);
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get("callbackUrl");
 
     const form = useForm<z.infer<typeof RegisterSchema>>({
         resolver: zodResolver(RegisterSchema),
