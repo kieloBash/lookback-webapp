@@ -25,7 +25,7 @@ const InvoiceItems = ({ fields, isLoading }: IProps) => {
             <CardContent className='space-y-4'>
                 {
                     fields.map((item: any) => (
-                        <div className="flex justify-between">
+                        <div className="flex justify-between" key={item.sku}>
                             <div className="flex flex-col justify-between items-start">
                                 <h2 className="text-lg font-bold">{item.name}</h2>
                                 <h3 className="text-sm text-muted-foreground">{formatPricingNumber(item.price)} x {item.quantity.toLocaleString()}</h3>
