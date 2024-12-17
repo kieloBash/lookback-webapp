@@ -70,8 +70,8 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                         url: "/transactions/admin/invoices",
                     },
                     {
-                        title: "Create",
-                        url: "/transactions/admin/create",
+                        title: "Point of Sale",
+                        url: "/transactions/admin/pos",
                     },
                 ],
             },

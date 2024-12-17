@@ -9,6 +9,7 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import useAdminInventory from "@/hooks/admin/use-inventory";
+import { formatPricingNumber } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 
@@ -24,10 +25,10 @@ export function ItemExistingTable() {
 
     return (
         <Table className="w-full max-w-lg">
-            <TableCaption>A list of items in {filter==="all" ? "all" : ""}</TableCaption>
+            <TableCaption>A list of items in {filter === "all" ? "all" : ""}</TableCaption>
             <TableHeader>
                 <TableRow>
-                    <TableHead className="w-[140px]">SKU</TableHead>
+                    <TableHead className="w-[155px]">SKU</TableHead>
                     <TableHead className="w-[220px]">Name</TableHead>
                     <TableHead className="">Price</TableHead>
                     <TableHead className="text-right">Stocks</TableHead>
@@ -38,7 +39,7 @@ export function ItemExistingTable() {
                     <TableRow key={id}>
                         <TableCell className="font-medium">{sku}</TableCell>
                         <TableCell>{name}</TableCell>
-                        <TableCell>{price}</TableCell>
+                        <TableCell>{formatPricingNumber(price)}</TableCell>
                         <TableCell className="text-right">{quantity}</TableCell>
                     </TableRow>
                 ))}

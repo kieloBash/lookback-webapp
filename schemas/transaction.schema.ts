@@ -13,6 +13,15 @@ export const ItemSchema = z.object({
   price: z.number().min(1, { message: "Minimum is 1" }),
 });
 
+export const ItemInvoiceSchema = z.object({
+  itemId: z.string().min(1, { message: "Please provide a item id!" }),
+  sku: z.string().min(1, { message: "Please provide a sku!" }),
+  name: z.string().min(1, { message: "Please provide a name!" }),
+  category: z.string().min(1, { message: "Please provide a category!" }),
+  quantity: z.number().min(1, { message: "Minimum is 1" }),
+  price: z.number().min(1, { message: "Minimum is 1" }),
+});
+
 export const TransactionSchema = z.object({
   items: z.array(ItemSchema),
   currentItem: z.optional(ItemSchema),
@@ -22,4 +31,8 @@ export const TransactionSchema = z.object({
 export const RestockInventorySchema = z.object({
   item: ItemSchema,
   date: z.string().min(1, { message: "Please provide a date!" }),
+});
+
+export const InvoiceSchema = z.object({
+  items: z.array(ItemInvoiceSchema),
 });

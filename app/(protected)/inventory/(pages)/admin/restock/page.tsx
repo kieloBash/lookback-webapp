@@ -82,6 +82,7 @@ const AdminRestockInventory = () => {
     function handleSuccess() {
         queryClient.invalidateQueries({ queryKey: [INVENTORY_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
         form.reset();
+        form.setValue("item.sku", generateRandomSKU())
         // router.push("/categories/admin/overview")
     }
 

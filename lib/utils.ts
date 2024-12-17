@@ -13,6 +13,13 @@ export const FORMAT = "yyyy-MM-dd";
 
 export const APP_NAME = "Inventory Management";
 
+export const formatPricingNumber = (val: number) => {
+  return new Intl.NumberFormat("en-US", {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2,
+  }).format(val);
+};
+
 export const generateRandomSKU = () => {
   const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
   const timestampPart = Date.now().toString().slice(-4); // Last 4 digits of the current timestamp

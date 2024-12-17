@@ -3,8 +3,8 @@ import { ILayoutProps } from '@/types/global'
 import { Metadata } from 'next';
 import React from 'react'
 
-const TITLE = 'Create Transaction';
-const DESCRIPTION = 'Create a new transaction to have in your system';
+const TITLE = 'Point of Sales';
+const DESCRIPTION = 'Built in Point of Sales system.';
 const LIST = [
     {
         type: "link",
@@ -14,7 +14,7 @@ const LIST = [
     {
         type: "page",
         href: "",
-        label: "Create"
+        label: "Point of Sales"
     },
 
 ]
