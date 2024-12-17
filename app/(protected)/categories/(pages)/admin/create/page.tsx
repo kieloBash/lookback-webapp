@@ -14,6 +14,8 @@ import FormTextArea from '@/components/forms/form-textarea';
 import { Button } from '@/components/ui/button';
 import { CATEGORIES_ROUTES } from '@/routes/categories.routes';
 import SubmitButton from '@/components/forms/submit-button';
+import FormSelect from '@/components/forms/form-select';
+import { CATEGORY_ICONS } from '@/constants/category-icons';
 
 
 const AdminCreateCategories = () => {
@@ -25,7 +27,8 @@ const AdminCreateCategories = () => {
     const form = useForm<z.infer<typeof CategorySchema>>({
         resolver: zodResolver(CategorySchema),
         defaultValues: {
-            name: ""
+            name: "",
+            icon: ""
         },
     });
 
@@ -52,6 +55,14 @@ const AdminCreateCategories = () => {
                         label="Category Name"
                         placeholder='Enter the name of the category'
                         disabled={isLoading}
+                    />
+                    <FormSelect
+                        control={form.control}
+                        name="icon"
+                        label="Category Icon"
+                        array={CATEGORY_ICONS.map((d) => { return { id: d, label: d } })}
+                        disabled={isLoading}
+                        value={form.watch("icon")}
                     />
                     <FormTextArea
                         control={form.control}

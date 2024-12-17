@@ -27,11 +27,11 @@ import {
 } from "@/components/ui/sidebar"
 import Link from "next/link"
 import useAdminCategories from "@/hooks/admin/use-categories"
+import UiCategoriesIcon from "./ui-categories-icon"
 
 export function NavCategories() {
     const { isMobile } = useSidebar()
     const categories = useAdminCategories({})
-    if (categories.isLoading || categories.isFetching) return null;
 
     return (
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -41,6 +41,7 @@ export function NavCategories() {
                     <SidebarMenuItem key={item.id}>
                         <SidebarMenuButton asChild>
                             <Link href={`/category/admin/view/${item.id}`}>
+                                <span><UiCategoriesIcon icon={item.icon} className="size-4" /></span>
                                 <span>{item.name}</span>
                                 {/* <span className="font-bold">{item.count}</span> */}
                             </Link>

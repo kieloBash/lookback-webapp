@@ -50,8 +50,8 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                         url: "/inventory/admin/overview",
                     },
                     {
-                        title: "Tracker",
-                        url: "/inventory/admin/tracker",
+                        title: "Restock",
+                        url: "/inventory/admin/restock",
                     },
                 ],
             },
@@ -67,7 +67,11 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                     },
                     {
                         title: "Invoices",
-                        url: "/transactions/admin/tracker",
+                        url: "/transactions/admin/invoices",
+                    },
+                    {
+                        title: "Create",
+                        url: "/transactions/admin/create",
                     },
                 ],
             },

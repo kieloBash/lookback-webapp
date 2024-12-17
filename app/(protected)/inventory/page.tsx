@@ -2,13 +2,14 @@
 import { useCurrentRole } from '@/lib/hooks'
 import { useRouter } from 'next/navigation'
 
-const CategoriesPage = () => {
+const InventoryPage = () => {
     const router = useRouter();
     const role = useCurrentRole();
 
     if (!role) router.push("/auth/error")
 
-    if (role === "ADMIN") router.push("/categories/admin")
+    if (role === "ADMIN") router.push("/inventory/admin")
+    if (role === "STAFF") router.push("/inventory/staff")
 }
 
-export default CategoriesPage
+export default InventoryPage

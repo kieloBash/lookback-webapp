@@ -31,7 +31,7 @@ export const FormInput = ({
   control,
   name,
   label,
-  placeholder,
+  placeholder = "Enter...",
   type = "text",
   description,
   disabled = false,

@@ -13,6 +13,12 @@ export const FORMAT = "yyyy-MM-dd";
 
 export const APP_NAME = "Inventory Management";
 
+export const generateRandomSKU = () => {
+  const randomPart = Math.random().toString(36).substring(2, 8).toUpperCase(); // Random alphanumeric string
+  const timestampPart = Date.now().toString().slice(-4); // Last 4 digits of the current timestamp
+  return `SKU-${randomPart}-${timestampPart}`; // Combine for a unique SKU
+};
+
 export async function handlePostAxios({
   values,
   route,
