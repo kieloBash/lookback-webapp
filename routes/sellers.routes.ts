@@ -10,14 +10,16 @@ export const SELLERS_ROUTES = {
       KEY: "",
     },
     CREATE: {
-      ITEM: {
-        URL: "",
+      USER: {
+        URL: MAIN_API + "/admin/create/user",
         KEY: "",
       },
     },
     DELETE: {
-      URL: "",
-      KEY: "",
+      USER: {
+        URL: MAIN_API + "/admin/delete/user",
+        KEY: "",
+      },
     },
     UPDATE: {
       URL: "",

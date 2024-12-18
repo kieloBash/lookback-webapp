@@ -22,7 +22,18 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get("limit") || "5", 10);
     const searchTerm = searchParams.get("searchTerm") || "";
 
-    const whereClause: any = {};
+    const whereClause: any = {
+      ...(searchTerm !== "" && {
+        OR: [
+          {
+            name: { contains: searchTerm, mode: "insensitive" },
+          },
+          {
+            email: { contains: searchTerm, mode: "insensitive" },
+          },
+        ],
+      }),
+    };
 
     const response: ApiResponse = {
       payload: [],
