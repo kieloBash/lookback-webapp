@@ -32,8 +32,6 @@ export async function GET(request: Request) {
       });
     }
 
-    console.log(searchTerm);
-
     const whereClause: any = {
       transactionType: "SALE", // Match transactions of type SALE
       createdAt: {

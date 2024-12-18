@@ -25,6 +25,13 @@ export async function GET(request: Request) {
 
     const whereClause: any = {
       ...(filter !== "all" && { categoryId: filter }),
+      ...(searchTerm !== "" && {
+        OR: [
+          {
+            name: { contains: searchTerm, mode: "insensitive" },
+          },
+        ],
+      }),
     };
 
     const response: ApiResponse = {

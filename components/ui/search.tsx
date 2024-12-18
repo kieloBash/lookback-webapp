@@ -21,7 +21,7 @@ const UiSearch = ({ placeholder = "Search...", className, handleResetPage }: IPr
     const debouncedSearchTerm = useDebounce(searchTerm, 300);
 
     const CLASSNAME = cn(
-        "flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50",
+        "flex items-center border bg-background rounded-md px-3 w-full",
         className,
     );
 
@@ -34,14 +34,14 @@ const UiSearch = ({ placeholder = "Search...", className, handleResetPage }: IPr
     }, [debouncedSearchTerm]);
 
     return (
-        <div className="flex items-center border bg-background rounded-md px-3 w-full">
+        <div className={CLASSNAME}>
             <Search className="mr-2 size-4 shrink-0 opacity-50" />
             <input
                 type="text"
                 placeholder={placeholder}
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className={CLASSNAME}
+                className={"flex h-10 w-full rounded-md bg-transparent py-3 text-sm outline-none placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:opacity-50"}
             />
             {searchTerm && <button type='button' className='size-4 shrink-0 opacity-50' onClick={() => { handleResetPage(); setSearchTerm("") }}><XIcon className="size-full" /></button>}
         </div>
