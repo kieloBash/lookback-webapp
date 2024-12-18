@@ -16,6 +16,7 @@ const RevenueCard = () => {
     const endDate = searchParams.get("endDate") ? new Date((searchParams.get("endDate") as any)) : endOfMonth(new Date());
 
     const revenue = useRevenue({ startDate, endDate });
+    console.log(revenue)
 
     if (revenue.isLoading) return <LoadingTemplate />
 
