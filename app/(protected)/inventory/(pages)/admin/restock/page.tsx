@@ -2,7 +2,7 @@
 import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/navigation';
 
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { z } from "zod";
@@ -20,6 +20,7 @@ import { ItemExistingTable } from './_components/item-existing-table';
 import { INVENTORY_ROUTES } from '@/routes/inventory.routes';
 
 import { usePathname, useSearchParams } from 'next/navigation';
+import useAdminInventory from '@/hooks/admin/use-inventory';
 
 const AdminRestockInventory = () => {
     const router = useRouter();
@@ -28,7 +29,11 @@ const AdminRestockInventory = () => {
     const queryClient = useQueryClient()
 
     const [isLoading, setIsLoading] = useState(false)
+    const [selectedINV, setSelectedINV] = useState("");
+
     const filter = searchParams.get("filter") || "all";
+    const categories = useAdminCategoriesList();
+    const inventory = useAdminInventory({ filter })
 
     const handleActiveCategoryChange = (newVal: { id: string; label: string }) => {
         if (newVal.id === filter) {
@@ -38,8 +43,6 @@ const AdminRestockInventory = () => {
             handleChangeCategory(newVal.id)
         }
     }
-
-    const categories = useAdminCategoriesList();
 
     const form = useForm<z.infer<typeof RestockInventorySchema>>({
         resolver: zodResolver(RestockInventorySchema),
@@ -70,6 +73,25 @@ const AdminRestockInventory = () => {
             form.setValue("item.category", filter)
         }
     }, [filter])
+
+    const activeItem = useMemo(() => {
+        return inventory.payload?.find((d) => d.id === selectedINV)
+    }, [selectedINV, inventory])
+
+    useEffect(() => {
+        if (activeItem) {
+            form.setValue("item.name", activeItem.name);
+            form.setValue("item.category", activeItem.categoryId);
+            form.setValue("item.sku", activeItem.sku);
+            form.setValue("item.quantity", activeItem.quantity);
+            form.setValue("item.price", activeItem.price);
+            form.setValue("item.reorderLevel", activeItem.reorderLevel);
+        } else {
+            form.reset();
+            form.setValue("item.sku", generateRandomSKU())
+        }
+    }, [activeItem])
+
 
 
     const handleChangeCategory = (newVal: string) => {
@@ -103,7 +125,7 @@ const AdminRestockInventory = () => {
                     <ItemCategoriesSelection
                         handleActiveCategoryChange={handleActiveCategoryChange} />
                     <div className="flex w-full gap-2 justify-between items-start">
-                        <ItemExistingTable />
+                        <ItemExistingTable selected={selectedINV} onChange={(e) => setSelectedINV(e)} />
                         <div className="w-full space-y-6">
                             <FormInput
                                 label='SKU of Item'

@@ -9,13 +9,15 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import useAdminInventory from "@/hooks/admin/use-inventory";
-import { formatPricingNumber } from "@/lib/utils";
+import { cn, formatPricingNumber } from "@/lib/utils";
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+interface IProps {
+    selected: string;
+    onChange: (val: string) => void;
+}
 
-
-export function ItemExistingTable() {
-
+export function ItemExistingTable({ selected, onChange }: IProps) {
     const searchParams = useSearchParams();
 
     const page = parseInt(searchParams.get("page") ?? "1", 10);
@@ -35,14 +37,23 @@ export function ItemExistingTable() {
                 </TableRow>
             </TableHeader>
             <TableBody>
-                {inventory?.payload?.map(({ id, sku, name, quantity, price }) => (
-                    <TableRow key={id}>
-                        <TableCell className="font-medium">{sku}</TableCell>
-                        <TableCell>{name}</TableCell>
-                        <TableCell>{formatPricingNumber(price)}</TableCell>
-                        <TableCell className="text-right">{quantity}</TableCell>
-                    </TableRow>
-                ))}
+                {inventory?.payload?.map(({ id, sku, name, quantity, price }) => {
+                    const activeClassName = cn("", selected === id ? "bg-primary/30 hover:bg-primary/30" : "hover:bg-muted")
+                    return (
+                        <TableRow className={activeClassName} key={id} onClick={() => {
+                            if (selected === id) {
+                                onChange("")
+                            } else {
+                                onChange(id)
+                            }
+                        }}>
+                            <TableCell className="font-medium">{sku}</TableCell>
+                            <TableCell>{name}</TableCell>
+                            <TableCell>{formatPricingNumber(price)}</TableCell>
+                            <TableCell className="text-right">{quantity}</TableCell>
+                        </TableRow>
+                    )
+                })}
             </TableBody>
             <TableFooter>
                 <TableRow>

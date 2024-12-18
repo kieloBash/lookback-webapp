@@ -26,26 +26,38 @@ export async function POST(request: Request) {
 
     const fields = validatedFields.data;
 
-    const existingSKU = await db.item.findFirst({
+    const existing = await db.item.findFirst({
       where: { sku: fields.item.sku },
+      select: { id: true },
     });
 
-    if (existingSKU)
-      return new NextResponse(ROUTE_NAME + ": Invalid SKU", { status: 400 });
+    if (existing) {
+      await db.item.update({
+        where: { id: existing.id },
+        data: {
+          name: fields.item.name,
+          categoryId: fields.item.category,
 
-    await db.item.create({
-      data: {
-        name: fields.item.name,
-        sku: fields.item.sku,
-        categoryId: fields.item.category,
+          quantity: fields.item.quantity,
+          reorderLevel: fields.item.reorderLevel,
+          price: fields.item.price,
+        },
+      });
+    } else {
+      await db.item.create({
+        data: {
+          name: fields.item.name,
+          sku: fields.item.sku,
+          categoryId: fields.item.category,
 
-        quantity: fields.item.quantity,
-        reorderLevel: fields.item.reorderLevel,
-        price: fields.item.price,
+          quantity: fields.item.quantity,
+          reorderLevel: fields.item.reorderLevel,
+          price: fields.item.price,
 
-        createdAt: new Date(fields.date),
-      },
-    });
+          createdAt: new Date(fields.date),
+        },
+      });
+    }
 
     return new NextResponse(SUCCESS_MESSAGE, { status: ROUTE_STATUS });
   } catch (error: any) {
