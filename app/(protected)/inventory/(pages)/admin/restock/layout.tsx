@@ -7,8 +7,8 @@ const TITLE = 'Restock Inventory';
 const DESCRIPTION = 'Restock items in your inventory.';
 const LIST = [
     {
-        type: "link",
-        href: "/inventory/admin/overview",
+        type: "page",
+        href: "",
         label: "Inventory"
     },
     {

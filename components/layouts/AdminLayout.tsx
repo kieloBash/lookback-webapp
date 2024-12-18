@@ -41,14 +41,14 @@ const AdminLayout = ({ children }: ILayoutProps) => {
             },
             {
                 title: "Inventory",
-                url: "/inventory/admin/overview",
+                url: "/inventory/admin/restock",
                 icon: BoxIcon,
                 isActive: pathname.includes("/inventory/admin"),
                 items: [
-                    {
-                        title: "Overview",
-                        url: "/inventory/admin/overview",
-                    },
+                    // {
+                    //     title: "Overview",
+                    //     url: "/inventory/admin/overview",
+                    // },
                     {
                         title: "Restock",
                         url: "/inventory/admin/restock",

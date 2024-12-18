@@ -1,4 +1,5 @@
 import UiDataLoader from "@/components/ui/data-loader";
+import UiReorderStocks from "@/components/ui/display-reorder";
 import UiSearch from "@/components/ui/search";
 import {
     Table,
@@ -49,7 +50,7 @@ export function ItemExistingTable({ selected, onChange }: IProps) {
                     </TableRow>
                 </TableHeader>
                 <TableBody className="w-full">
-                    {inventory?.payload?.map(({ id, sku, name, quantity, price }) => {
+                    {inventory?.payload?.map(({ id, sku, name, quantity, price, reorderLevel }) => {
                         const activeClassName = cn("w-full", selected === id ? "bg-primary/30 hover:bg-primary/30" : "hover:bg-muted")
                         return (
                             <TableRow className={activeClassName} key={id} onClick={() => {
@@ -62,7 +63,7 @@ export function ItemExistingTable({ selected, onChange }: IProps) {
                                 <TableCell className="font-medium">{sku}</TableCell>
                                 <TableCell>{name}</TableCell>
                                 <TableCell>{formatPricingNumber(price)}</TableCell>
-                                <TableCell className="text-right">{quantity}</TableCell>
+                                <TableCell className="text-right"><UiReorderStocks restock={reorderLevel} stock={quantity} /></TableCell>
                             </TableRow>
                         )
                     })}
