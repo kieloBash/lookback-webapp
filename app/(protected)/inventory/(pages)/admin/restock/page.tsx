@@ -31,9 +31,12 @@ const AdminRestockInventory = () => {
     const [isLoading, setIsLoading] = useState(false)
     const [selectedINV, setSelectedINV] = useState("");
 
+    const page = parseInt(searchParams.get("page") ?? "1", 10);
     const filter = searchParams.get("filter") || "all";
+    const search = searchParams.get("search") || "";
+
     const categories = useAdminCategoriesList();
-    const inventory = useAdminInventory({ filter })
+    const inventory = useAdminInventory({ filter, page, limit: 10, searchTerm: search })
 
     const handleActiveCategoryChange = (newVal: { id: string; label: string }) => {
         if (newVal.id === filter) {

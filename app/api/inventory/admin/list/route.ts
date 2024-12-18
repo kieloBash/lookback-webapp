@@ -30,6 +30,9 @@ export async function GET(request: Request) {
           {
             name: { contains: searchTerm, mode: "insensitive" },
           },
+          {
+            sku: { contains: searchTerm, mode: "insensitive" },
+          },
         ],
       }),
     };

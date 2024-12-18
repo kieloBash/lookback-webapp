@@ -28,7 +28,8 @@ const UiSearch = ({ placeholder = "Search...", className, handleResetPage }: IPr
     useEffect(() => {
         const currentParams = new URLSearchParams(Array.from(searchParams.entries()));
         currentParams.set("search", debouncedSearchTerm);
-        handleResetPage()
+        currentParams.set("page", "1");
+        handleResetPage();
 
         router.push(`${pathname}?${currentParams.toString()}`);
     }, [debouncedSearchTerm]);
