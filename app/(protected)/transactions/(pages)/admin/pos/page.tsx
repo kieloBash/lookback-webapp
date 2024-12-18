@@ -1,5 +1,5 @@
 'use client'
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import ItemCategoriesSelection from './_components/item-categories'
 import { Separator } from '@/components/ui/separator'
 import ItemMenu from './_components/menu'
@@ -15,19 +15,30 @@ import InvoiceItems from './_components/invoice'
 import { INVOICE_ROUTES } from '@/routes/invoice.routes'
 import { useRouter } from 'next/navigation'
 import { INVENTORY_ROUTES } from '@/routes/inventory.routes'
+import { useCurrentUser } from '@/lib/hooks'
 
 
 const AdminPOSTransactions = () => {
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter();
     const queryClient = useQueryClient()
+    const user = useCurrentUser();
 
     const form = useForm<z.infer<typeof InvoiceSchema>>({
         resolver: zodResolver(InvoiceSchema),
         defaultValues: {
-            items: []
+            items: [],
+            date: new Date().toISOString().split('T')[0],
+            seller: user?.id ?? ""
         },
     });
+
+    useEffect(() => {
+        if (user && user.id) {
+            form.setValue("seller", user.id)
+        }
+    }, [user])
+
 
     const fieldForm = useFieldArray({
         control: form.control,
@@ -59,7 +70,7 @@ const AdminPOSTransactions = () => {
                         />
                     </div>
                     <div className="w-full max-w-md">
-                        <InvoiceItems isLoading={isLoading} fields={fieldForm.fields} />
+                        <InvoiceItems isLoading={isLoading} fields={fieldForm.fields} form={form} />
                     </div>
                 </form>
             </Form>

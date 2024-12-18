@@ -1,19 +1,19 @@
 "use client";
 
 import { FETCH_INTERVAL } from "@/lib/utils";
-import { CATEGORIES_ROUTES } from "@/routes/categories.routes";
-import { Category } from "@prisma/client";
+import { SELLERS_ROUTES } from "@/routes/sellers.routes";
+import { User } from "@prisma/client";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
-const ROUTE = CATEGORIES_ROUTES.ADMIN.FETCH_ALL.URL;
-const KEY = CATEGORIES_ROUTES.ADMIN.FETCH_ALL.KEY;
+const ROUTE = SELLERS_ROUTES.ADMIN.FETCH_ALL.URL;
+const KEY = SELLERS_ROUTES.ADMIN.FETCH_ALL.KEY;
 const INTERVAL = FETCH_INTERVAL
 
 const default_limit = 10;
 const default_filter = "all";
 
 export type ApiResponse = {
-    payload: Category[];
+    payload: User[];
 };
 
 export type FetchParams = {
@@ -46,7 +46,7 @@ interface IProps {
     select?: any
 }
 
-const useAdminCategories = (
+const useAdminSellers = (
     { page = 1, limit = default_limit, filter = default_filter, searchTerm = "", select }: IProps
 ) => {
 
@@ -69,10 +69,11 @@ const useAdminCategories = (
     };
 };
 
-export default useAdminCategories;
+export default useAdminSellers;
 
-export const useAdminCategoriesList = ({ limit = default_limit }: { limit?: number } = {}) => {
-    const res = useAdminCategories({ limit, select: (data: ApiResponse) => { return data } })
+
+export const useAdminSellersList = ({ limit = default_limit }: { limit?: number } = {}) => {
+    const res = useAdminSellers({ limit, select: (data: ApiResponse) => { return data } })
 
     return {
         payload: res.payload?.map(({ id, name }) => {

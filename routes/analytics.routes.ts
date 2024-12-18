@@ -1,0 +1,20 @@
+import { INVOICE_ROUTES } from "./invoice.routes";
+
+const MAIN_API = "/api/analytics";
+export const ANALYTICS_ROUTES = {
+  REVENUE: {
+    URL: MAIN_API + "/revenue",
+    KEY: "REVENUE:ANALYTICS",
+    SUBKEY: INVOICE_ROUTES.ADMIN.FETCH_ALL.KEY,
+  },
+  CATEGORY_SALES: {
+    URL: MAIN_API + "/category-sales",
+    KEY: "CATEGORY_SALES:ANALYTICS",
+    SUBKEY: INVOICE_ROUTES.ADMIN.FETCH_ALL.KEY,
+  },
+  SELLER_SALES: {
+    URL: MAIN_API + "/seller-sales",
+    KEY: "SELLER_SALES:ANALYTICS",
+    SUBKEY: INVOICE_ROUTES.ADMIN.FETCH_ALL.KEY,
+  },
+};

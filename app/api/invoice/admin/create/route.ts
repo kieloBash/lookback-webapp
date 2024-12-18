@@ -24,7 +24,7 @@ export async function POST(request: Request) {
       return new NextResponse(ROUTE_NAME + ": Invalid fields", { status: 400 });
     }
 
-    const { items } = validatedFields.data;
+    const { items, date, seller } = validatedFields.data;
     const totalAmount = items.reduce(
       (acc, item) => acc + item.price * item.quantity,
       0
@@ -33,9 +33,10 @@ export async function POST(request: Request) {
     const transaction = await db.transaction.create({
       data: {
         sku: generateRandomINV(),
-        userId: user.id,
+        userId: seller,
         transactionType: "SALE", // Adjust based on your schema's enum values
         totalAmount,
+        createdAt: new Date(date),
       },
     });
 

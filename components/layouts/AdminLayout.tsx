@@ -2,7 +2,7 @@
 import { ILayoutProps } from '@/types/global'
 import React, { useMemo } from 'react'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '../ui/sidebar'
-import { BandageIcon, BoxIcon, Command, LayoutGridIcon, TruckIcon } from 'lucide-react'
+import { BandageIcon, BoxIcon, Command, LayoutGridIcon, TruckIcon, User2Icon } from 'lucide-react'
 import { APP_NAME } from '@/lib/utils'
 import { useCurrentUser } from '@/lib/hooks'
 import { NavUser } from '../ui/nav-user'
@@ -72,6 +72,22 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                     {
                         title: "Point of Sale",
                         url: "/transactions/admin/pos",
+                    },
+                ],
+            },
+            {
+                title: "Users",
+                url: "/users/admin/overview",
+                icon: User2Icon,
+                isActive: pathname.includes("/users/admin"),
+                items: [
+                    {
+                        title: "Overview",
+                        url: "/users/admin/overview",
+                    },
+                    {
+                        title: "Create",
+                        url: "/users/admin/create",
                     },
                 ],
             },

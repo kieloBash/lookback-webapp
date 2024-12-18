@@ -1,19 +1,21 @@
 "use client";
 
-import { FETCH_INTERVAL } from "@/lib/utils";
-import { CATEGORIES_ROUTES } from "@/routes/categories.routes";
-import { Category } from "@prisma/client";
+import { FETCH_INTERVAL, FORMAT } from "@/lib/utils";
+import { ANALYTICS_ROUTES } from "@/routes/analytics.routes";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { format } from "date-fns";
 
-const ROUTE = CATEGORIES_ROUTES.ADMIN.FETCH_ALL.URL;
-const KEY = CATEGORIES_ROUTES.ADMIN.FETCH_ALL.KEY;
+const ROUTE = ANALYTICS_ROUTES.SELLER_SALES.URL;
+const KEY = ANALYTICS_ROUTES.SELLER_SALES.KEY;
+const SUB_KEY = ANALYTICS_ROUTES.SELLER_SALES.SUBKEY;
+
 const INTERVAL = FETCH_INTERVAL
 
 const default_limit = 10;
 const default_filter = "all";
 
 export type ApiResponse = {
-    payload: Category[];
+    salesBySeller: { fill: string, sales: number, seller: { id: string, name: string, image: string | null } }[]
 };
 
 export type FetchParams = {
@@ -21,6 +23,8 @@ export type FetchParams = {
     limit?: number;
     filter?: string;
     searchTerm?: string;
+    startDate: string,
+    endDate: string,
 };
 
 const fetchData = async ({
@@ -28,9 +32,11 @@ const fetchData = async ({
     limit = default_limit,
     filter = default_filter,
     searchTerm = "",
+    startDate,
+    endDate
 }: FetchParams): Promise<ApiResponse> => {
     const response = await fetch(
-        `${ROUTE}?page=${page}&limit=${limit}&filter=${filter}&searchTerm=${searchTerm}`
+        `${ROUTE}?page=${page}&limit=${limit}&filter=${filter}&searchTerm=${searchTerm}&startDate=${startDate}&endDate=${endDate}`
     );
     if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -44,16 +50,21 @@ interface IProps {
     filter?: string,
     searchTerm?: string,
     select?: any
+    startDate: Date,
+    endDate: Date,
 }
 
-const useAdminCategories = (
-    { page = 1, limit = default_limit, filter = default_filter, searchTerm = "", select }: IProps
+const useSellerSales = (
+    { page = 1, limit = default_limit, filter = default_filter, searchTerm = "", select, startDate, endDate }: IProps
 ) => {
 
+    const formatStart = format(startDate, FORMAT);
+    const formatEnd = format(endDate, FORMAT);
+
     const { data, error, isLoading, isFetching, isError } = useQuery<ApiResponse>({
-        queryKey: [KEY, page, limit, filter, searchTerm],
+        queryKey: [SUB_KEY, KEY, page, limit, filter, searchTerm, formatStart, formatEnd],
         queryFn: () =>
-            fetchData({ page, limit, filter, searchTerm }),
+            fetchData({ page, limit, filter, searchTerm, startDate: formatStart, endDate: formatEnd }),
         staleTime: INTERVAL,
         refetchOnWindowFocus: false,
         placeholderData: keepPreviousData,
@@ -69,16 +80,4 @@ const useAdminCategories = (
     };
 };
 
-export default useAdminCategories;
-
-export const useAdminCategoriesList = ({ limit = default_limit }: { limit?: number } = {}) => {
-    const res = useAdminCategories({ limit, select: (data: ApiResponse) => { return data } })
-
-    return {
-        payload: res.payload?.map(({ id, name }) => {
-            return { id, label: name }
-        }) ?? [],
-        isLoading: res.isLoading,
-        isFetching: res.isFetching
-    }
-}
+export default useSellerSales;

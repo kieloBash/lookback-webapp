@@ -35,4 +35,6 @@ export const RestockInventorySchema = z.object({
 
 export const InvoiceSchema = z.object({
   items: z.array(ItemInvoiceSchema),
+  seller: z.string(),
+  date: z.string().min(1, { message: "Please provide a date!" }),
 });

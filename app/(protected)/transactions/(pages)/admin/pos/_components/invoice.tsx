@@ -1,13 +1,17 @@
+"use client"
+import { FormInput } from '@/components/forms/form-input';
+import FormSelect from '@/components/forms/form-select';
 import SubmitButton from '@/components/forms/submit-button';
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from '@/components/ui/card'
 import { Label } from '@/components/ui/label';
 import { Separator } from '@/components/ui/separator';
+import { useAdminSellersList } from '@/hooks/admin/use-sellers';
 import { formatPricingNumber } from '@/lib/utils';
 import React, { useMemo } from 'react'
 
-interface IProps { fields: any[]; isLoading: boolean }
+interface IProps { fields: any[]; isLoading: boolean; form: any }
 
-const InvoiceItems = ({ fields, isLoading }: IProps) => {
+const InvoiceItems = ({ fields, isLoading, form }: IProps) => {
 
     const sub_total = useMemo(() => {
         return fields.reduce((acc, i) => acc + (i.quantity * i.price), 0)
@@ -17,10 +21,27 @@ const InvoiceItems = ({ fields, isLoading }: IProps) => {
         return sub_total * 0.05
     }, [sub_total])
 
+    const sellers = useAdminSellersList();
+
     return (
-        <Card className='overflow-hidden'>
-            <CardHeader>
-                <CardTitle>Invoice</CardTitle>
+        <Card className='overflow-hidden relative'>
+            <div className="absolute top-2 right-4 flex justify-center items-center gap-2">
+                <FormInput
+                    type='date'
+                    name='date'
+                    control={form.control}
+                />
+                <FormSelect
+                    name='seller'
+                    value={form.watch("seller")}
+                    array={sellers.payload}
+                    control={form.control}
+                />
+            </div>
+            <CardHeader className=''>
+                <CardTitle>
+                    <span>Invoice</span>
+                </CardTitle>
             </CardHeader>
             <CardContent className='space-y-4'>
                 {
