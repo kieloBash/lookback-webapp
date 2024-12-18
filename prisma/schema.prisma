@@ -107,7 +107,7 @@ model Item {
   categoryId String   @db.ObjectId
   category   Category @relation(fields: [categoryId], references: [id])
 
-  transaction TransactionItem?
+  transaction TransactionItem[]
 
   quantity     Int   @default(0)
   reorderLevel Int   @default(10)
@@ -125,7 +125,9 @@ enum TransactionType {
 }
 
 model Transaction {
-  id              String          @id @default(auto()) @map("_id") @db.ObjectId
+  id  String @id @default(auto()) @map("_id") @db.ObjectId
+  sku String @unique
+
   transactionType TransactionType
 
   userId String @db.ObjectId
@@ -144,7 +146,7 @@ model TransactionItem {
 
   transactionId String      @db.ObjectId
   transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
-  itemId        String      @unique @db.ObjectId
+  itemId        String      @db.ObjectId
   item          Item        @relation(fields: [itemId], references: [id])
 
   quantity Int   @default(1)

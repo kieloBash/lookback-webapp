@@ -1,5 +1,6 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { generateRandomINV } from "@/lib/utils";
 import { InvoiceSchema } from "@/schemas/transaction.schema";
 import { UserRole } from "@prisma/client";
 import { NextResponse } from "next/server";
@@ -31,6 +32,7 @@ export async function POST(request: Request) {
 
     const transaction = await db.transaction.create({
       data: {
+        sku: generateRandomINV(),
         userId: user.id,
         transactionType: "SALE", // Adjust based on your schema's enum values
         totalAmount,
@@ -44,9 +46,23 @@ export async function POST(request: Request) {
       price: item.price,
     }));
 
-    await db.transactionItem.createMany({
-      data: transactionItems,
-    });
+    const [] = await Promise.all([
+      db.transactionItem.createMany({
+        data: transactionItems,
+      }),
+      items.map(async (item) => {
+        await db.item.update({
+          where: {
+            id: item.itemId,
+          },
+          data: {
+            quantity: {
+              decrement: item.quantity, // Decrement the item's quantity
+            },
+          },
+        });
+      }),
+    ]);
 
     return new NextResponse(SUCCESS_MESSAGE, { status: ROUTE_STATUS });
   } catch (error: any) {

@@ -33,12 +33,14 @@ const ItemMenu = ({ form, fieldForm: { fields, append, remove, update } }: IProp
         const existingIndex = fields.findIndex((d: any) => d.sku === item.sku);
 
         if (existingIndex !== -1) {
-            // If the item exists, increment its quantity using the `update` method
-            const updatedItem = {
-                ...fields[existingIndex],
-                quantity: (fields[existingIndex] as any).quantity + 1,
-            };
-            update(existingIndex, updatedItem);
+            if ((fields[existingIndex] as any).quantity + 1 <= item.quantity) {
+                // If the item exists, increment its quantity using the `update` method
+                const updatedItem = {
+                    ...fields[existingIndex],
+                    quantity: (fields[existingIndex] as any).quantity + 1,
+                };
+                update(existingIndex, updatedItem);
+            }
         } else {
             append({
                 itemId: item.id,
@@ -59,11 +61,13 @@ const ItemMenu = ({ form, fieldForm: { fields, append, remove, update } }: IProp
             const checker = (fields[existingIndex] as any).quantity > 1
 
             if (checker) {
-                const updatedItem = {
-                    ...fields[existingIndex],
-                    quantity: (fields[existingIndex] as any).quantity - 1,
-                };
-                update(existingIndex, updatedItem);
+                if ((fields[existingIndex] as any).quantity - 1 >= 0) {
+                    const updatedItem = {
+                        ...fields[existingIndex],
+                        quantity: (fields[existingIndex] as any).quantity - 1,
+                    };
+                    update(existingIndex, updatedItem);
+                }
             } else {
                 remove(existingIndex)
             }

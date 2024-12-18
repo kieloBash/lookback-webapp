@@ -14,6 +14,7 @@ import { handlePostAxios } from '@/lib/utils'
 import InvoiceItems from './_components/invoice'
 import { INVOICE_ROUTES } from '@/routes/invoice.routes'
 import { useRouter } from 'next/navigation'
+import { INVENTORY_ROUTES } from '@/routes/inventory.routes'
 
 
 const AdminPOSTransactions = () => {
@@ -35,6 +36,7 @@ const AdminPOSTransactions = () => {
 
     function handleSuccess() {
         queryClient.invalidateQueries({ queryKey: [INVOICE_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
+        queryClient.invalidateQueries({ queryKey: [INVENTORY_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
         form.reset();
         // router.push("/transactions/admin/overview")
     }

@@ -3,8 +3,8 @@ import { ILayoutProps } from '@/types/global'
 import { Metadata } from 'next';
 import React from 'react'
 
-const TITLE = 'Transactions';
-const DESCRIPTION = 'View and manage your transactions';
+const TITLE = 'Invoices';
+const DESCRIPTION = 'View and manage your invoices';
 const LIST = [
     {
         type: "link",

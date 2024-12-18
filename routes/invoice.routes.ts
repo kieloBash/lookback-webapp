@@ -14,7 +14,7 @@ export const INVOICE_ROUTES = {
       KEY: "",
     },
     DELETE: {
-      URL: "",
+      URL: MAIN_API + "/admin/delete",
       KEY: "",
     },
     UPDATE: {
