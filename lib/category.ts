@@ -6,7 +6,7 @@ export const getCategoryById = async (id: string) => {
   try {
     return await db.category.findUnique({
       where: { id },
-      select: { id: true, name: true },
+      select: { id: true, name: true, description: true },
     });
   } catch (error) {
     console.log(error);

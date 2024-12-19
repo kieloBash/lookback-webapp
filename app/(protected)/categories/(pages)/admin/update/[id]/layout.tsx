@@ -8,8 +8,8 @@ const APP_NAME = process.env.APP_NAME;
 
 export async function generateMetadata({ params }: { params: { id: string } }): Promise<Metadata> {
     const data = await getCategoryById(params.id);
-    const TITLE = data?.name ? `Category: ${data.name}` : "Category"
-    const DESCRIPTION = 'View and update specific category';
+    const TITLE = data?.name ? `${data.name}` : "Category"
+    const DESCRIPTION = data?.description ?? 'View and update specific category';
 
     return {
         title: `${TITLE} - ${APP_NAME}`,
@@ -21,8 +21,8 @@ export async function generateMetadata({ params }: { params: { id: string } }): 
 const layout = async ({ children, params }: ILayoutProps & { params: { id: string } }) => {
     const data = await getCategoryById(params.id);
 
-    const TITLE = data?.name ? `Category: ${data.name}` : "Category"
-    const DESCRIPTION = 'View and update specific category';
+    const TITLE = data?.name ? `${data.name}` : "Category"
+    const DESCRIPTION = data?.description ?? 'View and update specific category';
     const LIST = [
         {
             type: "link",

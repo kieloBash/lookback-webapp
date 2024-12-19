@@ -6,8 +6,8 @@ export const CATEGORIES_ROUTES = {
       KEY: "CATEGORIES:ADMIN:ALL",
     },
     FETCH_SINGLE: {
-      URL: "",
-      KEY: "",
+      URL: MAIN_API + "/admin/single",
+      KEY: "CATEGORIES:ADMIN:SINGLE",
     },
     CREATE: {
       URL: MAIN_API + "/admin/create",
