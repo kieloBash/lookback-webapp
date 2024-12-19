@@ -3,6 +3,10 @@ import { LucideIcon } from "lucide-react";
 export interface ILayoutProps {
   children: React.ReactNode;
 }
+export interface IPageProps {
+  params: { id: string };
+  searchParams: {};
+}
 
 export interface INavLink {
   title: string;

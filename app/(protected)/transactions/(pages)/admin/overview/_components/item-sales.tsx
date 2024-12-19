@@ -5,7 +5,6 @@ import useCategorySales from '@/hooks/analytics/use-category-sales';
 import { useSearchParams } from 'next/navigation';
 import { formatPricingNumber } from '@/lib/utils'
 import { endOfMonth, startOfMonth } from 'date-fns'
-import UiCategoriesIcon from '@/components/ui/ui-categories-icon';
 
 const ItemSales = () => {
 

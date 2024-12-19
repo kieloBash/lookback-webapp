@@ -22,20 +22,50 @@ export async function GET(request: Request) {
     const limit = parseInt(searchParams.get("limit") || "5", 10);
     const searchTerm = searchParams.get("searchTerm") || "";
 
-    const whereClause: any = {};
+    const whereClause: any = {
+      ...(searchTerm !== "" && {
+        OR: [
+          {
+            name: { contains: searchTerm, mode: "insensitive" },
+          },
+        ],
+      }),
+    };
 
     const response: ApiResponse = {
       payload: [],
+      totalData: 0,
+      totalPages: 0,
+      currentPage: 1,
     };
 
-    const [data] = await Promise.all([
+    const [data, totalData] = await Promise.all([
       await db.category.findMany({
+        skip: (page - 1) * limit,
+        take: limit,
         where: whereClause,
+        select: {
+          id: true,
+          name: true,
+          description: true,
+          icon: true,
+          items: {
+            select: {
+              id: true,
+              name: true,
+              quantity: true,
+            },
+          },
+        },
         orderBy: { name: "asc" },
       }),
+      await db.category.count({ where: whereClause }),
     ]);
 
     response.payload = (data as any[]) ?? [];
+    response.totalData = totalData;
+    response.totalPages = Math.ceil(totalData / limit);
+    response.currentPage = page;
 
     return NextResponse.json(response, {
       status: ROUTE_STATUS,

@@ -37,44 +37,47 @@ export function NavCategories() {
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
             <SidebarGroupLabel>Categories</SidebarGroupLabel>
             <SidebarMenu>
-                {categories?.payload?.map((item) => (
-                    <SidebarMenuItem key={item.id}>
-                        <SidebarMenuButton asChild>
-                            <Link href={`/category/admin/view/${item.id}`}>
-                                <span><UiCategoriesIcon icon={item.icon} className="size-4" /></span>
-                                <span>{item.name}</span>
-                                {/* <span className="font-bold">{item.count}</span> */}
-                            </Link>
-                        </SidebarMenuButton>
-                        <DropdownMenu>
-                            <DropdownMenuTrigger asChild>
-                                <SidebarMenuAction showOnHover>
-                                    <MoreHorizontal />
-                                    <span className="sr-only">More</span>
-                                </SidebarMenuAction>
-                            </DropdownMenuTrigger>
-                            <DropdownMenuContent
-                                className="w-48 rounded-lg"
-                                side={isMobile ? "bottom" : "right"}
-                                align={isMobile ? "end" : "start"}
-                            >
-                                <Link href={`/category/admin/view/${item.id}`}>
-                                    <DropdownMenuItem>
-                                        <Folder className="text-muted-foreground" />
-                                        <span>View Category</span>
-                                    </DropdownMenuItem>
+                {categories?.payload?.map((item) => {
+                    const total = item.items.reduce((acc, i) => acc + i.quantity, 0);
+                    return (
+                        <SidebarMenuItem key={item.id}>
+                            <SidebarMenuButton asChild>
+                                <Link href={`/categories/admin/update/${item.id}`}>
+                                    <span><UiCategoriesIcon icon={item.icon} className="size-4" /></span>
+                                    <span>{item.name}</span>
+                                    <span className="font-medium">{total}</span>
                                 </Link>
-                                <DropdownMenuSeparator />
-                                <Link href={`/category/admin/delete/${item.id}`}>
-                                    <DropdownMenuItem>
-                                        <Trash2 className="text-muted-foreground" />
-                                        <span>Delete Category</span>
-                                    </DropdownMenuItem>
-                                </Link>
-                            </DropdownMenuContent>
-                        </DropdownMenu>
-                    </SidebarMenuItem>
-                ))}
+                            </SidebarMenuButton>
+                            <DropdownMenu>
+                                <DropdownMenuTrigger asChild>
+                                    <SidebarMenuAction showOnHover>
+                                        <MoreHorizontal />
+                                        <span className="sr-only">More</span>
+                                    </SidebarMenuAction>
+                                </DropdownMenuTrigger>
+                                <DropdownMenuContent
+                                    className="w-48 rounded-lg"
+                                    side={isMobile ? "bottom" : "right"}
+                                    align={isMobile ? "end" : "start"}
+                                >
+                                    <Link href={`/categories/admin/update/${item.id}`}>
+                                        <DropdownMenuItem>
+                                            <Folder className="text-muted-foreground" />
+                                            <span>View Category</span>
+                                        </DropdownMenuItem>
+                                    </Link>
+                                    <DropdownMenuSeparator />
+                                    <Link href={`/categories/admin/delete/${item.id}`}>
+                                        <DropdownMenuItem>
+                                            <Trash2 className="text-muted-foreground" />
+                                            <span>Delete Category</span>
+                                        </DropdownMenuItem>
+                                    </Link>
+                                </DropdownMenuContent>
+                            </DropdownMenu>
+                        </SidebarMenuItem>
+                    )
+                })}
                 <SidebarMenuItem>
                     <Link href={"/categories/admin/create"}>
                         <SidebarMenuButton className="text-sidebar-foreground/70">

@@ -2,6 +2,7 @@
 
 import { FETCH_INTERVAL } from "@/lib/utils";
 import { CATEGORIES_ROUTES } from "@/routes/categories.routes";
+import { FullCategoryType } from "@/types/category.type";
 import { Category } from "@prisma/client";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 
@@ -13,7 +14,10 @@ const default_limit = 10;
 const default_filter = "all";
 
 export type ApiResponse = {
-    payload: Category[];
+    payload: FullCategoryType[];
+    totalPages: number;
+    totalData: number;
+    currentPage: number;
 };
 
 export type FetchParams = {
