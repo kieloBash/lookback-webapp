@@ -16,12 +16,32 @@ const AdminLayout = ({ children }: ILayoutProps) => {
 
     const routes = useMemo(() => {
         return [
+            // {
+            //     title: "My Dashboard",
+            //     url: "/dashboard/admin",
+            //     icon: LayoutGridIcon,
+            //     isActive: pathname.includes("/dashboard/admin"),
+            //     items: [],
+            // },
             {
-                title: "My Dashboard",
-                url: "/dashboard/admin",
-                icon: LayoutGridIcon,
-                isActive: pathname.includes("/dashboard/admin"),
-                items: [],
+                title: "Transactions",
+                url: "/transactions/admin/overview",
+                icon: TruckIcon,
+                isActive: pathname.includes("/transactions/admin"),
+                items: [
+                    {
+                        title: "Overview",
+                        url: "/transactions/admin/overview",
+                    },
+                    {
+                        title: "Invoices",
+                        url: "/transactions/admin/invoices",
+                    },
+                    {
+                        title: "Point of Sale",
+                        url: "/transactions/admin/pos",
+                    },
+                ],
             },
             {
                 title: "Categories",
@@ -52,26 +72,6 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                     {
                         title: "Restock",
                         url: "/inventory/admin/restock",
-                    },
-                ],
-            },
-            {
-                title: "Transactions",
-                url: "/transactions/admin/overview",
-                icon: TruckIcon,
-                isActive: pathname.includes("/transactions/admin"),
-                items: [
-                    {
-                        title: "Overview",
-                        url: "/transactions/admin/overview",
-                    },
-                    {
-                        title: "Invoices",
-                        url: "/transactions/admin/invoices",
-                    },
-                    {
-                        title: "Point of Sale",
-                        url: "/transactions/admin/pos",
                     },
                 ],
             },

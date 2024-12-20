@@ -16,41 +16,32 @@ const StaffLayout = ({ children }: ILayoutProps) => {
     const routes = useMemo(() => {
         return [
             {
-                title: "My Dashboard",
-                url: "/dashboard/staff",
-                icon: LayoutGridIcon,
-                isActive: pathname.includes("/dashboard/staff"),
-                items: [],
+                title: "Transactions",
+                url: "/transactions/admin/overview",
+                icon: TruckIcon,
+                isActive: pathname.includes("/transactions/admin"),
+                items: [
+                    {
+                        title: "Invoices",
+                        url: "/transactions/staff/invoices",
+                    },
+                    {
+                        title: "Point of Sale",
+                        url: "/transactions/staff/pos",
+                    },
+                ],
             },
-            // {
-            //     title: "Categories",
-            //     url: "/categories/overview",
-            //     icon: BandageIcon,
-            //     isActive: pathname.includes("/categories/overview"),
-            //     items: [
-            //         {
-            //             title: "Overview",
-            //             url: "/categories/overview",
-            //         },
-            //         {
-            //             title: "Create New",
-            //             url: "/categories/create",
-            //         },
-            //     ],
-            // },
             {
                 title: "Inventory",
-                url: "/inventory/staff",
+                url: "/inventory/staff/restock",
                 icon: BoxIcon,
                 isActive: pathname.includes("/inventory/staff"),
-                items: [],
-            },
-            {
-                title: "Transactions",
-                url: "/transactions/staff",
-                icon: TruckIcon,
-                isActive: pathname.includes("/transactions/staff"),
-                items: [],
+                items: [
+                    {
+                        title: "Restock",
+                        url: "/inventory/staff/restock",
+                    },
+                ],
             },
         ]
     }, [pathname])
