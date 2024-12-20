@@ -1,5 +1,6 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { sendInventoryNotification } from "@/lib/mail";
 import { generateRandomINV } from "@/lib/utils";
 import { InvoiceSchema } from "@/schemas/transaction.schema";
 import { UserRole } from "@prisma/client";
@@ -64,6 +65,28 @@ export async function POST(request: Request) {
         });
       }),
     ]);
+
+    const updatedStocks = await db.item.findMany({
+      where: {
+        id: {
+          in: items.map((item) => item.itemId),
+        },
+      },
+      select: {
+        id: true,
+        name: true,
+        sku: true,
+        quantity: true,
+        reorderLevel: true,
+      },
+    });
+
+    const toNotify = updatedStocks.filter(
+      (item) => item.quantity <= item.reorderLevel
+    );
+
+    if (toNotify.length > 0)
+      await sendInventoryNotification(user.email ?? "", toNotify);
 
     return new NextResponse(SUCCESS_MESSAGE, { status: ROUTE_STATUS });
   } catch (error: any) {

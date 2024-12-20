@@ -6,6 +6,28 @@ const domain = process.env.NEXT_PUBLIC_APP_URL;
 
 const APP_NAME = process.env.APP_NAME;
 
+export const sendInventoryNotification = async (
+  email: string,
+  items: { name: string; sku: string; quantity: number }[]
+) => {
+  const itemsList = items
+    .map(
+      (item) =>
+        `<li>${item.name} (${item.sku}) - Quantity: ${item.quantity}</li>`
+    )
+    .join("");
+
+  await resend.emails.send({
+    from: `${APP_NAME} <onboarding@resend.dev>`,
+    to: [email],
+    subject: `${APP_NAME}: Inventory Restock Notification!`,
+    html: `<p>
+      <h1>Inventory Restock Notification</h1>
+      <ul>${itemsList}</ul>
+    </p>`,
+  });
+};
+
 export const sendVerificationEmail = async (email: string, token: string) => {
   const confirmLink = `${domain}/auth/new-verification?token=${token}`;
 
