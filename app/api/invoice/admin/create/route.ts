@@ -14,7 +14,7 @@ export async function POST(request: Request) {
   try {
     const user = await currentUser();
 
-    if (!user || !user.id || user.role !== UserRole.ADMIN) {
+    if (!user || !user.id) {
       return new NextResponse(ROUTE_NAME + ": No Access", { status: 401 });
     }
 
@@ -85,8 +85,17 @@ export async function POST(request: Request) {
       (item) => item.quantity <= item.reorderLevel
     );
 
-    if (toNotify.length > 0)
-      await sendInventoryNotification(user.email ?? "", toNotify);
+    if (toNotify.length > 0) {
+      let adminAccount;
+
+      if (user.role === "ADMIN") adminAccount = user;
+      else
+        adminAccount = await db.user.findFirst({
+          where: { role: "ADMIN" },
+        });
+
+      await sendInventoryNotification(adminAccount?.email ?? "", toNotify);
+    }
 
     return new NextResponse(SUCCESS_MESSAGE, { status: ROUTE_STATUS });
   } catch (error: any) {
