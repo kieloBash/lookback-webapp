@@ -1,6 +1,7 @@
 "use client"
 
 import {
+    EditIcon,
     Folder,
     Forward,
     MoreHorizontal,
@@ -28,10 +29,22 @@ import {
 import Link from "next/link"
 import useAdminCategories from "@/hooks/admin/use-categories"
 import UiCategoriesIcon from "./ui-categories-icon"
+import { handlePostAxios } from "@/lib/utils"
+import { useQueryClient } from "@tanstack/react-query"
+import { CATEGORIES_ROUTES } from "@/routes/categories.routes"
 
 export function NavCategories() {
     const { isMobile } = useSidebar()
     const categories = useAdminCategories({})
+    const queryClient = useQueryClient();
+
+    const handleSuccessDelete = () => {
+        queryClient.invalidateQueries({ queryKey: [CATEGORIES_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
+    }
+
+    const handleDeleteCategory = async (id: string) => {
+        await handlePostAxios({ values: { id }, route: CATEGORIES_ROUTES.ADMIN.DELETE.URL, handleSuccess: handleSuccessDelete })
+    }
 
     return (
         <SidebarGroup className="group-data-[collapsible=icon]:hidden">
@@ -42,7 +55,7 @@ export function NavCategories() {
                     return (
                         <SidebarMenuItem key={item.id}>
                             <SidebarMenuButton asChild>
-                                <Link href={`/categories/admin/update/${item.id}`}>
+                                <Link href={`/categories/admin/view/${item.id}`}>
                                     <span><UiCategoriesIcon icon={item.icon} className="size-4" /></span>
                                     <span>{item.name}</span>
                                     <span className="font-medium">{total}</span>
@@ -60,19 +73,22 @@ export function NavCategories() {
                                     side={isMobile ? "bottom" : "right"}
                                     align={isMobile ? "end" : "start"}
                                 >
-                                    <Link href={`/categories/admin/update/${item.id}`}>
+                                    <Link href={`/categories/admin/view/${item.id}`}>
                                         <DropdownMenuItem>
                                             <Folder className="text-muted-foreground" />
                                             <span>View Category</span>
                                         </DropdownMenuItem>
                                     </Link>
-                                    <DropdownMenuSeparator />
-                                    <Link href={`/categories/admin/delete/${item.id}`}>
+                                    <Link href={`/categories/admin/update/${item.id}`}>
                                         <DropdownMenuItem>
-                                            <Trash2 className="text-muted-foreground" />
-                                            <span>Delete Category</span>
+                                            <EditIcon className="text-muted-foreground" />
+                                            <span>Edit Category</span>
                                         </DropdownMenuItem>
                                     </Link>
+                                    <DropdownMenuItem onClick={() => handleDeleteCategory(item.id)}>
+                                        <Trash2 className="text-muted-foreground" />
+                                        <span>Delete Category</span>
+                                    </DropdownMenuItem>
                                 </DropdownMenuContent>
                             </DropdownMenu>
                         </SidebarMenuItem>

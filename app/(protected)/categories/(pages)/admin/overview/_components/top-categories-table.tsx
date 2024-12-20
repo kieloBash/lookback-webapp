@@ -15,7 +15,10 @@ import {
 } from "@/components/ui/table"
 import UiCategoriesIcon from "@/components/ui/ui-categories-icon";
 import useAdminCategories from "@/hooks/admin/use-categories"
-import { ChevronLeft, ChevronRight, EditIcon } from "lucide-react";
+import { handlePostAxios } from "@/lib/utils";
+import { CATEGORIES_ROUTES } from "@/routes/categories.routes";
+import { useQueryClient } from "@tanstack/react-query";
+import { ChevronLeft, ChevronRight, EditIcon, Trash2Icon } from "lucide-react";
 import Link from "next/link";
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
@@ -28,6 +31,15 @@ export function TopCategoriesTable() {
     const page = parseInt(searchParams.get("page") || "1", 10);
     const searchTerm = searchParams.get("search") || "";
     const categories = useAdminCategories({ limit: 5, page, searchTerm });
+
+    const queryClient = useQueryClient();
+    const handleSuccessDelete = () => {
+        queryClient.invalidateQueries({ queryKey: [CATEGORIES_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
+    }
+
+    const handleDeleteCategory = async (id: string) => {
+        await handlePostAxios({ values: { id }, route: CATEGORIES_ROUTES.ADMIN.DELETE.URL, handleSuccess: handleSuccessDelete })
+    }
 
     const handlePageChange = (newPage: number) => {
         const currentParams = new URLSearchParams(
@@ -73,7 +85,7 @@ export function TopCategoriesTable() {
                                     categories?.payload?.map((item) => {
                                         const total = item.items.reduce((acc, i) => acc + i.quantity, 0);
                                         return (
-                                            <TableRow key={item.id}>
+                                            <TableRow key={item.id} onClick={() => router.push(`/categories/admin/view/${item.id}`)} className="cursor-pointer">
                                                 <TableCell>
                                                     <div className="size-14 relative bg-muted rounded flex justify-center items-center">
                                                         <UiCategoriesIcon icon={item.icon} />
@@ -100,8 +112,12 @@ export function TopCategoriesTable() {
                                                         <h1 className="text-lg font-medium text-nowrap text-right">{total} stocks</h1>
                                                         <div className="flex gap-1 items-center justify-center">
                                                             <Link href={`/categories/admin/update/${item.id}`}>
-                                                                <Button type="button" className="size-7 p-1" variant={"outline"}><EditIcon /></Button>
+                                                                <Button type="button" className="size-7 p-1 z-10" variant={"outline"} onClick={(e) => e.stopPropagation()}><EditIcon /></Button>
                                                             </Link>
+                                                            <Button type="button" className="size-7 p-1 z-10" variant={"outline"} onClick={(e) => {
+                                                                handleDeleteCategory(item.id);
+                                                                e.stopPropagation()
+                                                            }}><Trash2Icon /></Button>
                                                         </div>
                                                     </div>
                                                 </TableCell>

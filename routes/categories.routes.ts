@@ -14,11 +14,11 @@ export const CATEGORIES_ROUTES = {
       KEY: "",
     },
     DELETE: {
-      URL: "",
+      URL: MAIN_API + "/admin/delete",
       KEY: "",
     },
     UPDATE: {
-      URL: "",
+      URL: MAIN_API + "/admin/update",
       KEY: "",
     },
   },

@@ -18,9 +18,6 @@ export async function GET(request: Request) {
     }
 
     const { searchParams } = new URL(request.url || "");
-    const page = parseInt(searchParams.get("page") || "1", 10);
-    const limit = parseInt(searchParams.get("limit") || "5", 10);
-    const searchTerm = searchParams.get("searchTerm") || "";
     const categoryId = searchParams.get("id") || "";
 
     if (!categoryId) {
