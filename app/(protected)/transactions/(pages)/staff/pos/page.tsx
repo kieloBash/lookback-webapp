@@ -20,7 +20,7 @@ import { useCurrentUser } from '@/lib/hooks'
 import { CATEGORIES_ROUTES } from '@/routes/categories.routes'
 
 
-const AdminPOSTransactions = () => {
+const StaffPOSTransactions = () => {
     const [isLoading, setIsLoading] = useState(false)
     const router = useRouter();
     const queryClient = useQueryClient()
@@ -48,8 +48,8 @@ const AdminPOSTransactions = () => {
     });
 
     function handleSuccess() {
-        queryClient.invalidateQueries({ queryKey: [INVOICE_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
-        queryClient.invalidateQueries({ queryKey: [INVENTORY_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
+        queryClient.invalidateQueries({ queryKey: [INVOICE_ROUTES.STAFF.FETCH_ALL.KEY], exact: false })
+        queryClient.invalidateQueries({ queryKey: [INVENTORY_ROUTES.STAFF.FETCH_ALL.KEY], exact: false })
         queryClient.invalidateQueries({ queryKey: [CATEGORIES_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
         form.reset();
         // router.push("/transactions/admin/overview")
@@ -81,4 +81,4 @@ const AdminPOSTransactions = () => {
     )
 }
 
-export default AdminPOSTransactions
+export default StaffPOSTransactions

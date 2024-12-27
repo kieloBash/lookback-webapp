@@ -2,7 +2,7 @@
 import { ILayoutProps } from '@/types/global'
 import React, { useMemo } from 'react'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '../ui/sidebar'
-import { BandageIcon, BoxIcon, Command, LayoutGridIcon, TruckIcon } from 'lucide-react'
+import { BandageIcon, BoxIcon, CircleDollarSign, Command, LayoutGridIcon, MailIcon, PaperclipIcon, TruckIcon } from 'lucide-react'
 import { APP_NAME } from '@/lib/utils'
 import { useCurrentUser } from '@/lib/hooks'
 import { NavUser } from '../ui/nav-user'
@@ -16,32 +16,18 @@ const StaffLayout = ({ children }: ILayoutProps) => {
     const routes = useMemo(() => {
         return [
             {
-                title: "Transactions",
-                url: "/transactions/admin/overview",
-                icon: TruckIcon,
-                isActive: pathname.includes("/transactions/admin"),
-                items: [
-                    {
-                        title: "Invoices",
-                        url: "/transactions/staff/invoices",
-                    },
-                    {
-                        title: "Point of Sale",
-                        url: "/transactions/staff/pos",
-                    },
-                ],
+                title: "Invoices",
+                url: "/transactions/staff/invoices",
+                icon: MailIcon,
+                isActive: pathname.includes("/transactions/staff/invoices"),
+                items: [],
             },
             {
-                title: "Inventory",
-                url: "/inventory/staff/restock",
-                icon: BoxIcon,
-                isActive: pathname.includes("/inventory/staff"),
-                items: [
-                    {
-                        title: "Restock",
-                        url: "/inventory/staff/restock",
-                    },
-                ],
+                title: "POS",
+                url: "/transactions/staff/pos",
+                icon: CircleDollarSign,
+                isActive: pathname.includes("/transactions/staff/pos"),
+                items: [],
             },
         ]
     }, [pathname])

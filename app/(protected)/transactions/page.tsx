@@ -9,7 +9,7 @@ const TransactionsPage = () => {
     if (!role) router.push("/auth/error")
 
     if (role === "ADMIN") router.push("/transactions/admin/overview")
-    if (role === "STAFF") router.push("/transactions/staff")
+    if (role === "STAFF") router.push("/transactions/staff/invoices")
 }
 
 export default TransactionsPage

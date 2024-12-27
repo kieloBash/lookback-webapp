@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const user = await currentUser();
 
-    if (!user || user.role !== "ADMIN") {
+    if (!user) {
       return new NextResponse(ROUTE_NAME + ": Unauthorized: No Access", {
         status: 401,
       });
