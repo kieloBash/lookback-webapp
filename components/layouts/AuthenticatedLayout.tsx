@@ -5,6 +5,7 @@ import { redirect } from 'next/navigation';
 import StaffLayout from './StaffLayout';
 import UserLayout from './UserLayout';
 import ManagementLayout from './ManagementLayout';
+import { SidebarProvider } from '../ui/sidebar';
 
 
 
@@ -20,7 +21,13 @@ const AuthenticatedLayout = async ({ children }: ILayoutProps) => {
     if (user.role === "USER") {
         return <UserLayout>{children}</UserLayout>
     } else if (user.role === "MANAGEMENT") {
-        return <ManagementLayout>{children}</ManagementLayout>
+        return (
+            <SidebarProvider>
+                <ManagementLayout>
+                    {children}
+                </ManagementLayout>
+            </SidebarProvider>
+        )
     }
 
 
