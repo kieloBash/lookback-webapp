@@ -8,7 +8,6 @@ import { useCurrentUser } from '@/lib/hooks'
 import { NavUser } from '../ui/nav-user'
 import { NavLinks } from '../ui/nav-links'
 import { usePathname } from 'next/navigation'
-import { NavCategories } from '../ui/nav-categories'
 
 const AdminLayout = ({ children }: ILayoutProps) => {
     const user = useCurrentUser();
