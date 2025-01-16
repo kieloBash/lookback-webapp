@@ -31,4 +31,4 @@ export const apiAuthPrefix = "/api/auth"; //always allowed for middleware
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/users";
+export const DEFAULT_LOGIN_REDIRECT = "/history";
