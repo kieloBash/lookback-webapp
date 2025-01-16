@@ -1,20 +1,21 @@
 import React from 'react'
 import { Button } from '../ui/button'
-import LoadingIcon from '../ui/loading-icon'
 import { cn } from '@/lib/utils';
+import UiLoading from '../ui-project/loading-page';
 
 interface IProps {
     disabled: boolean;
     children: React.ReactNode;
-    className?: string
+    className?: string;
+    isDirty?: boolean;
 }
-const SubmitButton = ({ disabled, children, className }: IProps) => {
+const FormSubmit = ({ disabled, children, className, isDirty = false }: IProps) => {
     return (
-        <Button disabled={disabled} type='submit' className={cn('flex justify-center items-center gap-2', className)}>
+        <Button disabled={disabled || isDirty} type='submit' className={cn('flex justify-center items-center gap-2', className)}>
             {children}
-            {disabled && <LoadingIcon />}
+            {disabled && <UiLoading type='icon' />}
         </Button>
     )
 }
 
-export default SubmitButton
+export default FormSubmit

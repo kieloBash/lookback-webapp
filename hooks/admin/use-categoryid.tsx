@@ -1,7 +1,7 @@
 "use client";
 
 import { FETCH_INTERVAL } from "@/lib/utils";
-import { CATEGORIES_ROUTES } from "@/routes/categories.routes";
+import { CATEGORIES_ROUTES } from "@/routes/auth.routes";
 import { FullCategoryType } from "@/types/category.type";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
 

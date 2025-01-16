@@ -2,10 +2,13 @@ import AuthenticatedLayout from '@/components/layouts/AuthenticatedLayout'
 import { ILayoutProps } from '@/types/global'
 import React from 'react'
 
-const MainLayout = ({ children }: ILayoutProps) => {
+const ProtectedLayout = ({ children }: ILayoutProps) => {
     return (
-        <AuthenticatedLayout>{children}</AuthenticatedLayout>
-    )
+        <AuthenticatedLayout>
+            <div className="w-full h-full">
+                {children}
+            </div>
+        </AuthenticatedLayout>)
 }
 
-export default MainLayout
+export default ProtectedLayout

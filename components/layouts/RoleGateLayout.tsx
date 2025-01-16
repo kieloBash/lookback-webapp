@@ -3,15 +3,17 @@ import { useCurrentRole } from '@/lib/hooks'
 import { UserRole } from '@prisma/client'
 import React from 'react'
 
+type RoleType = UserRole | 'ANY';
+
 interface IProps {
-    roles: UserRole[];
+    roles: RoleType[];
     children: React.ReactNode
 }
 
 const RoleGateLayout = ({ roles, children }: IProps) => {
     const currentRole = useCurrentRole();
-    if (currentRole && roles.includes(currentRole)) {
-        return <>{children}</>
+    if (currentRole && roles.includes(currentRole) || roles.includes('ANY')) {
+        return children
     } else {
         return (
             <section className="w-full h-full flex justify-center items-center flex-col">

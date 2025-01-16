@@ -1,7 +1,7 @@
 'use client'
 import { ILayoutProps } from '@/types/global'
 import React, { useMemo } from 'react'
-import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '../ui/sidebar'
+import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from '../ui/sidebar'
 import { BandageIcon, BellIcon, BoxIcon, Command, HistoryIcon, LayoutGridIcon, MapPinCheckIcon, SettingsIcon, TruckIcon, User2Icon } from 'lucide-react'
 import { APP_NAME } from '@/lib/utils'
 import { useCurrentUser } from '@/lib/hooks'
@@ -86,6 +86,7 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                 </SidebarFooter>
             </Sidebar>
             <SidebarInset>
+                <SidebarTrigger className="lg:hidden fixed top-4 right-4" />
                 {children}
             </SidebarInset>
         </SidebarProvider>

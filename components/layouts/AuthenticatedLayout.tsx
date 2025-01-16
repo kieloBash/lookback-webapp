@@ -1,25 +1,31 @@
-import { currentUser } from '@/lib/auth'
-import { ILayoutProps } from '@/types/global'
-import { UserRole } from '@prisma/client'
-import { redirect } from 'next/navigation'
 import React from 'react'
+import { currentUser } from '@/lib/auth';
+import { ILayoutProps } from '@/types/global'
+import { redirect } from 'next/navigation';
+import StaffLayout from './StaffLayout';
+import UserLayout from './UserLayout';
 
-import StaffLayout from './StaffLayout'
-import AdminLayout from './AdminLayout'
+
 
 const AuthenticatedLayout = async ({ children }: ILayoutProps) => {
-    const user = await currentUser()
+    const user = await currentUser();
 
     if (!user) redirect(`/auth/error?message=Unauthenticated User`);
 
-    if (user.role === UserRole.USER)
-        return (
-            <StaffLayout>{children}</StaffLayout>
-        );
-    else if (user.role === UserRole.ADMIN)
-        return (
-            <AdminLayout>{children}</AdminLayout>
-        )
+    if (!user.isOnboarded) return (
+        <>{children}</>
+    );
+
+    if (user.role === "USER") {
+        return <UserLayout>{children}</UserLayout>
+    }else if (user.role === "MANAGEMENT") {
+        return <UserLayout>{children}</UserLayout>
+    }
+
+
+    return (
+        <div>error</div>
+    )
 }
 
 export default AuthenticatedLayout

@@ -144,3 +144,45 @@ export const ForgotPasswordSchema = z.object({
     message: "Must be a valid email!",
   }),
 });
+
+export const UserProfileSchema = z.object({
+  fname: z.string().min(1, "First name is required"),
+  lname: z.string().min(1, "Last name is required"),
+  gender: z.enum(["Male", "Female", "Other"], { message: "Invalid gender" }),
+  birthDate: z.string(),
+
+  regCode: z.string().min(1, "Region code is required"),
+  provCode: z.string().min(1, "Province code is required"),
+  citymunCode: z.string().min(1, "City/Municipality code is required"),
+  brgyCode: z.string().min(1, "Barangay code is required"),
+});
+
+export const ManagementProfileSchema = z.object({
+  name: z.string().min(1, "Name is required"),
+  regCode: z.string().min(1, "Region code is required"),
+  provCode: z.string().min(1, "Province code is required"),
+  citymunCode: z.string().min(1, "City/Municipality code is required"),
+  brgyCode: z.string().min(1, "Barangay code is required"),
+});
+
+export const OnboardingSchema = z
+  .object({
+    management: ManagementProfileSchema.optional(),
+    user: UserProfileSchema.optional(),
+    role: z.enum([UserRole.MANAGEMENT, UserRole.USER]).default("USER"),
+  })
+  .refine(
+    (data) => {
+      if (data.role === UserRole.USER) {
+        return data.user !== undefined && data.management === undefined;
+      } else if (data.role === UserRole.MANAGEMENT) {
+        return data.management !== undefined && data.user === undefined;
+      }
+      return true;
+    },
+    {
+      message:
+        "Role and profile mismatch: If role is USER, user profile must be defined and management profile must be undefined, and vice versa.",
+      path: ["role"],
+    }
+  );

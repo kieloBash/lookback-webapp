@@ -31,7 +31,7 @@ import useAdminCategories from "@/hooks/admin/use-categories"
 import UiCategoriesIcon from "./ui-categories-icon"
 import { handlePostAxios } from "@/lib/utils"
 import { useQueryClient } from "@tanstack/react-query"
-import { CATEGORIES_ROUTES } from "@/routes/categories.routes"
+import { CATEGORIES_ROUTES } from "@/routes/auth.routes"
 
 export function NavCategories() {
     const { isMobile } = useSidebar()
