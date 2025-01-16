@@ -7,6 +7,7 @@ import {
     CreditCard,
     LogOut,
     Sparkles,
+    UserCog2Icon,
 } from "lucide-react"
 
 import {
@@ -77,15 +78,10 @@ export function NavUser({
                                 </div>
                             </div>
                         </DropdownMenuLabel>
-                        <DropdownMenuSeparator />
                         <DropdownMenuGroup>
                             <DropdownMenuItem>
-                                <BadgeCheck />
-                                Account
-                            </DropdownMenuItem>
-                            <DropdownMenuItem>
-                                <Bell />
-                                Notifications
+                                <UserCog2Icon />
+                                {user.role}
                             </DropdownMenuItem>
                         </DropdownMenuGroup>
                         <DropdownMenuSeparator />

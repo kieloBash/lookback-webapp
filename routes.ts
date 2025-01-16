@@ -5,10 +5,7 @@
  * Do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = [
-  "/",
-  "/auth/new-verification",
-];
+export const publicRoutes = ["/", "/auth/new-verification"];
 
 /**
  * An array of routes that is NOT accessible if user is logged out.
@@ -34,4 +31,4 @@ export const apiAuthPrefix = "/api/auth"; //always allowed for middleware
  * The default redirect path after logging in
  * @type {string}
  */
-export const DEFAULT_LOGIN_REDIRECT = "/transactions";
+export const DEFAULT_LOGIN_REDIRECT = "/users";

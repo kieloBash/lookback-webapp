@@ -9,7 +9,8 @@ datasource db {
 
 enum UserRole {
   ADMIN
-  STAFF
+  MANAGEMENT
+  USER
 }
 
 model Account {
@@ -40,7 +41,7 @@ model User {
   password      String?
   image         String?
   contactNumber String?
-  role          UserRole? @default(STAFF)
+  role          UserRole? @default(USER)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -49,7 +50,14 @@ model User {
   accounts    Account[]
 
   //added
-  transactions Transaction[]
+  notifications Notification[]
+  history       History[]
+
+  //user
+  userProfile UserProfile?
+
+  //management
+  managementProfile ManagementProfile?
 
   @@map("users")
 }
@@ -84,76 +92,81 @@ model PasswordResetToken {
 //   \ /
 //    V
 
-model Category {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String  @unique
-  icon        String
-  description String?
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  items Item[]
-
-  @@map("categories")
+enum CovidStatus {
+  POSIIVE
+  NEGATIVE
 }
 
-model Item {
-  id          String  @id @default(auto()) @map("_id") @db.ObjectId
-  name        String
-  sku         String  @unique
-  description String?
+model UserProfile {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  categoryId String   @db.ObjectId
-  category   Category @relation(fields: [categoryId], references: [id])
+  userId String @unique @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  transaction TransactionItem[]
+  fname       String
+  lname       String
+  gender      String
+  birthDate   DateTime
+  
+  regCode     String
+  provCode    String
+  citymunCode String
+  brgyCode    String
 
-  quantity     Int   @default(0)
-  reorderLevel Int   @default(10)
-  price        Float @default(0.0)
+  status CovidStatus @default(NEGATIVE)
 
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-
-  @@map("items")
+  @@index([regCode, provCode, citymunCode, brgyCode]) // Optimizes searches by location
+  @@map("user-profiles")
 }
 
-enum TransactionType {
-  SALE
-  PURCHASE
+model ManagementProfile {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @unique @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  regCode          String
+  provCode         String
+  citymunCode      String
+  brgyCode         String
+  daysWithoutCovid Int    @default(0)
+
+  @@map("management-profiles")
 }
 
-model Transaction {
-  id  String @id @default(auto()) @map("_id") @db.ObjectId
-  sku String @unique
-
-  transactionType TransactionType
+model History {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
 
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  items       TransactionItem[]
-  totalAmount Float             @default(0.0)
-  createdAt   DateTime          @default(now())
-  updatedAt   DateTime          @updatedAt
-
-  @@map("transactions")
-}
-
-model TransactionItem {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
-
-  transactionId String      @db.ObjectId
-  transaction   Transaction @relation(fields: [transactionId], references: [id], onDelete: Cascade)
-  itemId        String      @db.ObjectId
-  item          Item        @relation(fields: [itemId], references: [id])
-
-  quantity Int   @default(1)
-  price    Float @default(0.0)
+  date        DateTime
+  regCode     String
+  provCode    String
+  citymunCode String
+  brgyCode    String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  @@map("transaction-items")
+  @@index([userId])
+  @@index([date])
+  @@map("history")
+}
+
+model Notification {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  date    DateTime
+  message String
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@index([userId])
+  @@index([date])
+  @@map("notifications")
 }

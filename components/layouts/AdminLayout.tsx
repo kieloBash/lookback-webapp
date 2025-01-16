@@ -2,7 +2,7 @@
 import { ILayoutProps } from '@/types/global'
 import React, { useMemo } from 'react'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider } from '../ui/sidebar'
-import { BandageIcon, BoxIcon, Command, LayoutGridIcon, TruckIcon, User2Icon } from 'lucide-react'
+import { BandageIcon, BellIcon, BoxIcon, Command, HistoryIcon, LayoutGridIcon, MapPinCheckIcon, SettingsIcon, TruckIcon, User2Icon } from 'lucide-react'
 import { APP_NAME } from '@/lib/utils'
 import { useCurrentUser } from '@/lib/hooks'
 import { NavUser } from '../ui/nav-user'
@@ -16,64 +16,26 @@ const AdminLayout = ({ children }: ILayoutProps) => {
 
     const routes = useMemo(() => {
         return [
-            // {
-            //     title: "My Dashboard",
-            //     url: "/dashboard/admin",
-            //     icon: LayoutGridIcon,
-            //     isActive: pathname.includes("/dashboard/admin"),
-            //     items: [],
-            // },
             {
-                title: "Transactions",
-                url: "/transactions/admin/overview",
-                icon: TruckIcon,
-                isActive: pathname.includes("/transactions/admin"),
-                items: [
-                    {
-                        title: "Overview",
-                        url: "/transactions/admin/overview",
-                    },
-                    {
-                        title: "Invoices",
-                        url: "/transactions/admin/invoices",
-                    },
-                    {
-                        title: "Point of Sale",
-                        url: "/transactions/admin/pos",
-                    },
-                ],
+                title: "History",
+                url: "/history/admin",
+                icon: HistoryIcon,
+                isActive: pathname.includes("/history/admin"),
+                items: [],
             },
             {
-                title: "Categories",
-                url: "/categories/admin/overview",
-                icon: BandageIcon,
-                isActive: pathname.includes("/categories/admin"),
-                items: [
-                    {
-                        title: "Overview",
-                        url: "/categories/admin/overview",
-                    },
-                    {
-                        title: "Create New",
-                        url: "/categories/admin/create",
-                    },
-                ],
+                title: "Notifications",
+                url: "/notifications/admin",
+                icon: BellIcon,
+                isActive: pathname.includes("/notifications/admin"),
+                items: [],
             },
             {
-                title: "Inventory",
-                url: "/inventory/admin/restock",
-                icon: BoxIcon,
-                isActive: pathname.includes("/inventory/admin"),
-                items: [
-                    // {
-                    //     title: "Overview",
-                    //     url: "/inventory/admin/overview",
-                    // },
-                    {
-                        title: "Restock",
-                        url: "/inventory/admin/restock",
-                    },
-                ],
+                title: "Settings",
+                url: "/settings/admin",
+                icon: SettingsIcon,
+                isActive: pathname.includes("/settings/admin"),
+                items: [],
             },
             {
                 title: "Users",
@@ -104,12 +66,12 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" asChild>
                                 <a href="#">
-                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-sidebar-primary text-sidebar-primary-foreground">
-                                        <Command className="size-4" />
+                                    <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                                        <MapPinCheckIcon className="size-4" />
                                     </div>
                                     <div className="grid flex-1 text-left text-sm leading-tight">
                                         <span className="truncate font-semibold">{APP_NAME}</span>
-                                        <span className="truncate text-xs">System</span>
+                                        <span className="truncate text-xs">Covid Tracker</span>
                                     </div>
                                 </a>
                             </SidebarMenuButton>
@@ -118,7 +80,6 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                 </SidebarHeader>
                 <SidebarContent>
                     <NavLinks items={routes} />
-                    <NavCategories />
                 </SidebarContent>
                 <SidebarFooter>
                     <NavUser user={user as any} />

@@ -11,7 +11,7 @@ export const FETCH_INTERVAL = 60000 * 10;
 
 export const FORMAT = "yyyy-MM-dd";
 
-export const APP_NAME = "Inventory Management";
+export const APP_NAME = "LookBack";
 
 export const formatPricingNumber = (val: number) => {
   return new Intl.NumberFormat("en-US", {
