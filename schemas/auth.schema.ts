@@ -22,7 +22,7 @@ export const CreateUserSchema = z.object({
     .regex(/[^a-zA-Z0-9]/, {
       message: "Password must contain at least one special character.",
     }),
-  role: z.enum([UserRole.ADMIN, UserRole.STAFF]),
+  role: z.enum([UserRole.MANAGEMENT, UserRole.USER]),
   email: z.string().email({
     message: "Must be a valid email!",
   }),
@@ -50,7 +50,7 @@ export const RegisterSchema = z
       .regex(/[^a-zA-Z0-9]/, {
         message: "Password must contain at least one special character.",
       }),
-    role: z.enum([UserRole.ADMIN, UserRole.STAFF]),
+    role: z.enum([UserRole.MANAGEMENT, UserRole.USER]),
     confirmPassword: z.string(),
     email: z.string().email({
       message: "Must be a valid email!",

@@ -6,7 +6,6 @@ import { db } from "@/lib/db";
 import { RegisterSchema } from "@/schemas/auth.schema";
 import { getUserByEmail } from "@/lib/user";
 import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/lib/mail";
 
 export const handleRegisterAccount = async (values: z.infer<typeof RegisterSchema>) => {
     const validatedFields = RegisterSchema.safeParse(values);
@@ -25,7 +24,6 @@ export const handleRegisterAccount = async (values: z.infer<typeof RegisterSchem
             return { error: "Email already in use!" };
         }
 
-
         await db.user.create({
             data: {
                 name: fullName,
@@ -37,11 +35,8 @@ export const handleRegisterAccount = async (values: z.infer<typeof RegisterSchem
         });
 
         const verificationToken = await generateVerificationToken(email);
-        await sendVerificationEmail(verificationToken.email, verificationToken.token);
 
-        console.log("verifying!")
-
-        return { success: "Confirmation sent! Please verify your account first before you login! Thank you!" };
+        return { success: "Confirmation sent! Please verify your account first before you login! Thank you!", token: verificationToken.token };
     } catch (error) {
         console.log(error)
         return { error: "An error occured!" };

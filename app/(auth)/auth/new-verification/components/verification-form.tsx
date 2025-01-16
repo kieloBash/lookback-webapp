@@ -11,6 +11,8 @@ const NewVerificationForm = () => {
   const searchParams = useSearchParams();
   const token = searchParams.get("token");
 
+  console.log(token);
+
   const [isLoading, setIsLoading] = useState(true);
 
   const onSubmit = useCallback(() => {

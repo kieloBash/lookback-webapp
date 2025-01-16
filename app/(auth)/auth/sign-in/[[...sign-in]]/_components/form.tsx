@@ -12,12 +12,19 @@ import { handleLoginAccount } from '../../../_actions/login';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from "next/navigation";
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
-import { cn } from '@/lib/utils';
+import { APP_EMAIL, APP_NAME, cn } from '@/lib/utils';
 import { Form } from '@/components/ui/form';
 import { Button } from '@/components/ui/button';
 import { FormInput } from '@/components/forms/form-input';
 import Link from 'next/link';
 import LoadingIcon from '@/components/ui/loading-icon';
+
+import emailjs from "emailjs-com";
+
+const domain = process.env.NEXT_PUBLIC_APP_URL;
+const template_id = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
+const service_id = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "";
+const public_key = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "";
 
 const LoginForm = () => {
 
@@ -56,7 +63,28 @@ const LoginForm = () => {
                 });
             })
             form.reset();
-        } else {
+        } else if (res.error_verify) {
+            const confirmLink = `${domain}/auth/new-verification?token=${res.token}`;
+            const templateParams = {
+                app_name: APP_NAME,
+                app_email: APP_EMAIL,
+                to_email: values.email,
+                to_name: "",
+                link: confirmLink
+            }
+            await emailjs.send(service_id, template_id, templateParams, public_key)
+                .then(() => {
+                    toast({
+                        title: "Verify your Account!",
+                        description: res.error_verify,
+                    });
+                })
+                .catch((error: any) => {
+                    console.error("Failed to send email:", error);
+                    throw new Error("Could not send verification email.");
+                })
+        }
+        else {
             toast({
                 title: "An error occured!",
                 variant: "destructive",

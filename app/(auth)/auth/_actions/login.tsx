@@ -6,7 +6,6 @@ import { db } from "@/lib/db";
 import { LoginSchema } from "@/schemas/auth.schema";
 import { getUserByEmail } from "@/lib/user";
 import { generateVerificationToken } from "@/lib/tokens";
-import { sendVerificationEmail } from "@/lib/mail";
 
 export const handleLoginAccount = async (values: z.infer<typeof LoginSchema>) => {
     const validatedFields = LoginSchema.safeParse(values);
@@ -27,13 +26,11 @@ export const handleLoginAccount = async (values: z.infer<typeof LoginSchema>) =>
             const verificationToken = await generateVerificationToken(
                 existingUser.email
             );
-            await sendVerificationEmail(
-                verificationToken.email,
-                verificationToken.token
-            );
+
 
             return {
-                error: "Please verify your account! A Confirmation email has been sent!",
+                error_verify: "Please verify your account! A Confirmation email has been sent!",
+                token: verificationToken.token,
             };
         } else {
             const isMatching = await bcrypt.compare(password, existingUser.password);

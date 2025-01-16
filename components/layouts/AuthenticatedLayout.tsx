@@ -12,7 +12,7 @@ const AuthenticatedLayout = async ({ children }: ILayoutProps) => {
 
     if (!user) redirect(`/auth/error?message=Unauthenticated User`);
 
-    if (user.role === UserRole.STAFF)
+    if (user.role === UserRole.USER)
         return (
             <StaffLayout>{children}</StaffLayout>
         );

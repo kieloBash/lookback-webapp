@@ -12,12 +12,19 @@ import { toast } from '@/hooks/use-toast';
 import { handleRegisterAccount } from '../../../_actions/register';
 import Link from 'next/link';
 import { FormInput } from '@/components/forms/form-input';
-import { cn } from '@/lib/utils';
+import { APP_EMAIL, APP_NAME, cn } from '@/lib/utils';
 import { Form } from '@/components/ui/form';
 import LoadingIcon from '@/components/ui/loading-icon';
 import { signIn } from 'next-auth/react';
 import { useSearchParams } from 'next/navigation';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
+
+import emailjs from "emailjs-com";
+
+const domain = process.env.NEXT_PUBLIC_APP_URL;
+const template_id = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
+const service_id = process.env.NEXT_PUBLIC_EMAILJS_SERVICE_ID ?? "";
+const public_key = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "";
 
 const RegisterForm = () => {
 
@@ -32,7 +39,7 @@ const RegisterForm = () => {
             email: "",
             password: "",
             confirmPassword: "",
-            role: UserRole.STAFF
+            role: UserRole.USER
         },
     });
 
@@ -48,11 +55,28 @@ const RegisterForm = () => {
         setIsLoading(true)
         const res = await handleRegisterAccount(values)
         if (res.success) {
-            toast({
-                title: "Success!",
-                description: res.success,
-            });
-            form.reset();
+            const confirmLink = `${domain}/auth/new-verification?token=${res.token}`;
+            const templateParams = {
+                app_name: APP_NAME,
+                app_email: APP_EMAIL,
+                to_email: values.email,
+                to_name: values.fullName,
+                link: confirmLink
+            }
+
+            await emailjs.send(service_id, template_id, templateParams, public_key)
+                .then(() => {
+                    toast({
+                        title: "Success!",
+                        description: res.success,
+                    });
+                    form.reset();
+                })
+                .catch((error) => {
+                    console.error("Failed to send email:", error);
+                    throw new Error("Could not send verification email.");
+                })
+
         } else {
             toast({
                 title: "An error occured!",
@@ -97,7 +121,7 @@ const RegisterForm = () => {
                                     <FormInput
                                         control={form.control}
                                         name="fullName"
-                                        label={form.watch("role") === UserRole.STAFF ? "Full Name" : "Name of Staff"}
+                                        label={"Full Name"}
                                         type="text"
                                         required={true}
                                         disabled={isLoading}
@@ -106,7 +130,7 @@ const RegisterForm = () => {
                                     <FormInput
                                         control={form.control}
                                         name="email"
-                                        label={form.watch("role") === UserRole.STAFF ? "Email Address" : "Emaill Address of clinic staff"}
+                                        label={"Email Address"}
                                         type="email"
                                         required={true}
                                         disabled={isLoading}
