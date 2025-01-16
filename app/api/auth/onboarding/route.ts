@@ -41,10 +41,12 @@ export async function POST(request: Request) {
         },
       });
     } else if (fields.role === "MANAGEMENT" && fields.management) {
+      const { name, ...values } = fields.management;
       await db.managementProfile.create({
         data: {
-          ...fields.management,
+          ...values,
           userId: user.id,
+          daysWithoutCovid: 0,
         },
       });
       await db.user.update({

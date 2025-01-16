@@ -90,7 +90,7 @@ const OnboardingPage = () => {
 
                     {
                         page === 2 && (
-                            <div className="size-full flex flex-col gap-4">
+                            <div className="size-full flex flex-col gap-4 justify-center items-center">
                                 <div className="w-full max-w-sm">
                                     <div className="flex flex-col items-center gap-2">
                                         <h1 className="text-xl font-bold">{form.watch("role")}</h1>
