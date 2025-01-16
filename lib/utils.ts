@@ -3,6 +3,7 @@ import { clsx, type ClassValue } from "clsx";
 import { twMerge } from "tailwind-merge";
 import axios from "axios";
 import { SortOrder } from "@/types/lib.type";
+import { format, parse } from "date-fns";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -14,6 +15,15 @@ export const FORMAT = "yyyy-MM-dd";
 
 export const APP_NAME = "LookBack";
 export const APP_EMAIL = "lookback@gmail.com";
+
+export function formatTime(time: string) {
+  const TIME_FORMAT = "HH:mm";
+  return format(parse(time, TIME_FORMAT, new Date()), "hh:mm a");
+}
+
+export function formatDateTime(date: Date | string) {
+  return format(new Date(date), "MM/dd/yyyy hh:mm:ss a");
+}
 
 export const formatPricingNumber = (val: number) => {
   return new Intl.NumberFormat("en-US", {

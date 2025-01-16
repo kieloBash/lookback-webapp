@@ -24,4 +24,16 @@ export const getUserById = async (id: string) => {
   }
 };
 
-
+export const getManagementUserById = async (id: string) => {
+  try {
+    return await db.user.findUnique({
+      where: { id },
+      select: { id: true, name: true, managementProfile: true },
+    });
+  } catch (error) {
+    console.log(error);
+    return null;
+  } finally {
+    db.$disconnect();
+  }
+};

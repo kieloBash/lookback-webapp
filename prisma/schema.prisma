@@ -51,7 +51,6 @@ model User {
 
   //added
   notifications Notification[]
-  history       History[]
 
   //user
   userProfile UserProfile?
@@ -103,17 +102,18 @@ model UserProfile {
   userId String @unique @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  fname       String
-  lname       String
-  gender      String
-  birthDate   DateTime
-  
+  fname     String
+  lname     String
+  gender    String
+  birthDate DateTime
+
   regCode     String
   provCode    String
   citymunCode String
   brgyCode    String
 
-  status CovidStatus @default(NEGATIVE)
+  status  CovidStatus @default(NEGATIVE)
+  history History[]
 
   @@index([regCode, provCode, citymunCode, brgyCode]) // Optimizes searches by location
   @@map("user-profiles")
@@ -129,7 +129,8 @@ model ManagementProfile {
   provCode         String
   citymunCode      String
   brgyCode         String
-  daysWithoutCovid Int    @default(0)
+  daysWithoutCovid Int       @default(0)
+  history          History[]
 
   @@map("management-profiles")
 }
@@ -137,14 +138,13 @@ model ManagementProfile {
 model History {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
-  userId String @db.ObjectId
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String      @db.ObjectId
+  user   UserProfile @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  managementId String            @db.ObjectId
+  management   ManagementProfile @relation(fields: [managementId], references: [id], onDelete: Cascade)
 
   date        DateTime
-  regCode     String
-  provCode    String
-  citymunCode String
-  brgyCode    String
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
