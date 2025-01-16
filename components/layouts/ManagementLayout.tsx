@@ -8,6 +8,7 @@ import { useCurrentUser } from '@/lib/hooks'
 import { NavUser } from '../ui/nav-user'
 import { NavLinks } from '../ui/nav-links'
 import { usePathname } from 'next/navigation'
+import Link from 'next/link'
 
 const ManagementLayout = ({ children }: ILayoutProps) => {
     const user = useCurrentUser();
@@ -55,7 +56,7 @@ const ManagementLayout = ({ children }: ILayoutProps) => {
                     <SidebarMenu>
                         <SidebarMenuItem>
                             <SidebarMenuButton size="lg" asChild>
-                                <a href="#">
+                                <Link href="/history">
                                     <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
                                         <MapPinCheckIcon className="size-4" />
                                     </div>
@@ -63,7 +64,7 @@ const ManagementLayout = ({ children }: ILayoutProps) => {
                                         <span className="truncate font-semibold">{APP_NAME}</span>
                                         <span className="truncate text-xs">Covid Tracker</span>
                                     </div>
-                                </a>
+                                </Link>
                             </SidebarMenuButton>
                         </SidebarMenuItem>
                     </SidebarMenu>
