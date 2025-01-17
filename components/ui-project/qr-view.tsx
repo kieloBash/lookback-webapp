@@ -7,13 +7,13 @@ interface IProps {
     value: string
 }
 const UiQRView = ({ value }: IProps) => {
-
+    const origin = typeof window !== 'undefined' ? window.location.origin : '';
     const qrCodeUrl = useMemo(() => {
-        if (value) {
-            return `${window.location.origin}/qr?token=${value}`;
+        if (value && origin) {
+            return `${origin}/qr?token=${value}`;
         }
         return undefined
-    }, [value])
+    }, [value, origin])
 
     return (
         <div className='p-2 bg-white rounded'>
