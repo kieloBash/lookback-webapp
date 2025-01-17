@@ -14,7 +14,7 @@ const ManagementScannerPage = async () => {
     if (!data) return null;
 
     return (
-        <section className="w-full h-full flex flex-col justify-center items-center gap-4">
+        <section className="w-full h-full pt-20 flex flex-col justify-center items-center gap-4">
             <h1 className="text-center text-4xl font-medium">{data.name}</h1>
             <UiQRView value={data.id} />
         </section>

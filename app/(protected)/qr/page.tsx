@@ -42,11 +42,9 @@ const QRPage = () => {
     }, [onSubmit]);
 
     return (
-        <div className="flex flex-col justify-center items-center gap-4 mt-4">
+        <div className="w-full min-h-screen flex flex-col justify-center items-center gap-4 pt-4">
             {isLoading && <Loader2 className="w-10 h-10 animate-spin" />}
-            <Link href={"/auth/sign-in"}>
-                <Button variant={"link"}>Back to login!</Button>
-            </Link>
+            <p className="text-center text-sm">Please wait while we update your history!</p>
         </div>
     );
 };

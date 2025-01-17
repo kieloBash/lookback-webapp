@@ -19,7 +19,11 @@ const AuthenticatedLayout = async ({ children }: ILayoutProps) => {
     );
 
     if (user.role === "USER") {
-        return <UserLayout>{children}</UserLayout>
+        return (
+            <SidebarProvider>
+                <UserLayout>{children}</UserLayout>
+            </SidebarProvider>
+        )
     } else if (user.role === "MANAGEMENT") {
         return (
             <SidebarProvider>

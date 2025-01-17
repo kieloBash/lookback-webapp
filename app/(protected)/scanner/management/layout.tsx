@@ -7,13 +7,13 @@ import HeaderLayout from '@/components/layouts/HeaderLayout';
 import { Metadata } from 'next';
 import { APP_NAME } from '@/lib/utils';
 
-const TITLE = 'Scanner';
+const TITLE = 'QR Code';
 const DESCRIPTION = 'Use the scanner to scan qr codes';
 const LIST = [
     {
         type: "page",
         href: "",
-        label: "Scanner"
+        label: "QR"
     },
 ]
 

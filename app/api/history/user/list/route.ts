@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const user = await currentUser();
 
-    if (!user || !user.id || user.role !== "MANAGEMENT") {
+    if (!user || !user.id || user.role !== "USER") {
       return new NextResponse(ROUTE_NAME + ": Unauthorized: No Access", {
         status: 401,
       });
@@ -24,7 +24,7 @@ export async function GET(request: Request) {
     const statusFilter = searchParams.get("filter") || "ALL";
 
     const whereClause: any = {
-      management: {
+      user: {
         userId: user.id,
       },
     };
@@ -39,18 +39,16 @@ export async function GET(request: Request) {
         select: {
           id: true,
           date: true,
-          user: {
+          management: {
             select: {
               id: true,
-              fname: true,
-              lname: true,
-              gender: true,
+              user: { select: { name: true } },
 
               regCode: true,
               provCode: true,
               citymunCode: true,
               brgyCode: true,
-              status: true,
+              daysWithoutCovid: true,
             },
           },
         },

@@ -6,4 +6,10 @@ export const HISTORY_ROUTES = {
       KEY: "HISTORY:MANAGEMENT:ALL",
     },
   },
+  USER: {
+    FETCH_ALL: {
+      URL: MAIN_API + "/user/list",
+      KEY: "HISTORY:USER:ALL",
+    },
+  },
 };
