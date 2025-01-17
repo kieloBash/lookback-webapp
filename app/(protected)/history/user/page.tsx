@@ -16,7 +16,6 @@ import useUserHistory from '@/hooks/user/use-history'
 
 const UserHistoryPage = () => {
     const data = useUserHistory({});
-    console.log(data);
     return (
         <section className="w-full h-full p-4 flex justify-start items-center flex-col">
             <div className="w-full lg:max-w-none max-w-xs">

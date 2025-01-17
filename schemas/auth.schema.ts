@@ -61,10 +61,18 @@ export const RegisterSchema = z
     message: "Passwords do not match.",
   });
 
-export const SettingsSchema = z
+export const SettingsUserSchema = z
   .object({
     image: z.optional(z.string()),
-    name: z.optional(z.string().min(4)),
+    fname: z.optional(z.string().min(2)),
+    lname: z.optional(z.string().min(2)),
+    gender: z.optional(z.string()),
+
+    regCode: z.optional(z.string()),
+    provCode: z.optional(z.string()),
+    citymunCode: z.optional(z.string()),
+    brgyCode: z.optional(z.string()),
+
     email: z.optional(z.string().email()),
     oldPassword: z.optional(z.string().min(4)),
     newPassword: z.optional(

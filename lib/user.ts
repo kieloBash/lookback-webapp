@@ -1,6 +1,8 @@
 "use server";
 
 import { db } from "@/lib/db";
+import { currentUser } from "./auth";
+import { UserRole } from "@prisma/client";
 
 export const getUserByEmail = async (email: string) => {
   try {
@@ -16,6 +18,29 @@ export const getUserByEmail = async (email: string) => {
 export const getUserById = async (id: string) => {
   try {
     return await db.user.findUnique({ where: { id } });
+  } catch (error) {
+    console.log(error);
+    return null;
+  } finally {
+    db.$disconnect();
+  }
+};
+
+export const getUser = async (id: string) => {
+  try {
+    return await db.user.findUnique({
+      where: { id },
+      select: {
+        id: true,
+        name: true,
+        email: true,
+        image: true,
+        role: true,
+
+        userProfile: true,
+        managementProfile: true,
+      },
+    });
   } catch (error) {
     console.log(error);
     return null;

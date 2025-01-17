@@ -27,11 +27,12 @@ interface IProps {
     form: UseFormReturn<any, any, undefined>;
     formName: string;
     regCode: string;
+    defaultValue?: string
 }
 
 type DataType = { id: string, value: string, label: string };
 
-export default function ProvinceCodeSelect({ form, formName, regCode }: IProps) {
+export default function ProvinceCodeSelect({ form, formName, regCode, defaultValue = "" }: IProps) {
     const provinces = useDataProvinces({ regCode });
     const data = React.useMemo(() => {
         if (provinces.isFetching || provinces.isLoading || !provinces?.payload || regCode === "") {
@@ -41,7 +42,7 @@ export default function ProvinceCodeSelect({ form, formName, regCode }: IProps) 
     }, [provinces, regCode, provinces.isLoading, provinces.isFetching])
 
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("");
+    const [value, setValue] = React.useState(defaultValue);
     const [searchTerm, setSearchTerm] = React.useState("");
 
     const filteredData = React.useMemo(() => {

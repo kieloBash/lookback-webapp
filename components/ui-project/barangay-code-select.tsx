@@ -27,11 +27,12 @@ interface IProps {
     form: UseFormReturn<any, any, undefined>;
     formName: string;
     citymunCode: string;
+    defaultValue?: string
 }
 
 type DataType = { id: string, value: string, label: string };
 
-export default function BarangayCodeSelect({ form, formName, citymunCode }: IProps) {
+export default function BarangayCodeSelect({ form, formName, citymunCode, defaultValue = "" }: IProps) {
     const barangays = useDataBarangays({ citymunCode });
 
     const data = React.useMemo(() => {
@@ -42,7 +43,7 @@ export default function BarangayCodeSelect({ form, formName, citymunCode }: IPro
     }, [barangays, citymunCode, barangays.isLoading, barangays.isFetching])
 
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("");
+    const [value, setValue] = React.useState(defaultValue);
     const [searchTerm, setSearchTerm] = React.useState("");
 
     const filteredData = React.useMemo(() => {

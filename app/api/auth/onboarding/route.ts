@@ -37,6 +37,7 @@ export async function POST(request: Request) {
         where: { id: user.id },
         data: {
           isOnboarded: true,
+          name: `${fields.user.fname} ${fields.user.lname}`,
           role: "USER",
         },
       });

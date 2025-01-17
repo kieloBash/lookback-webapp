@@ -25,11 +25,12 @@ import useDataRegions from "@/hooks/data/use-regions"
 interface IProps {
     form: UseFormReturn<any, any, undefined>;
     formName: string;
+    defaultValue?: string
 }
 
 type DataType = { id: string, value: string, label: string };
 
-export default function RegionCodeSelect({ form, formName }: IProps) {
+export default function RegionCodeSelect({ form, formName, defaultValue = "" }: IProps) {
 
     const regions = useDataRegions({});
     const data = React.useMemo(() => {
@@ -39,7 +40,7 @@ export default function RegionCodeSelect({ form, formName }: IProps) {
     }, [regions])
 
     const [open, setOpen] = React.useState(false)
-    const [value, setValue] = React.useState("");
+    const [value, setValue] = React.useState(defaultValue);
     const [searchTerm, setSearchTerm] = React.useState("");
 
     const filteredData = React.useMemo(() => {
