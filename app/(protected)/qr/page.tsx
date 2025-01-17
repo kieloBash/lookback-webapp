@@ -32,7 +32,7 @@ const QRPage = () => {
         handleAxios({ values: { token: tokenVal }, url: "/api/log/create" })
             .then((res) => {
                 setTokenVal("");
-                router.push("/history");
+                router.push("/scanner");
             })
 
     }, [token]);
