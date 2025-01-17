@@ -43,7 +43,7 @@ const OnboardingPage = () => {
         setIsLoading(true);
         await handleAxios({ values, url })
             .then(async () => {
-                form.reset();
+                // form.reset();
                 window.location.reload();
             })
             .catch(() => {

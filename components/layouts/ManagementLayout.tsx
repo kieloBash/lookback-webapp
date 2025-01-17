@@ -2,7 +2,7 @@
 import { ILayoutProps } from '@/types/global'
 import React, { useMemo } from 'react'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger, useSidebar } from '../ui/sidebar'
-import { BellIcon, HistoryIcon, MapPinCheckIcon, ScanQrCodeIcon, SettingsIcon } from 'lucide-react'
+import { BellIcon, HistoryIcon, MapPinCheckIcon, ScanQrCodeIcon, SettingsIcon, QrCodeIcon } from 'lucide-react'
 import { APP_NAME } from '@/lib/utils'
 import { useCurrentUser } from '@/lib/hooks'
 import { NavUser } from '../ui/nav-user'
@@ -27,9 +27,9 @@ const ManagementLayout = ({ children }: ILayoutProps) => {
                 items: [],
             },
             {
-                title: "Scanner",
+                title: "QR Code",
                 url: "/scanner/management",
-                icon: ScanQrCodeIcon,
+                icon: QrCodeIcon,
                 isActive: pathname.includes("/scanner/management"),
                 items: [],
             },
@@ -53,7 +53,7 @@ const ManagementLayout = ({ children }: ILayoutProps) => {
     if (!user) return null;
 
     return (
-        <div className='w-full min-h-screen'>
+        <>
             {isMobile ? (
                 <div className='relative w-full h-full'>
                     <div className="w-full h-full pb-24">
@@ -103,7 +103,7 @@ const ManagementLayout = ({ children }: ILayoutProps) => {
                     {children}
                 </SidebarInset>
             </>}
-        </div>
+        </>
     )
 }
 
