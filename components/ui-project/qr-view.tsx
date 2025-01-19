@@ -6,24 +6,29 @@ import { QRCodeCanvas } from 'qrcode.react';
 interface IProps {
     value: string
 }
-const UiQRView = ({ value }: IProps) => {
-    const origin = typeof window !== 'undefined' ? window.location.origin : '';
-    const qrCodeUrl = useMemo(() => {
-        if (value && origin) {
-            return `${origin}/qr?token=${value}`;
-        }
-        return undefined
-    }, [value, origin])
+const URL = process.env.NEXT_PUBLIC_APP_URL ?? "";
 
-    return (
-        <div className='p-2 bg-white rounded'>
-            {qrCodeUrl && (
-                <Link href={qrCodeUrl} target="_blank">
-                    <QRCodeCanvas value={qrCodeUrl} size={256} />
-                </Link>
-            )}
-        </div>
-    )
+const UiQRView = ({ value }: IProps) => {
+
+    const qrCodeUrl = useMemo(() => {
+        if (value) {
+            return `${URL}/qr?token=${value}`;
+        }
+        return ""
+    }, [value])
+
+    if (qrCodeUrl)
+        return (
+            <div className='p-2 bg-white rounded'>
+                {qrCodeUrl && (
+                    <Link href={qrCodeUrl} target="_blank">
+                        <QRCodeCanvas value={qrCodeUrl} size={256} />
+                    </Link>
+                )}
+            </div>
+        )
+
+    return null;
 }
 
 export default UiQRView
