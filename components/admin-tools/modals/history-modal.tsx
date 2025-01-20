@@ -51,45 +51,45 @@ export default function HistoryModal({ open, setOpen }: IProps) {
         setOpen(false);
     }
 
-
-    return (
-        <Dialog open={open} onOpenChange={setOpen}>
-            <DialogContent className="sm:max-w-[425px]">
-                <DialogHeader>
-                    <DialogTitle>Admin Util</DialogTitle>
-                </DialogHeader>
-                <Form {...form}>
-                    <form className='w-full space-y-2' onSubmit={form.handleSubmit(onSubmit)}>
-                        <FormInput
-                            label="User Email"
-                            type='email'
-                            name="user"
-                            placeholder="Enter user"
-                            control={form.control}
-                            disabled={true}
-                        />
-                        <FormInput
-                            label="Management Email"
-                            type='email'
-                            name="management"
-                            placeholder="Enter management"
-                            control={form.control}
-                            disabled={true}
-                        />
-                        <FormInput
-                            label="Date"
-                            type="date"
-                            name="date"
-                            placeholder="Enter date"
-                            control={form.control}
-                            disabled={isLoading}
-                        />
-                        <FormSubmit disabled={isLoading}>
-                            <span className="">Submit</span>
-                        </FormSubmit>
-                    </form>
-                </Form>
-            </DialogContent>
-        </Dialog>
-    )
+    if (open)
+        return (
+            <Dialog open={open} onOpenChange={setOpen}>
+                <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                        <DialogTitle>Admin Util</DialogTitle>
+                    </DialogHeader>
+                    <Form {...form}>
+                        <form className='w-full space-y-2' onSubmit={form.handleSubmit(onSubmit)}>
+                            <FormInput
+                                label="User Email"
+                                type='email'
+                                name="user"
+                                placeholder="Enter user"
+                                control={form.control}
+                                disabled={isLoading}
+                            />
+                            <FormInput
+                                label="Management Email"
+                                type='email'
+                                name="management"
+                                placeholder="Enter management"
+                                control={form.control}
+                                disabled={isLoading}
+                            />
+                            <FormInput
+                                label="Date"
+                                type="date"
+                                name="date"
+                                placeholder="Enter date"
+                                control={form.control}
+                                disabled={isLoading}
+                            />
+                            <FormSubmit disabled={isLoading}>
+                                <span className="">Submit</span>
+                            </FormSubmit>
+                        </form>
+                    </Form>
+                </DialogContent>
+            </Dialog>
+        )
 }

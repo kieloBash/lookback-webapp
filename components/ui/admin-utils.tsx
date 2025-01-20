@@ -32,13 +32,13 @@ type SelectedType = "add-history" | "";
 
 export default function UiAdminUtils() {
     const [selected, setSelected] = useState<SelectedType>("");
-
+    console.log(selected);
     return (
         <>
-            {selected === "add-history" && <HistoryModal
+            <HistoryModal
                 open={selected === "add-history"}
-                setOpen={(e) => { if (!e) setSelected("") }}
-            />}
+                setOpen={(e) => { setSelected("") }}
+            />
             <div className="fixed lg:bottom-10 bottom-36 mb-2 right-2">
                 <DropdownMenu>
                     <DropdownMenuTrigger asChild>
@@ -112,7 +112,10 @@ export default function UiAdminUtils() {
                                     <span>History</span>
                                 </DropdownMenuSubTrigger>
                                 <DropdownMenuSubContent>
-                                    <DropdownMenuItem onClick={() => { setSelected("add-history") }}>
+                                    <DropdownMenuItem onClick={
+                                        () => {
+                                            // setSelected("add-history")
+                                        }}>
                                         <PlusIcon />
                                         <span>Add history</span>
                                     </DropdownMenuItem>
