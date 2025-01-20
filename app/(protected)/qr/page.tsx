@@ -6,11 +6,14 @@ import { useRouter, useSearchParams } from "next/navigation";
 import React, { useCallback, useEffect, useState } from "react";
 import { toast } from "@/hooks/use-toast";
 import { handleAxios } from "@/lib/utils";
+import { useQueryClient } from "@tanstack/react-query";
+import { HISTORY_ROUTES } from "@/routes/history.routes";
 
 const QRPage = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
     const token = searchParams.get("token");
+    const queryClient = useQueryClient();
 
     const [tokenVal, setTokenVal] = useState(token)
 
@@ -32,6 +35,7 @@ const QRPage = () => {
         handleAxios({ values: { token: tokenVal }, url: "/api/log/create" })
             .then((res) => {
                 setTokenVal("");
+                queryClient.invalidateQueries({ queryKey: [HISTORY_ROUTES.USER.FETCH_ALL], exact: false })
                 router.push("/scanner");
             })
 

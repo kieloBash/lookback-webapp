@@ -39,6 +39,12 @@ export const getUser = async (id: string) => {
 
         userProfile: true,
         managementProfile: true,
+        requests: {
+          select: { id: true },
+          where: {
+            status: "PENDING",
+          },
+        },
       },
     });
   } catch (error) {

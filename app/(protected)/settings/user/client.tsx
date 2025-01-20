@@ -35,7 +35,7 @@ interface IProps {
 
 const SettingsUserClient = ({ data: { userProfile: profile, ...data } }: IProps) => {
     const [isLoading, setIsLoading] = useState(false)
-    const { fname, lname, gender, regCode, provCode, citymunCode, brgyCode } = profile;
+    const { fname, lname, gender, regCode, provCode, citymunCode, brgyCode, status } = profile;
 
     const queryClient = useQueryClient()
     const router = useRouter()
@@ -56,7 +56,7 @@ const SettingsUserClient = ({ data: { userProfile: profile, ...data } }: IProps)
         <section className="w-full lg:max-w-none max-w-sm p-4">
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-md space-y-6">
-                    <CovidStatusCard />
+                    <CovidStatusCard covidStatus={status} hasRequest={data.requests.length > 0} />
                     <FormInput
                         control={form.control}
                         name="fname"

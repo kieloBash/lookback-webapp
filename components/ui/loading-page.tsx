@@ -1,12 +1,33 @@
+import { cn } from '@/lib/utils'
 import { Loader2Icon } from 'lucide-react'
 import React from 'react'
 
-const LoadingTemplate = () => {
+const LoadingIcon = ({ className }: { className?: string }) => {
+    const CLASS_NAME = cn("size-5 animate-spin", className)
+    return <Loader2Icon className={CLASS_NAME} />
+}
+
+const LoadingPage = ({ className }: { className?: string }) => {
+    const CLASS_NAME = cn("w-full h-full flex justify-center items-center", className)
     return (
-        <div className="w-full h-full flex justify-center items-center">
-            <Loader2Icon className='animate-spin size-5' />
-        </div>
+        <article className={CLASS_NAME}>
+            <LoadingIcon className={className} />
+        </article>
     )
 }
 
-export default LoadingTemplate
+interface IProps {
+    className?: string;
+    type?: "page" | "icon";
+}
+
+const UiLoading = ({ type = "page", className }: IProps) => {
+
+    if (type === "icon")
+        return <LoadingIcon className={className} />
+
+    if (type === "page")
+        return <LoadingPage className={className} />
+}
+
+export default UiLoading

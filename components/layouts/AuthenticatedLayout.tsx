@@ -6,6 +6,7 @@ import StaffLayout from './StaffLayout';
 import UserLayout from './UserLayout';
 import ManagementLayout from './ManagementLayout';
 import { SidebarProvider } from '../ui/sidebar';
+import AdminLayout from './AdminLayout';
 
 
 
@@ -30,6 +31,14 @@ const AuthenticatedLayout = async ({ children }: ILayoutProps) => {
                 <ManagementLayout>
                     {children}
                 </ManagementLayout>
+            </SidebarProvider>
+        )
+    } else if (user.role === "ADMIN") {
+        return (
+            <SidebarProvider>
+                <AdminLayout>
+                    {children}
+                </AdminLayout>
             </SidebarProvider>
         )
     }

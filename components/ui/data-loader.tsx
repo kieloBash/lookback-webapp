@@ -1,22 +1,32 @@
 'use client'
 import React from 'react'
 import LoadingTemplate from './loading-page';
-import { TableCell, TableRow } from './table';
-import LoadingIcon from './loading-icon';
+import UiLoading from './loading-page';
+import { TableCell, TableRow } from '../ui/table';
 
 interface IProps {
     isLoading: boolean;
     isError?: boolean;
     length?: number;
-    columns: number;
+    columns?: number;
     children: React.ReactNode;
     type?: "default" | "table";
+
+    message?: {
+        no_items?: string;
+        error?: string;
+    }
 }
 
-const UiDefault = ({ length = 0, isError = false, isLoading, children }: IProps) => {
+const DEFAULT_MESSAGE = {
+    no_items: "No items found!",
+    error: "An error occured!"
+}
+
+const UiDefault = ({ length = 0, isError = false, isLoading, children, message = DEFAULT_MESSAGE }: IProps) => {
     if (isError) return (
         <article className="size-full flex justify-center items-center">
-            <h2 className="text-muted-foreground">An error occured!</h2>
+            <h2 className="text-muted-foreground">{message.error ?? DEFAULT_MESSAGE.error}</h2>
         </article>
     )
 
@@ -28,7 +38,7 @@ const UiDefault = ({ length = 0, isError = false, isLoading, children }: IProps)
                 <div className='size-full'>
                     {length <= 0 ?
                         <div className='size-full flex justify-center items-center'>
-                            <h2 className="text-muted-foreground">No Items Found!</h2>
+                            <h2 className="text-muted-foreground">{message.no_items ?? DEFAULT_MESSAGE.no_items}</h2>
                         </div> :
                         <div className='size-full'>
                             {children}
@@ -40,7 +50,7 @@ const UiDefault = ({ length = 0, isError = false, isLoading, children }: IProps)
     )
 }
 
-const UiTable = ({ length = 0, isError = false, isLoading, children, columns }: IProps) => {
+const UiTable = ({ length = 0, isError = false, isLoading, children, columns = 0 }: IProps) => {
     if (isError) return (
         <TableRow>
             <TableCell colSpan={columns}>
@@ -53,7 +63,7 @@ const UiTable = ({ length = 0, isError = false, isLoading, children, columns }: 
         <TableRow>
             <TableCell className='' colSpan={columns}>
                 <div className="p-4 flex justify-center items-center">
-                    <LoadingIcon />
+                    <UiLoading type='icon' />
                 </div>
             </TableCell>
         </TableRow>
@@ -72,7 +82,7 @@ const UiTable = ({ length = 0, isError = false, isLoading, children, columns }: 
 
 const UiDataLoader = (props: IProps) => {
     if (props.type === "table") return <UiTable {...props} />
-    else if (props.type === "default") return <UiDefault {...props} />
+    else return <UiDefault {...props} />
 }
 
 export default UiDataLoader

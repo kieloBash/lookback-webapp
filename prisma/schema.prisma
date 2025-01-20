@@ -51,7 +51,7 @@ model User {
 
   //added
   notifications Notification[]
-  requests Request[]
+  requests      Request[]
 
   //user
   userProfile UserProfile?
@@ -93,7 +93,7 @@ model PasswordResetToken {
 //    V
 
 enum CovidStatus {
-  POSIIVE
+  POSITIVE
   NEGATIVE
 }
 
@@ -130,7 +130,7 @@ model ManagementProfile {
   provCode         String
   citymunCode      String
   brgyCode         String
-  daysWithoutCovid Int       @default(0)
+  daysWithoutCovid Int       @default(0) // TODO: to be removed
   history          History[]
 
   @@map("management-profiles")
@@ -145,7 +145,7 @@ model History {
   managementId String            @db.ObjectId
   management   ManagementProfile @relation(fields: [managementId], references: [id], onDelete: Cascade)
 
-  date        DateTime
+  date DateTime
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -155,6 +155,11 @@ model History {
   @@map("history")
 }
 
+enum NotificationType {
+  DEFAULT
+  COVID
+}
+
 model Notification {
   id String @id @default(auto()) @map("_id") @db.ObjectId
 
@@ -162,7 +167,9 @@ model Notification {
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   date    DateTime
+  title   String
   message String
+  type    NotificationType @default(DEFAULT)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
@@ -184,11 +191,11 @@ model Request {
   userId String @db.ObjectId
   user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
-  dateOfSymptoms    DateTime
-  dateOfTesting     DateTime
-  symptoms String
-  medicalImages String[]
-  status RequestStatus @default(PENDING)
+  dateOfSymptoms DateTime
+  dateOfTesting  DateTime
+  symptoms       String
+  medicalImages  String[]
+  status         RequestStatus @default(PENDING)
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt

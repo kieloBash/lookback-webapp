@@ -1,9 +1,11 @@
 import {
   History,
   ManagementProfile,
+  Request,
   User,
   UserProfile,
   UserRole,
+  Notification,
 } from "@prisma/client";
 
 export type FullAdminType = {
@@ -20,6 +22,7 @@ export type FullStaffType = {
 
 export type FullUserType = User & {
   userProfile: UserProfile;
+  requests: Request[];
 };
 export type FullManagementUserType = User & {
   managementProfile: ManagementProfile;
@@ -35,3 +38,9 @@ export type FullHistoryType = History & {
   user: FullUserProfile;
   management: FullManagementProfile;
 };
+
+export type FullRequestType = Request & {
+  user: FullUserType;
+};
+
+export type FullNotificationType = Notification & {};

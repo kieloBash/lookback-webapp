@@ -1,36 +1,28 @@
 "use client"
 
-import { useState } from "react"
+import { useMemo } from "react"
 import { Card, CardContent, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { WormIcon as Virus, ShieldCheck } from 'lucide-react'
-import { handleAxios } from "@/lib/utils"
+import { WormIcon as Virus, ShieldCheck, NotebookPen } from 'lucide-react'
+import { CovidStatus, RequestStatus } from "@prisma/client"
+import { useRouter } from "next/navigation"
 
-export default function CovidStatusCard() {
-    const [isLoading, setIsLoading] = useState(false);
-    const [isPositive, setIsPositive] = useState(false)
+interface IProps {
+    hasRequest: boolean;
+    covidStatus: CovidStatus;
+}
 
-    const toggleStatus = async () => {
+export default function CovidStatusCard({ hasRequest, covidStatus }: IProps) {
+    const router = useRouter();
 
-        const newStatus = isPositive ? "NEGATIVE" : "POSITIVE";
-        if (!isPositive) {
-            //prev status is negative so will be positive
-            setIsLoading(true);
-            await handleAxios({ values: { newStatus }, url: "/api/covid/status/update" })
-                .then(async () => {
-
-                })
-                .catch(() => {
-                    console.log("Error");
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                });
+    const status = useMemo(() => {
+        if (hasRequest) {
+            return "PENDING";
         }
 
+        return covidStatus;
+    }, [hasRequest, covidStatus]);
 
-        setIsPositive(!isPositive)
-    }
 
     return (
         <Card className="w-full max-w-md mx-auto">
@@ -38,24 +30,23 @@ export default function CovidStatusCard() {
                 <CardTitle className="text-2xl font-bold text-center">COVID-19 Status</CardTitle>
             </CardHeader>
             <CardContent className="flex flex-col items-center space-y-4">
-                {isPositive ? (
-                    <Virus className="w-24 h-24 text-red-500" />
-                ) : (
-                    <ShieldCheck className="w-24 h-24 text-green-500" />
-                )}
-                <p className="text-xl font-semibold">
-                    {isPositive ? "Positive" : "Negative"}
+                {status === "PENDING" && <NotebookPen className="size-24" />}
+                {status === "NEGATIVE" && <ShieldCheck className="size-24" />}
+                {status === "POSITIVE" && <Virus className="size-24" />}
+                <p className="text-center">
+                    {status}
                 </p>
             </CardContent>
-            <CardFooter className="flex justify-center">
+            <CardFooter className="w-full flex justify-center items-center">
                 <Button
-                    disabled={isLoading}
+                    disabled={status !== "NEGATIVE"}
+                    onClick={() => router.push("/requests")}
                     type="button"
-                    onClick={toggleStatus}
-                    variant={isPositive ? "destructive" : "default"}
-                    className="w-full max-w-xs"
+                    className="w-full lg:max-w-none max-w-xs"
                 >
-                    {isPositive ? "Mark as Negative" : "Mark as Positive"}
+                    {status === "PENDING" && <span>Pending Request</span>}
+                    {status === "NEGATIVE" && <span>Mark as Positive</span>}
+                    {status === "POSITIVE" && <span>Please Stay Safe and Quarantine</span>}
                 </Button>
             </CardFooter>
         </Card>

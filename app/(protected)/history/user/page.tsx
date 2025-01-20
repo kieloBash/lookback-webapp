@@ -28,7 +28,7 @@ const UserHistoryPage = () => {
                             <TableHead>Province</TableHead>
                             <TableHead>City</TableHead>
                             <TableHead>Barangay</TableHead>
-                            <TableHead className='text-right'>No Covid Days</TableHead>
+                            {/* <TableHead className='text-right'>No Covid Days</TableHead> */}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -41,7 +41,7 @@ const UserHistoryPage = () => {
                                     <TableCell>{d.management.provCode}</TableCell>
                                     <TableCell>{d.management.citymunCode}</TableCell>
                                     <TableCell>{d.management.brgyCode}</TableCell>
-                                    <TableCell className="text-right">{d.management.daysWithoutCovid}</TableCell>
+                                    {/* <TableCell className="text-right">{d.management.daysWithoutCovid}</TableCell> */}
                                 </TableRow>
                             )
                         })}

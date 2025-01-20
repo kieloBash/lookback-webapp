@@ -2,7 +2,7 @@
 import { ILayoutProps } from '@/types/global'
 import React, { useMemo } from 'react'
 import { Sidebar, SidebarContent, SidebarFooter, SidebarGroup, SidebarHeader, SidebarInset, SidebarMenu, SidebarMenuButton, SidebarMenuItem, SidebarProvider, SidebarTrigger } from '../ui/sidebar'
-import { BandageIcon, BellIcon, BoxIcon, Command, HistoryIcon, LayoutGridIcon, MapPinCheckIcon, SettingsIcon, TruckIcon, User2Icon } from 'lucide-react'
+import { BandageIcon, BellIcon, BoxIcon, Command, HistoryIcon, LayoutGridIcon, MapPinCheckIcon, MessageCircleMore, SettingsIcon, TruckIcon, User2Icon } from 'lucide-react'
 import { APP_NAME } from '@/lib/utils'
 import { useCurrentUser } from '@/lib/hooks'
 import { NavUser } from '../ui/nav-user'
@@ -23,17 +23,10 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                 items: [],
             },
             {
-                title: "Notifications",
-                url: "/notifications/admin",
-                icon: BellIcon,
-                isActive: pathname.includes("/notifications/admin"),
-                items: [],
-            },
-            {
-                title: "Settings",
-                url: "/settings/admin",
-                icon: SettingsIcon,
-                isActive: pathname.includes("/settings/admin"),
+                title: "Requests",
+                url: "/requests/admin",
+                icon: MessageCircleMore,
+                isActive: pathname.includes("/requests/admin"),
                 items: [],
             },
             {
