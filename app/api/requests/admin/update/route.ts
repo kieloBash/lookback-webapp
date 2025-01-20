@@ -85,7 +85,15 @@ export async function POST(request: Request) {
           type: "COVID",
         });
       }
-      
+
+      await createNotification({
+        userId: existing.userId,
+        date: new Date(),
+        title: "Request Accepted!",
+        message:
+          "Your request has been accepted! please practice caution and quarantine for 14 days",
+        type: "DEFAULT",
+      });
     } else {
       await db.userProfile.update({
         where: { userId: existing.userId },
