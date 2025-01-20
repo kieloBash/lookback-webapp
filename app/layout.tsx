@@ -7,6 +7,7 @@ import { QueryProvider } from "@/providers/query-provider";
 import { ThemeProvider } from "@/providers/theme-provider";
 import { Toaster } from "@/components/ui/toaster";
 import { ThemeToggle } from "@/components/ui/theme-toggle";
+import UiAdminUtils from "@/components/ui/admin-utils";
 
 
 const poppins = Poppins({
@@ -46,6 +47,7 @@ export default async function RootLayout({
               <main className="w-full relative min-h-screen">
                 {children}
               </main>
+              <UiAdminUtils />
               <ThemeToggle />
             </ThemeProvider>
           </QueryProvider>
