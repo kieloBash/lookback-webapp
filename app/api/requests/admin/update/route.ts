@@ -1,6 +1,7 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createNotification } from "@/lib/notification";
+import { addMinutes, subDays } from "date-fns";
 import { NextResponse } from "next/server";
 
 const ROUTE_NAME = "Covid Status Update";
@@ -25,7 +26,10 @@ export async function POST(request: Request) {
 
     console.log(newStatus, id);
 
-    const existing = await db.request.findFirst({ where: { id } });
+    const existing = await db.request.findFirst({
+      where: { id },
+      include: { user: { include: { userProfile: true } } },
+    });
     if (!existing) {
       return new NextResponse(ROUTE_NAME + ": Data not found", { status: 404 });
     }
@@ -38,6 +42,50 @@ export async function POST(request: Request) {
       });
 
       //TODO: notify all users based on the criteria
+      const userHistories = await db.history.findMany({
+        where: {
+          userId: existing.user?.userProfile?.id ?? "",
+          date: {
+            gte: subDays(existing.dateOfSymptoms, 14),
+            lte: new Date(existing.dateOfTesting),
+          },
+        },
+      });
+
+      const affectedUserIds = new Set<string>();
+
+      for (const history of userHistories) {
+        const relatedHistories = await db.history.findMany({
+          where: {
+            managementId: history.managementId,
+            date: {
+              gte: history.date,
+              lte: addMinutes(history.date, 30),
+            },
+          },
+        });
+
+        relatedHistories.forEach((relatedHistory) => {
+          if (
+            relatedHistory.userId &&
+            relatedHistory.userId !== existing.userId
+          ) {
+            affectedUserIds.add(relatedHistory.userId);
+          }
+        });
+      }
+
+      for (const userId of affectedUserIds) {
+        await createNotification({
+          userId,
+          date: new Date(),
+          title: "COVID Exposure Alert",
+          message:
+            "You may have been exposed to someone who tested positive for COVID-19. Please monitor your health and consider getting tested.",
+          type: "COVID",
+        });
+      }
+      
     } else {
       await db.userProfile.update({
         where: { userId: existing.userId },
@@ -53,7 +101,7 @@ export async function POST(request: Request) {
         type: "DEFAULT",
       });
     }
-    
+
     await db.request.update({
       where: { id: existing.id },
       data: { status: newStatus },
