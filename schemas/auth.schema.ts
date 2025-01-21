@@ -22,7 +22,7 @@ export const CreateUserSchema = z.object({
     .regex(/[^a-zA-Z0-9]/, {
       message: "Password must contain at least one special character.",
     }),
-  role: z.enum([UserRole.MANAGEMENT, UserRole.USER]),
+  role: z.enum([UserRole.MANAGEMENT, UserRole.USER, UserRole.ADMIN]),
   email: z.string().email({
     message: "Must be a valid email!",
   }),
@@ -191,6 +191,48 @@ export const OnboardingSchema = z
     {
       message:
         "Role and profile mismatch: If role is USER, user profile must be defined and management profile must be undefined, and vice versa.",
+      path: ["role"],
+    }
+  );
+
+export const AdminUserSchema = z
+  .object({
+    name: z.string(),
+    password: z
+      .string()
+      .min(8, {
+        message: "Password must be at least 8 characters long.",
+      })
+      .regex(/[a-z]/, {
+        message: "Password must contain at least one lowercase letter.",
+      })
+      .regex(/[A-Z]/, {
+        message: "Password must contain at least one uppercase letter.",
+      })
+      .regex(/[0-9]/, {
+        message: "Password must contain at least one number.",
+      })
+      .regex(/[^a-zA-Z0-9]/, {
+        message: "Password must contain at least one special character.",
+      }),
+    role: z.enum([UserRole.MANAGEMENT, UserRole.USER, UserRole.ADMIN]),
+    email: z.string().email({
+      message: "Must be a valid email!",
+    }),
+    management: ManagementProfileSchema.optional(),
+    user: UserProfileSchema.optional(),
+  })
+  .refine(
+    (data) => {
+      if (data.role === UserRole.USER) {
+        return data.user !== undefined && data.management === undefined;
+      } else if (data.role === UserRole.MANAGEMENT) {
+        return data.management !== undefined && data.user === undefined;
+      }
+      return true;
+    },
+    {
+      message: "",
       path: ["role"],
     }
   );
