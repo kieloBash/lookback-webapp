@@ -18,3 +18,5 @@ export interface INavLink {
     url: string;
   }[];
 }
+export type IActionType = "delete" | "update" | "view" | "";
+
