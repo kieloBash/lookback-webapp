@@ -50,8 +50,15 @@ export async function POST(request: Request) {
       await db.userProfile.update({
         where: { userId: id },
         data: {
-          ...fields.user,
+          fname: fields.user.fname,
+          lname: fields.user.lname,
+          gender: fields.user.gender,
           birthDate: new Date(fields.user.birthDate),
+          status: fields.user.status ?? "NEGATIVE",
+          regCode: fields.user.regCode,
+          provCode: fields.user.provCode,
+          citymunCode: fields.user.citymunCode,
+          brgyCode: fields.user.brgyCode,
         },
       });
     } else if (fields.role === "MANAGEMENT" && fields.management) {

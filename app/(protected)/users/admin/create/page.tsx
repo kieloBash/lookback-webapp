@@ -18,6 +18,7 @@ import FormSubmit from '@/components/forms/submit-button';
 import UserForm from './_components/user-form';
 import ManagementForm from './_components/management-form';
 import { AdminUserSchema } from '@/schemas/auth.schema';
+import { toast } from '@/hooks/use-toast';
 
 const URL = USERS_ROUTES.ADMIN.CREATE.URL;
 const QUERY_KEY = USERS_ROUTES.ADMIN.FETCH_ALL.KEY;
@@ -50,6 +51,7 @@ const AdminCreateUserPage = () => {
                 router.push("/users/admin/overview")
             })
             .catch((e) => {
+                toast({ description: "An error occured!", variant: "destructive" })
                 console.error(e);
             })
         setIsLoading(false);

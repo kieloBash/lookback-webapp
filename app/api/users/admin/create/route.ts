@@ -63,6 +63,7 @@ export async function POST(request: Request) {
               create: {
                 ...UserProfile,
                 birthDate: new Date(UserProfile.birthDate),
+                status: UserProfile?.status ?? "NEGATIVE",
               },
             },
           }),
