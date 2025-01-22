@@ -163,6 +163,7 @@ export const UserProfileSchema = z.object({
   provCode: z.string().min(1, "Province code is required"),
   citymunCode: z.string().min(1, "City/Municipality code is required"),
   brgyCode: z.string().min(1, "Barangay code is required"),
+  status: z.enum(["NEGATIVE", "POSITIVE"], { message: "Invalid status" }),
 });
 
 export const ManagementProfileSchema = z.object({

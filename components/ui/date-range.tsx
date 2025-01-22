@@ -1,7 +1,7 @@
 "use client"
 
 import * as React from "react"
-import { addDays, format, subDays } from "date-fns"
+import { format, subDays } from "date-fns"
 import { Calendar as CalendarIcon } from "lucide-react"
 import { DateRange } from "react-day-picker"
 
@@ -16,16 +16,22 @@ import {
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
+interface Extended {
+    defaultStartDate?: Date;
+    defaultEndDate?: Date;
+}
 export function UiDatePickerRange({
     className,
-}: React.HTMLAttributes<HTMLDivElement>) {
+    defaultStartDate,
+    defaultEndDate,
+}: React.HTMLAttributes<HTMLDivElement> & Extended) {
     const router = useRouter();
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
     const [date, setDate] = React.useState<DateRange | undefined>({
-        from: subDays(new Date(), 7),
-        to: new Date(),
+        from: defaultStartDate ? defaultStartDate : subDays(new Date(), 7),
+        to: defaultEndDate ? defaultEndDate : new Date(),
     })
 
     React.useEffect(() => {

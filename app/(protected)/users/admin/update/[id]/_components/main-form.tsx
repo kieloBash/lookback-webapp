@@ -63,6 +63,7 @@ const EditMainForm = ({ data }: { data: FullAllUserType }) => {
                 provCode: data.userProfile.provCode,
                 citymunCode: data.userProfile.citymunCode,
                 brgyCode: data.userProfile.brgyCode,
+                status: data.userProfile.status as any,
             }
             form.setValue("user", v);
         } else if (data.role === "MANAGEMENT") {
