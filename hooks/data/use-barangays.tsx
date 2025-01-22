@@ -32,7 +32,7 @@ const fetchData = async ({
     citymunCode
 }: FetchParams): Promise<ApiResponse> => {
 
-    if (!citymunCode) return { payload: [] };
+    // if (!citymunCode) return { payload: [] };
 
     const url = citymunCode ? `${ROUTE}/${citymunCode}?page=${page}&limit=${limit}&filter=${filter}&searchTerm=${searchTerm}` : `${ROUTE}?page=${page}&limit=${limit}&filter=${filter}&searchTerm=${searchTerm}`
 

@@ -18,6 +18,7 @@ import {
 import { MoreHorizontalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { IActionType } from '@/types/global';
+import Link from 'next/link';
 
 interface IProps {
     data: User;
@@ -40,11 +41,13 @@ const Row = ({ data, handleAction }: IProps) => {
                     </DropdownMenuTrigger>
                     <DropdownMenuContent align="end">
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem
-                            onClick={() => handleAction(data, "update")}
-                        >
-                            Edit
-                        </DropdownMenuItem>
+                        <Link href={`/users/admin/update/${data.id}`}>
+                            <DropdownMenuItem
+                                onClick={() => handleAction(data, "update")}
+                            >
+                                Edit
+                            </DropdownMenuItem>
+                        </Link>
                         <DropdownMenuItem
                             onClick={() => handleAction(data, "delete")}
                         >

@@ -45,6 +45,9 @@ export default function ProvinceCodeSelect({ form, formName, regCode, defaultVal
     const [value, setValue] = React.useState(defaultValue);
     const [searchTerm, setSearchTerm] = React.useState("");
 
+    console.log(defaultValue);
+    console.log(value);
+
     const filteredData = React.useMemo(() => {
         const normalizedSearchTerm = searchTerm.trim().toLowerCase();
         return data.filter((d) =>
@@ -65,11 +68,9 @@ export default function ProvinceCodeSelect({ form, formName, regCode, defaultVal
     }
 
     React.useEffect(() => {
-        form.setValue(formName, "");
-        setValue("");
-    }, [regCode])
-
-
+        form.setValue(formName, defaultValue);
+        setValue(defaultValue);
+    }, [regCode, defaultValue])
 
     return (
         <div className="w-full flex justify-between items-center gap-1">
@@ -88,7 +89,7 @@ export default function ProvinceCodeSelect({ form, formName, regCode, defaultVal
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[300px] p-0">
-                    <Command className="w-full" shouldFilter={false}>
+                    <Command value={value} defaultValue={defaultValue} className="w-full" shouldFilter={false}>
                         <CommandInput
                             placeholder="Search province..."
                             value={searchTerm}

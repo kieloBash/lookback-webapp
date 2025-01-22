@@ -195,10 +195,10 @@ export const OnboardingSchema = z
     }
   );
 
-export const AdminUserSchema = z
-  .object({
-    name: z.string(),
-    password: z
+export const AdminUserSchema = z.object({
+  name: z.string(),
+  password: z.optional(
+    z
       .string()
       .min(8, {
         message: "Password must be at least 8 characters long.",
@@ -214,25 +214,14 @@ export const AdminUserSchema = z
       })
       .regex(/[^a-zA-Z0-9]/, {
         message: "Password must contain at least one special character.",
-      }),
-    role: z.enum([UserRole.MANAGEMENT, UserRole.USER, UserRole.ADMIN]),
-    email: z.string().email({
-      message: "Must be a valid email!",
-    }),
-    management: ManagementProfileSchema.optional(),
-    user: UserProfileSchema.optional(),
-  })
-  .refine(
-    (data) => {
-      if (data.role === UserRole.USER) {
-        return data.user !== undefined && data.management === undefined;
-      } else if (data.role === UserRole.MANAGEMENT) {
-        return data.management !== undefined && data.user === undefined;
-      }
-      return true;
-    },
-    {
-      message: "",
-      path: ["role"],
-    }
-  );
+      })
+  ),
+  role: z
+    .enum([UserRole.MANAGEMENT, UserRole.USER, UserRole.ADMIN])
+    .default("USER"),
+  email: z.string().email({
+    message: "Must be a valid email!",
+  }),
+  management: ManagementProfileSchema.optional(),
+  user: UserProfileSchema.optional(),
+});

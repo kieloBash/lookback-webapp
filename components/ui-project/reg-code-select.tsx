@@ -31,7 +31,6 @@ interface IProps {
 type DataType = { id: string, value: string, label: string };
 
 export default function RegionCodeSelect({ form, formName, defaultValue = "" }: IProps) {
-
     const regions = useDataRegions({});
     const data = React.useMemo(() => {
         if (regions.isLoading || !regions?.payload) return [];
@@ -42,6 +41,10 @@ export default function RegionCodeSelect({ form, formName, defaultValue = "" }: 
     const [open, setOpen] = React.useState(false)
     const [value, setValue] = React.useState(defaultValue);
     const [searchTerm, setSearchTerm] = React.useState("");
+
+    console.log(regions);
+    console.log(defaultValue)
+    console.log(value)
 
     const filteredData = React.useMemo(() => {
         const normalizedSearchTerm = searchTerm.trim().toLowerCase();
@@ -80,7 +83,7 @@ export default function RegionCodeSelect({ form, formName, defaultValue = "" }: 
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[300px] p-0">
-                    <Command className="w-full" shouldFilter={false}>
+                    <Command value={value} defaultValue={defaultValue} className="w-full" shouldFilter={false}>
                         <CommandInput
                             placeholder="Search region..."
                             value={searchTerm}

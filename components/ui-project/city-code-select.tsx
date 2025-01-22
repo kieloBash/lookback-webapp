@@ -66,11 +66,9 @@ export default function CityCodeSelect({ form, formName, provCode, defaultValue 
     }
 
     React.useEffect(() => {
-        form.setValue(formName, "");
-        setValue("");
-    }, [provCode])
-
-
+        form.setValue(formName, defaultValue);
+        setValue(defaultValue);
+    }, [provCode, defaultValue])
 
     return (
         <div className="w-full flex justify-between items-center gap-1">
@@ -89,7 +87,7 @@ export default function CityCodeSelect({ form, formName, provCode, defaultValue 
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[300px] p-0">
-                    <Command className="w-full" shouldFilter={false}>
+                    <Command value={value} defaultValue={defaultValue} className="w-full" shouldFilter={false}>
                         <CommandInput
                             placeholder="Search city/municipality..."
                             value={searchTerm}

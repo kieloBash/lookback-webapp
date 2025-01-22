@@ -32,7 +32,7 @@ const fetchData = async ({
     provCode
 }: FetchParams): Promise<ApiResponse> => {
 
-    if (!provCode) return { payload: [] };
+    // if (!provCode) return { payload: [] };
 
     const url = provCode ? `${ROUTE}/${provCode}?page=${page}&limit=${limit}&filter=${filter}&searchTerm=${searchTerm}` : `${ROUTE}?page=${page}&limit=${limit}&filter=${filter}&searchTerm=${searchTerm}`
 

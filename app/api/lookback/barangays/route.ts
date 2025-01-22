@@ -34,7 +34,7 @@ export async function GET() {
     const fileContents = await fs.readFile(filePath, "utf-8");
     const barangays = JSON.parse(fileContents);
 
-    return NextResponse.json(barangays);
+    return NextResponse.json({payload:barangays});
   } catch (error) {
     return new NextResponse("Internal error", {
       status: 500,

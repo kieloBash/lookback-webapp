@@ -66,9 +66,9 @@ export default function BarangayCodeSelect({ form, formName, citymunCode, defaul
     }
 
     React.useEffect(() => {
-        form.setValue(formName, "");
-        setValue("");
-    }, [citymunCode])
+        form.setValue(formName, defaultValue);
+        setValue(defaultValue);
+    }, [citymunCode, defaultValue])
 
 
 
@@ -89,7 +89,7 @@ export default function BarangayCodeSelect({ form, formName, citymunCode, defaul
                     </Button>
                 </PopoverTrigger>
                 <PopoverContent className="w-[300px] p-0">
-                    <Command className="w-full" shouldFilter={false}>
+                    <Command value={value} defaultValue={defaultValue} className="w-full" shouldFilter={false}>
                         <CommandInput
                             placeholder="Search barangay..."
                             value={searchTerm}

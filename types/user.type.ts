@@ -27,6 +27,12 @@ export type FullUserType = User & {
 export type FullManagementUserType = User & {
   managementProfile: ManagementProfile;
 };
+
+export type FullAllUserType = User & {
+  userProfile: UserProfile;
+  managementProfile: ManagementProfile;
+};
+
 export type FullManagementProfile = ManagementProfile & {
   user: FullManagementUserType;
 };

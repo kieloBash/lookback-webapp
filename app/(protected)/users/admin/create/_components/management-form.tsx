@@ -5,10 +5,8 @@ import CityCodeSelect from '@/components/ui-project/city-code-select';
 import ProvinceCodeSelect from '@/components/ui-project/prov-code-select';
 import RegionCodeSelect from '@/components/ui-project/reg-code-select';
 import { Label } from '@/components/ui/label';
-import { OnboardingSchema } from '@/schemas/auth.schema';
 import React from 'react'
 import { UseFormReturn } from 'react-hook-form';
-import { z } from 'zod';
 
 interface IProps {
     form: UseFormReturn<any, any, undefined>;

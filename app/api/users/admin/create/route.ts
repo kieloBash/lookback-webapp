@@ -33,7 +33,7 @@ export async function POST(request: Request) {
       management: ManagementProfile,
     } = validatedFields.data;
 
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await bcrypt.hash(password as any, 10);
     const existingUser = await getUserByEmail(email);
     if (existingUser) {
       return new NextResponse(ROUTE_NAME + ": Email already exists!", {
