@@ -34,13 +34,39 @@ const HistoryAdminPage = () => {
 
     const data = useAdminHistory({ page, limit: 20, startDate, endDate, searchTerm: search });
 
+    const handleExport = () => {
+        if (data.payload?.length === 0 || !data.payload) return;
+
+        const csvContent = [
+            ["Date Time", "User", "Region", "Province", "City", "Barangay"],
+            ...data.payload.map(d => [
+                formatDateTime(d.date),
+                `${d.user.fname} ${d.user.lname}`,
+                d.user.regCode,
+                d.user.provCode,
+                d.user.citymunCode,
+                d.user.brgyCode
+            ])
+        ].map(e => e.join(",")).join("\n");
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "history_data.csv");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
     return (
         <article className="w-full p-4">
             <div className="flex justify-between items-center py-2">
                 <div className="flex justify-start gap-2 items-center">
                     <UiSearch className='h-9 max-w-md' handleResetPage={() => { }} placeholder='Search name of user...' />
                     <UiDatePickerRange defaultStartDate={startDate} defaultEndDate={endDate} />
-                    <Button type='button' variant={"outline"}>
+                    <Button onClick={handleExport} type='button' variant={"outline"}>
                         <span>Export Data</span>
                         <DownloadIcon />
                     </Button>
