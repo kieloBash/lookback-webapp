@@ -51,8 +51,7 @@ const AdminCreateUserPage = () => {
                 router.push("/users/admin/overview")
             })
             .catch((e) => {
-                toast({ description: "An error occured!", variant: "destructive" })
-                console.error(e);
+                toast({ description: "Email already exists!", variant: "destructive" })
             })
         setIsLoading(false);
     }
