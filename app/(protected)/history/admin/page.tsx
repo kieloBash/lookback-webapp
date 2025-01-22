@@ -71,7 +71,7 @@ const HistoryAdminPage = () => {
                         <DownloadIcon />
                     </Button>
                 </div>
-                <UiPaginatedButtons hasPrev={page > 1} hasNext={page < (data.totalData ?? 0)} />
+                <UiPaginatedButtons hasPrev={page > 1} hasNext={page < (data.totalPages ?? 0)} />
             </div>
             <div className="w-full lg:max-w-none max-w-xs">
                 <Table>

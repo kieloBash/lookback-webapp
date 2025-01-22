@@ -44,6 +44,7 @@ const AdminCreateUserPage = () => {
 
     async function onSubmit(values: z.infer<typeof Schema>) {
         setIsLoading(true);
+        console.log(values)
         await handleAxios({ values, url: URL })
             .then((res) => {
                 queryClient.invalidateQueries({ queryKey: [QUERY_KEY], exact: false })
