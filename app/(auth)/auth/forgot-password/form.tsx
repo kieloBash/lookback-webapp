@@ -39,6 +39,7 @@ export function ForgotPasswordForm() {
     async function onSubmit(values: z.infer<typeof ForgotPasswordSchema>) {
         setIsLoading(true);
         const res = await handleAxios({ values, url: URL });
+        setIsLoading(false);
         if (res.token) {
             const confirmLink = `${domain}/auth/new-password?token=${res.token}`;
             const templateParams = {
@@ -67,7 +68,6 @@ export function ForgotPasswordForm() {
                 description: "an error occured!",
             });
         }
-        setIsLoading(false);
     }
 
     return (
