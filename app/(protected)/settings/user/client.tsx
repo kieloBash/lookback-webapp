@@ -9,25 +9,19 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 
 import { Form } from '@/components/ui/form';
-import { handlePostAxios } from '@/lib/utils';
+import { handleAxios, handlePostAxios } from '@/lib/utils';
 import { FormInput } from '@/components/forms/form-input';
 
 import { SettingsUserSchema } from '@/schemas/auth.schema';
 
-import { Button } from '@/components/ui/button';
-import { signOut } from 'next-auth/react';
-import UiLoading from '@/components/ui-project/loading-page';
-import { Label } from '@/components/ui/label';
-
-import BarangayCodeSelect from '@/components/ui-project/barangay-code-select';
-import CityCodeSelect from '@/components/ui-project/city-code-select';
-import ProvinceCodeSelect from '@/components/ui-project/prov-code-select';
-import RegionCodeSelect from '@/components/ui-project/reg-code-select';
 import FormSelect from '@/components/forms/form-select';
 
 import { FullUserType } from '@/types/user.type';
 import FormSubmit from '@/components/forms/submit-button';
 import CovidStatusCard from './_components/covid-status';
+import AddressForm from './_components/address-form';
+import { USERS_ROUTES } from '@/routes/users.routes';
+import { toast } from '@/hooks/use-toast';
 
 interface IProps {
     data: FullUserType;
@@ -45,11 +39,20 @@ const SettingsUserClient = ({ data: { userProfile: profile, ...data } }: IProps)
         defaultValues: {
             fname, lname, gender, regCode, provCode, citymunCode, brgyCode,
             email: data.email,
+            birthDate: new Date(profile.birthDate).toISOString().split('T')[0],
         },
     });
 
     async function onSubmit(values: z.infer<typeof SettingsUserSchema>) {
-        console.log(values);
+        setIsLoading(true);
+        await handleAxios({ values: { id: data.id, profileId: profile.id, ...values }, url: USERS_ROUTES.USER.UPDATE.URL })
+            .then(() => {
+                window.location.reload();
+            })
+            .catch((e) => {
+                toast({ description: e.response.data, variant: 'destructive' })
+            })
+        setIsLoading(false);
     }
 
     return (
@@ -57,6 +60,14 @@ const SettingsUserClient = ({ data: { userProfile: profile, ...data } }: IProps)
             <Form {...form}>
                 <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-md space-y-6">
                     <CovidStatusCard covidStatus={status} hasRequest={data.requests.length > 0} />
+                    <FormInput
+                        control={form.control}
+                        name="email"
+                        type='email'
+                        label="Email Address"
+                        placeholder='Enter email'
+                        disabled={true}
+                    />
                     <FormInput
                         control={form.control}
                         name="fname"
@@ -79,9 +90,19 @@ const SettingsUserClient = ({ data: { userProfile: profile, ...data } }: IProps)
                         control={form.control}
                         disabled={isLoading}
                     />
+                    <FormInput
+                        label="Date of Birth"
+                        type='date'
+                        name="birthDate"
+                        placeholder="Enter your date of birth"
+                        control={form.control}
+                        disabled={isLoading}
+                    />
+                    <AddressForm form={form} isLoading={isLoading} />
                     <FormSubmit
                         className='w-full'
                         disabled={isLoading}
+                        isDirty={!form.formState.isDirty}
                     >
                         <span>Save Changes</span>
                     </FormSubmit>

@@ -15,4 +15,9 @@ export const USERS_ROUTES = {
       URL: MAIN_API + "/admin/create",
     },
   },
+  USER: {
+    UPDATE: {
+      URL: MAIN_API + "/user/update",
+    },
+  },
 };

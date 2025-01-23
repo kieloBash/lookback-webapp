@@ -67,6 +67,7 @@ export const SettingsUserSchema = z
     fname: z.optional(z.string().min(2)),
     lname: z.optional(z.string().min(2)),
     gender: z.optional(z.string()),
+    birthDate: z.string(),
 
     regCode: z.optional(z.string()),
     provCode: z.optional(z.string()),
