@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table"
 import { formatDateTime } from '@/lib/utils'
 import useUserHistory from '@/hooks/user/use-history'
+import UiCodeLabel from '@/components/ui-project/code-label';
 
 const UserHistoryPage = () => {
     const data = useUserHistory({});
@@ -37,10 +38,18 @@ const UserHistoryPage = () => {
                                 <TableRow key={d.id}>
                                     <TableCell className="font-medium">{formatDateTime(d.date)}</TableCell>
                                     <TableCell>{d.management.user.name}</TableCell>
-                                    <TableCell>{d.management.regCode}</TableCell>
-                                    <TableCell>{d.management.provCode}</TableCell>
-                                    <TableCell>{d.management.citymunCode}</TableCell>
-                                    <TableCell>{d.management.brgyCode}</TableCell>
+                                    <TableCell>
+                                        <UiCodeLabel value={d.management.regCode} type="region" />
+                                    </TableCell>
+                                    <TableCell>
+                                        <UiCodeLabel value={d.management.provCode} type="province" />
+                                    </TableCell>
+                                    <TableCell>
+                                        <UiCodeLabel value={d.management.citymunCode} type="city" />
+                                    </TableCell>
+                                    <TableCell>
+                                        <UiCodeLabel value={d.management.brgyCode} type="barangay" />
+                                    </TableCell>
                                     {/* <TableCell className="text-right">{d.management.daysWithoutCovid}</TableCell> */}
                                 </TableRow>
                             )

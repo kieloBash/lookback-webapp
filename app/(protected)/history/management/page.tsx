@@ -13,6 +13,7 @@ import {
 } from "@/components/ui/table"
 import useManagementHistory from '@/hooks/management/use-history'
 import { formatDateTime } from '@/lib/utils'
+import UiCodeLabel from '@/components/ui-project/code-label';
 
 const ManagementHistoryPage = () => {
     const data = useManagementHistory({});
@@ -37,10 +38,18 @@ const ManagementHistoryPage = () => {
                                 <TableRow key={d.id}>
                                     <TableCell className="font-medium">{formatDateTime(d.date)}</TableCell>
                                     <TableCell>{d.user.fname} {d.user.lname}</TableCell>
-                                    <TableCell>{d.user.regCode}</TableCell>
-                                    <TableCell>{d.user.provCode}</TableCell>
-                                    <TableCell>{d.user.citymunCode}</TableCell>
-                                    <TableCell>{d.user.brgyCode}</TableCell>
+                                    <TableCell>
+                                        <UiCodeLabel value={d.user.regCode} type="region" />
+                                    </TableCell>
+                                    <TableCell>
+                                        <UiCodeLabel value={d.user.provCode} type="province" />
+                                    </TableCell>
+                                    <TableCell>
+                                        <UiCodeLabel value={d.user.citymunCode} type="city" />
+                                    </TableCell>
+                                    <TableCell>
+                                        <UiCodeLabel value={d.user.brgyCode} type="barangay" />
+                                    </TableCell>
                                     <TableCell className="text-right">{d.user.status}</TableCell>
                                 </TableRow>
                             )

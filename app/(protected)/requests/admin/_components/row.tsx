@@ -15,6 +15,7 @@ import Link from 'next/link'
 import { RequestStatus } from '@prisma/client'
 import { REQUESTS_ROUTES } from '@/routes/requests.routes'
 import { useQueryClient } from '@tanstack/react-query'
+import UiCodeLabel from '@/components/ui-project/code-label'
 
 interface IProps {
     data: FullRequestType;
@@ -45,7 +46,9 @@ const Row = ({ data: d }: IProps) => {
             <TableCell>{d.user.userProfile.fname}</TableCell>
             <TableCell className="font-medium">{formatDate(d.dateOfSymptoms, FORMAT)}</TableCell>
             <TableCell className="font-medium">{formatDate(d.dateOfTesting, FORMAT)}</TableCell>
-            <TableCell>{d.user.userProfile.citymunCode}</TableCell>
+            <TableCell>
+                <UiCodeLabel value={d.user.userProfile.citymunCode} type="city" />
+            </TableCell>
             <TableCell>
                 <Link href={`${domain}/_next/image?url=${d.medicalImages[0]}&w=1920&q=75`} target='_blank'>
                     <div className="size-16 overflow-hidden rounded relative">
