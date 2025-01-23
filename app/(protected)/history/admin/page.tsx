@@ -21,6 +21,7 @@ import UiDataLoader from '@/components/ui/data-loader';
 import { formatDateTime } from '@/lib/utils';
 import UiSearch from '@/components/ui/search';
 import UiPaginatedButtons from '@/components/ui/paginated-btns';
+import UiCodeLabel from '@/components/ui-project/code-label';
 
 const HistoryAdminPage = () => {
     const searchParams = useSearchParams();
@@ -97,10 +98,18 @@ const HistoryAdminPage = () => {
                                     <TableRow key={d.id}>
                                         <TableCell className="font-medium">{formatDateTime(d.date)}</TableCell>
                                         <TableCell>{d.user.fname} {d.user.lname}</TableCell>
-                                        <TableCell>{d.user.regCode}</TableCell>
-                                        <TableCell>{d.user.provCode}</TableCell>
-                                        <TableCell>{d.user.citymunCode}</TableCell>
-                                        <TableCell>{d.user.brgyCode}</TableCell>
+                                        <TableCell>
+                                            <UiCodeLabel value={d.user.regCode} type="region" />
+                                        </TableCell>
+                                        <TableCell>
+                                            <UiCodeLabel value={d.user.provCode} type="province" />
+                                        </TableCell>
+                                        <TableCell>
+                                            <UiCodeLabel value={d.user.citymunCode} type="city" />
+                                        </TableCell>
+                                        <TableCell>
+                                            <UiCodeLabel value={d.user.brgyCode} type="barangay" />
+                                        </TableCell>
                                     </TableRow>
                                 )
                             })}
