@@ -41,7 +41,7 @@ const LoginForm = () => {
     });
 
     function handleSocialSignIn(provider: "google" | "github") {
-        signIn(provider, { callbackUrl: callbackUrl || DEFAULT_LOGIN_REDIRECT });
+        signIn(provider, { callbackUrl: DEFAULT_LOGIN_REDIRECT });
     }
 
     const onSubmit = async (values: z.infer<typeof LoginSchema>) => {
