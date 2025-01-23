@@ -6,7 +6,7 @@ import { UiDatePickerRange } from '@/components/ui/date-range';
 import useAdminHistory from '@/hooks/admin/use-history'
 import { endOfMonth, startOfMonth } from 'date-fns';
 import { Button } from '@/components/ui/button';
-import { ChevronLeftIcon, ChevronRightIcon, DownloadIcon } from 'lucide-react';
+import { ChevronLeftIcon, ChevronRightIcon, DownloadIcon, PlusIcon } from 'lucide-react';
 import {
     Table,
     TableBody,
@@ -22,6 +22,7 @@ import { formatDateTime } from '@/lib/utils';
 import UiSearch from '@/components/ui/search';
 import UiPaginatedButtons from '@/components/ui/paginated-btns';
 import UiCodeLabel from '@/components/ui-project/code-label';
+import { AddModal } from './_components/add';
 
 const HistoryAdminPage = () => {
     const searchParams = useSearchParams();
@@ -61,6 +62,10 @@ const HistoryAdminPage = () => {
         document.body.removeChild(link);
     }
 
+    const handleAdd = () => {
+        console.log('add');
+    }
+
     return (
         <article className="w-full p-4">
             <div className="flex justify-between items-center py-2">
@@ -71,6 +76,7 @@ const HistoryAdminPage = () => {
                         <span>Export Data</span>
                         <DownloadIcon />
                     </Button>
+                    <AddModal />
                 </div>
                 <UiPaginatedButtons hasPrev={page > 1} hasNext={page < (data.totalPages ?? 0)} />
             </div>

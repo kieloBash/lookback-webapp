@@ -54,7 +54,7 @@ export async function GET(request: Request) {
             },
           },
         },
-        orderBy: { date: "asc" },
+        orderBy: { date: "desc" },
       }),
     ]);
 

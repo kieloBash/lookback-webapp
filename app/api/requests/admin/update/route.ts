@@ -1,7 +1,7 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { createNotification } from "@/lib/notification";
-import { addMinutes, subDays } from "date-fns";
+import { addMinutes, endOfDay, subDays } from "date-fns";
 import { NextResponse } from "next/server";
 
 const ROUTE_NAME = "Covid Status Update";
@@ -33,21 +33,14 @@ export async function POST(request: Request) {
     if (!existing) {
       return new NextResponse(ROUTE_NAME + ": Data not found", { status: 404 });
     }
-    if (newStatus === "QUALIFIED") {
-      await db.userProfile.update({
-        where: { userId: existing.userId },
-        data: {
-          status: "POSITIVE",
-        },
-      });
 
-      //TODO: notify all users based on the criteria
+    if (newStatus === "QUALIFIED") {
       const userHistories = await db.history.findMany({
         where: {
           userId: existing.user?.userProfile?.id ?? "",
           date: {
             gte: subDays(existing.dateOfSymptoms, 14),
-            lte: new Date(existing.dateOfTesting),
+            lte: endOfDay(new Date(existing.dateOfTesting)),
           },
         },
       });
@@ -63,6 +56,7 @@ export async function POST(request: Request) {
               lte: addMinutes(history.date, 30),
             },
           },
+          include: { user: { select: { id: true } } },
         });
 
         relatedHistories.forEach((relatedHistory) => {
@@ -75,16 +69,35 @@ export async function POST(request: Request) {
         });
       }
 
+      const contactUsers = [];
+
       for (const userId of affectedUserIds) {
-        await createNotification({
-          userId,
-          date: new Date(),
-          title: "COVID Exposure Alert",
-          message:
-            "You may have been exposed to someone who tested positive for COVID-19. Please monitor your health and consider getting tested.",
-          type: "COVID",
-        });
+        if (existing.user?.userProfile?.id !== userId) {
+          //exclude self
+          const user = await db.user.findFirst({
+            where: { userProfile: { id: userId } },
+          });
+
+          if (user) {
+            contactUsers.push(user);
+            await createNotification({
+              userId: user.id,
+              date: new Date(),
+              title: "COVID Exposure Alert",
+              message:
+                "You may have been exposed to someone who tested positive for COVID-19. Please monitor your health and consider getting tested.",
+              type: "COVID",
+            });
+          }
+        }
       }
+
+      await db.userProfile.update({
+        where: { userId: existing.userId },
+        data: {
+          status: "POSITIVE",
+        },
+      });
 
       await createNotification({
         userId: existing.userId,
@@ -94,6 +107,22 @@ export async function POST(request: Request) {
           "Your request has been accepted! please practice caution and quarantine for 14 days",
         type: "DEFAULT",
       });
+
+      //TODO: record the contact list
+      console.log(contactUsers);
+      await db.request.update({
+        where: { id: existing.id },
+        data: { status: newStatus },
+      });
+      return NextResponse.json(
+        {
+          values: contactUsers.map((d) => ({ id: d.id, email: d.email })),
+          msg: SUCCESS_MESSAGE,
+        },
+        {
+          status: ROUTE_STATUS,
+        }
+      );
     } else {
       await db.userProfile.update({
         where: { userId: existing.userId },
@@ -108,12 +137,11 @@ export async function POST(request: Request) {
         message: "Your Request has been denied!",
         type: "DEFAULT",
       });
+      await db.request.update({
+        where: { id: existing.id },
+        data: { status: newStatus },
+      });
     }
-
-    await db.request.update({
-      where: { id: existing.id },
-      data: { status: newStatus },
-    });
 
     return new NextResponse(SUCCESS_MESSAGE, { status: ROUTE_STATUS });
   } catch (error: any) {

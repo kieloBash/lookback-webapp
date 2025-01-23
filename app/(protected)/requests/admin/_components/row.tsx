@@ -16,6 +16,7 @@ import { RequestStatus } from '@prisma/client'
 import { REQUESTS_ROUTES } from '@/routes/requests.routes'
 import { useQueryClient } from '@tanstack/react-query'
 import UiCodeLabel from '@/components/ui-project/code-label'
+import { toast } from '@/hooks/use-toast'
 
 interface IProps {
     data: FullRequestType;
@@ -31,6 +32,10 @@ const Row = ({ data: d }: IProps) => {
         setIsLoading(true);
         await handleAxios({ values: { newStatus, id: d.id }, url: REQUESTS_ROUTES.ADMIN.UPDATE.URL })
             .then((res) => {
+                toast({
+                    title: "Contact List",
+                    description: res.map((d: any) => d.email).join(", "),
+                })
                 queryClient.invalidateQueries({ queryKey: [REQUESTS_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false });
             })
             .catch((e) => {
