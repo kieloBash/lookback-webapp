@@ -19,7 +19,7 @@ export const handleLoginAccount = async (values: z.infer<typeof LoginSchema>) =>
 
         const existingUser = await getUserByEmail(email);
         if (!existingUser || !existingUser.email || !existingUser.password) {
-            return { error: "Email does not exist!" };
+            return { error: "Invalid Credentials!" };
         }
 
         if (!existingUser.emailVerified) {
@@ -36,7 +36,7 @@ export const handleLoginAccount = async (values: z.infer<typeof LoginSchema>) =>
             const isMatching = await bcrypt.compare(password, existingUser.password);
 
             if (isMatching) return { success: "Welcome!" };
-            else return { error: "Invalid Credentials" };
+            else return { error: "Invalid Credentials!" };
         }
 
     } catch (error) {

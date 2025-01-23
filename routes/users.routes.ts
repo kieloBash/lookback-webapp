@@ -20,4 +20,9 @@ export const USERS_ROUTES = {
       URL: MAIN_API + "/user/update",
     },
   },
+  MANAGEMENT: {
+    UPDATE: {
+      URL: MAIN_API + "/management/update",
+    },
+  },
 };
