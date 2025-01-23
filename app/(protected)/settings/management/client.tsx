@@ -75,7 +75,7 @@ const SettingsManagementClient = ({ data: { managementProfile: profile, ...data 
                     <FormSubmit
                         className='w-full'
                         disabled={isLoading}
-                        isDirty={!form.formState.isDirty}
+                        // isDirty={!form.formState.isDirty}
                     >
                         <span>Save Changes</span>
                     </FormSubmit>

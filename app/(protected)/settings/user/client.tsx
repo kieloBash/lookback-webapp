@@ -102,7 +102,7 @@ const SettingsUserClient = ({ data: { userProfile: profile, ...data } }: IProps)
                     <FormSubmit
                         className='w-full'
                         disabled={isLoading}
-                        isDirty={!form.formState.isDirty}
+                        // isDirty={!form.formState.isDirty}
                     >
                         <span>Save Changes</span>
                     </FormSubmit>
