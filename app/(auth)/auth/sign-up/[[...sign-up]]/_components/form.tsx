@@ -20,6 +20,7 @@ import { useSearchParams } from 'next/navigation';
 import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 import emailjs from "emailjs-com";
+import { AlertModal } from './modal';
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 const template_id = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
@@ -28,6 +29,7 @@ const public_key = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "";
 
 const RegisterForm = () => {
 
+    const [openModal, setOpenModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const searchParams = useSearchParams();
     const callbackUrl = searchParams.get("callbackUrl");
@@ -71,6 +73,7 @@ const RegisterForm = () => {
                         description: res.success,
                     });
                     form.reset();
+                    setOpenModal(true);
                 })
                 .catch((error) => {
                     console.error("Failed to send email:", error);
@@ -90,6 +93,7 @@ const RegisterForm = () => {
 
     return (
         <div className={cn("flex flex-col gap-6")}>
+            {openModal && <AlertModal open={openModal} setOpen={setOpenModal} />}
             <Card>
                 <CardHeader className="text-center">
                     <CardTitle className="text-xl">Join Us</CardTitle>
