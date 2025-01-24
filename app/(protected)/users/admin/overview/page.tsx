@@ -14,10 +14,16 @@ import UiDataLoader from '@/components/ui/data-loader'
 import Row from './_components/row'
 import { IActionType } from '@/types/global'
 import { DeleteModal } from './_components/modals/delete'
+import StatusFilter from './_components/filtter-status'
+
+import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 
 const AdminOverviewPage = () => {
-    const data = useAdminUsers({});
+    const searchParams = useSearchParams();
+    const status = searchParams.get("statusFilter") || "ALL";
+
+    const data = useAdminUsers({ filter: status });
     const [selectedData, setSelectedData] = useState<any>(undefined);
     const [action, setAction] = useState<IActionType>("");
 
@@ -41,6 +47,9 @@ const AdminOverviewPage = () => {
                     open={selectedData && action === "delete"}
                     setOpen={handleReset}
                 />}
+            <div className="w-full flex justify-end items-center py-2">
+                <StatusFilter />
+            </div>
             <div className="w-full lg:max-w-none max-w-xs">
                 <Table>
                     <TableHeader>
@@ -53,7 +62,7 @@ const AdminOverviewPage = () => {
                     </TableHeader>
                     <TableBody>
                         <UiDataLoader
-                            isLoading={data.isLoading}
+                            isLoading={data.isLoading || data.isFetching}
                             length={data.payload?.length}
                             type='table'
                             columns={4}

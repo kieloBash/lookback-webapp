@@ -23,7 +23,10 @@ export async function GET(request: Request) {
     const searchTerm = searchParams.get("searchTerm") || "";
     const statusFilter = searchParams.get("filter") || "ALL";
 
-    const whereClause: any = { id: { notIn: [user.id] } };
+    const whereClause: any = {
+      id: { notIn: [user.id] },
+      ...(statusFilter !== "ALL" && { role: statusFilter as any }),
+    };
 
     const response: ApiResponse = {
       payload: [],
