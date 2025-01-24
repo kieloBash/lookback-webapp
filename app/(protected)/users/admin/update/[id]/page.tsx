@@ -1,7 +1,6 @@
 import { getUser } from '@/lib/user';
 import { IPageProps } from '@/types/global'
 import React from 'react'
-import EditClientPage from './client';
 import EditMainForm from './_components/main-form';
 
 const UpdateUserPage = async (props: IPageProps) => {

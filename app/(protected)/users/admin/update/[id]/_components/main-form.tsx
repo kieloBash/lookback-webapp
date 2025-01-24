@@ -79,7 +79,14 @@ const EditMainForm = ({ data }: { data: FullAllUserType }) => {
             form.setValue("user", undefined);
             form.setValue("management", undefined);
         }
-    }, [data])
+    }, [data, form])
+
+    useEffect(() => {
+        if (data && data.userProfile) {
+            form.setValue("user.gender", data.userProfile?.gender as any);
+        }
+    }, [data, data.userProfile])
+
 
     return (
         <Form {...form}>
