@@ -55,7 +55,7 @@ const LoginForm = () => {
             await signIn("credentials", {
                 email: values.email,
                 password: values.password,
-                redirectTo: callbackUrl || DEFAULT_LOGIN_REDIRECT,
+                redirectTo: DEFAULT_LOGIN_REDIRECT,
             }).then(() => {
                 toast({
                     title: "Success!",
