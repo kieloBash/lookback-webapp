@@ -46,7 +46,7 @@ export function ForgotPasswordForm() {
                 app_name: APP_NAME,
                 app_email: APP_EMAIL,
                 to_email: values.email,
-                to_name: "Old User",
+                to_name: res.name,
                 link: confirmLink
             }
             await emailjs.send(service_id, template_id, templateParams, public_key)

@@ -21,7 +21,7 @@ export async function POST(request: Request) {
     const fields = validated.data;
     const existing = await db.user.findUnique({
       where: { email: fields.email },
-      select: { email: true },
+      select: { email: true, name:true },
     });
 
     if (!existing) {
@@ -32,7 +32,7 @@ export async function POST(request: Request) {
 
     const response = {
       msg: SUCCESS_MESSAGE,
-      values: { token: passwordResetToken.token },
+      values: { token: passwordResetToken.token,email:existing.email, name: existing.name },
     };
 
     console.log(response);
