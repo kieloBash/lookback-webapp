@@ -23,7 +23,7 @@ export function AddModal() {
     const [management, setManagement] = useState("management_test@gmail.com")
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
-    const [isLoading, setIsLoading] = useState(true)
+    const [isLoading, setIsLoading] = useState(false)
 
     const handleSubmit = async () => {
         console.log(user, management, date);
