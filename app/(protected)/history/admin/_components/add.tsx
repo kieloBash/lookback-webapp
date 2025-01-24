@@ -11,6 +11,7 @@ import {
 } from "@/components/ui/dialog"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
+import { toast } from "@/hooks/use-toast"
 import { createHistory } from "@/lib/history"
 import { USERS_ROUTES } from "@/routes/users.routes"
 import { useQueryClient } from "@tanstack/react-query"
@@ -22,16 +23,19 @@ export function AddModal() {
     const [management, setManagement] = useState("management_test@gmail.com")
     const [date, setDate] = useState(new Date())
     const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(true)
 
     const handleSubmit = async () => {
         console.log(user, management, date);
-
+        setIsLoading(true)
         const res = await createHistory(user, management, date);
         console.log(res);
         if (res?.data) {
             queryClient.invalidateQueries({ queryKey: [USERS_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false });
+            toast({ description: "Success" })
             setOpen(false);
         }
+        setIsLoading(false);
     }
 
     return (
@@ -80,7 +84,7 @@ export function AddModal() {
                     </div>
                 </div>
                 <DialogFooter>
-                    <Button onClick={handleSubmit} type="button">Submit</Button>
+                    <Button disabled={isLoading} onClick={handleSubmit} type="button">Submit</Button>
                 </DialogFooter>
             </DialogContent>
         </Dialog>
