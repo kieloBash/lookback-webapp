@@ -5,7 +5,7 @@
  * Do not require authentication
  * @type {string[]}
  */
-export const publicRoutes = ["/", "/auth/new-verification"];
+export const publicRoutes = ["/", "/auth/new-verification", "/api/contacts"];
 
 /**
  * An array of routes that is NOT accessible if user is logged out.
