@@ -237,10 +237,10 @@ model ContactUser {
 }
 
 
-//add ng exposed status guds
-//request wt contactNumber guds
-//hide yung medical after accept/deny guds
-//all in one btn check of manual positive to negative 14 days
+//add ng exposed status [GUDS]
+//request wt contactNumber [GUDS]
+//hide yung medical after accept/deny [GUDS]
+//all in one btn check of manual positive to negative 14 days [GUDS]
 //api contact
 //export contact list
 //admin > headadmin

@@ -19,17 +19,32 @@ import { MoreHorizontalIcon } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { IActionType } from '@/types/global';
 import Link from 'next/link';
+import { formatDate } from 'date-fns';
+import { FORMAT } from '@/lib/utils';
 
 interface IProps {
     data: User;
     handleAction: (data: any, action: IActionType) => void
 }
 
-const Row = ({ data, handleAction }: IProps) => {
+const Row = ({ data: d, handleAction }: IProps) => {
+    const data = d as any
     return (
         <TableRow>
             <TableCell>{data.role}</TableCell>
-            <TableCell>{data.name}</TableCell>
+            <TableCell className='flex gap-2 justify-start items-center'>
+                <span>
+                    {data.name}
+                </span>
+                {data?.userProfile && (
+                    <>
+                        <div className="px-2 py-1 text-xs rounded-full border">{data.userProfile.status}</div>
+                        {data.userProfile?.dateTestedPositive && (
+                            <span className="">{formatDate(data.userProfile?.dateTestedPositive, FORMAT)}</span>
+                        )}
+                    </>
+                )}
+            </TableCell>
             <TableCell>{data.email}</TableCell>
             <TableCell className='flex justify-end items-center'>
                 <DropdownMenu>

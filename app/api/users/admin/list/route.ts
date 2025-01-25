@@ -40,6 +40,13 @@ export async function GET(request: Request) {
           name: true,
           role: true,
           email: true,
+
+          userProfile: {
+            select: {
+              status: true,
+              dateTestedPositive: true,
+            },
+          },
         },
         orderBy: { createdAt: "asc" },
       }),

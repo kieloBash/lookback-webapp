@@ -17,9 +17,15 @@ import { DeleteModal } from './_components/modals/delete'
 import StatusFilter from './_components/filtter-status'
 
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
+import { Button } from '@/components/ui/button'
+import { handleAxios } from '@/lib/utils'
+import { toast } from '@/hooks/use-toast'
+import { useQueryClient } from '@tanstack/react-query'
+import { USERS_ROUTES } from '@/routes/users.routes'
 
 
 const AdminOverviewPage = () => {
+    const queryClient = useQueryClient();
     const searchParams = useSearchParams();
     const status = searchParams.get("statusFilter") || "ALL";
 
@@ -39,6 +45,16 @@ const AdminOverviewPage = () => {
         setAction("");
     }
 
+    const handleResetStatus = async () => {
+        await handleAxios({ values: {}, url: "/api/users/admin/update/reset" })
+            .then((res) => {
+                queryClient.invalidateQueries({ queryKey: [USERS_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
+            })
+            .catch((e) => {
+                toast({ description: e.response });
+            })
+    }
+
     return (
         <section className="w-full h-full p-4 flex justify-start items-center flex-col">
             {selectedData && action === "delete" &&
@@ -47,8 +63,9 @@ const AdminOverviewPage = () => {
                     open={selectedData && action === "delete"}
                     setOpen={handleReset}
                 />}
-            <div className="w-full flex justify-end items-center py-2">
+            <div className="w-full flex justify-end items-center py-2 gap-2">
                 <StatusFilter />
+                <Button type='button' size={"sm"} onClick={handleResetStatus}>Reset Status Users</Button>
             </div>
             <div className="w-full lg:max-w-none max-w-xs">
                 <Table>
