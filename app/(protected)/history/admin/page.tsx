@@ -4,7 +4,7 @@ import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 
 import { UiDatePickerRange } from '@/components/ui/date-range';
 import useAdminHistory from '@/hooks/admin/use-history'
-import { endOfMonth, startOfMonth } from 'date-fns';
+import { endOfMonth, format, startOfMonth } from 'date-fns';
 import { Button } from '@/components/ui/button';
 import { ChevronLeftIcon, ChevronRightIcon, DownloadIcon, PlusIcon } from 'lucide-react';
 import {
@@ -18,11 +18,22 @@ import {
     TableRow,
 } from "@/components/ui/table"
 import UiDataLoader from '@/components/ui/data-loader';
-import { formatDateTime } from '@/lib/utils';
+import { FORMAT, formatDateTime } from '@/lib/utils';
 import UiSearch from '@/components/ui/search';
 import UiPaginatedButtons from '@/components/ui/paginated-btns';
 import UiCodeLabel from '@/components/ui-project/code-label';
 import { AddModal } from './_components/add';
+
+import {
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu"
+import { toast } from '@/hooks/use-toast';
+
 
 const HistoryAdminPage = () => {
     const searchParams = useSearchParams();
@@ -36,7 +47,7 @@ const HistoryAdminPage = () => {
 
     const data = useAdminHistory({ page, limit: 20, startDate, endDate, searchTerm: search });
 
-    const handleExport = () => {
+    const handleExportHistory = () => {
         if (data.payload?.length === 0 || !data.payload) return;
 
         const csvContent = [
@@ -62,8 +73,39 @@ const HistoryAdminPage = () => {
         document.body.removeChild(link);
     }
 
-    const handleAdd = () => {
-        console.log('add');
+    const handleExportContacts = async () => {
+        toast({ description: "Please wait while we fetch your request..." })
+        const ROUTE = "/api/contacts/export"
+        const response = await fetch(
+            `${ROUTE}?startDate=${format(startDate, FORMAT)}&endDate=${format(endDate, FORMAT)}`
+        );
+        if (!response.ok) {
+            throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+
+        const csvContent = [
+            ["Date Time", "User Infected", "Region", "Province", "City", "Barangay", "Contacts"],
+            ...data.payload.map(d => [
+                formatDateTime(d.date),
+                `${d.user.name}`,
+                d.user.userProfile.regCode,
+                d.user.userProfile.provCode,
+                d.user.userProfile.citymunCode,
+                d.user.userProfile.brgyCode,
+                d.usersExposed.map((g) => (g.user.email)).join(", ")
+            ])
+        ].map(e => e.join(",")).join("\n");
+
+        const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+        const url = URL.createObjectURL(blob);
+        const link = document.createElement("a");
+        link.setAttribute("href", url);
+        link.setAttribute("download", "contacts_data.csv");
+        link.style.visibility = 'hidden';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
     }
 
     return (
@@ -72,10 +114,18 @@ const HistoryAdminPage = () => {
                 <div className="flex justify-start gap-2 items-center">
                     <UiSearch className='h-9 max-w-md' handleResetPage={() => { }} placeholder='Search name of user...' />
                     <UiDatePickerRange defaultStartDate={startDate} defaultEndDate={endDate} />
-                    <Button onClick={handleExport} type='button' variant={"outline"}>
-                        <span>Export Data</span>
-                        <DownloadIcon />
-                    </Button>
+                    <DropdownMenu>
+                        <DropdownMenuTrigger asChild>
+                            <Button type='button' variant={"outline"}>
+                                <span>Export Data</span>
+                                <DownloadIcon />
+                            </Button>
+                        </DropdownMenuTrigger>
+                        <DropdownMenuContent>
+                            <DropdownMenuItem onClick={handleExportHistory}>History</DropdownMenuItem>
+                            <DropdownMenuItem onClick={handleExportContacts}>Contact List</DropdownMenuItem>
+                        </DropdownMenuContent>
+                    </DropdownMenu>
                     <AddModal />
                 </div>
                 <UiPaginatedButtons hasPrev={page > 1} hasNext={page < (data.totalPages ?? 0)} />
