@@ -19,7 +19,7 @@ export const createAdminAccount = async ({ email = "admin@gmail.com" }: { email?
                 name: "ADMIN",
                 email,
                 password: hashedPassword,
-                role: "ADMIN",
+                role: "HEAD_ADMIN",
                 isOnboarded: true,
                 emailVerified: new Date(),
             },
