@@ -9,7 +9,7 @@ import { NavUser } from '../ui/nav-user'
 import { NavLinks } from '../ui/nav-links'
 import { usePathname } from 'next/navigation'
 
-const AdminLayout = ({ children }: ILayoutProps) => {
+const HeadAdminLayout = ({ children }: ILayoutProps) => {
     const user = useCurrentUser();
     const pathname = usePathname();
 
@@ -21,6 +21,29 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                 icon: HistoryIcon,
                 isActive: pathname.includes("/history/admin"),
                 items: [],
+            },
+            {
+                title: "Requests",
+                url: "/requests/admin",
+                icon: MessageCircleMore,
+                isActive: pathname.includes("/requests/admin"),
+                items: [],
+            },
+            {
+                title: "Users",
+                url: "/users/admin/overview",
+                icon: User2Icon,
+                isActive: pathname.includes("/users/admin"),
+                items: [
+                    {
+                        title: "Overview",
+                        url: "/users/admin/overview",
+                    },
+                    {
+                        title: "Create",
+                        url: "/users/admin/create",
+                    },
+                ],
             },
         ]
     }, [pathname])
@@ -62,4 +85,4 @@ const AdminLayout = ({ children }: ILayoutProps) => {
     )
 }
 
-export default AdminLayout
+export default HeadAdminLayout

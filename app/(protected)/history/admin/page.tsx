@@ -52,7 +52,7 @@ const HistoryAdminPage = () => {
 
         const csvContent = [
             ["Date Time", "User", "Region", "Province", "City", "Barangay"],
-            ...data.payload.map(d => [
+            ...data.payload.map((d: any) => [
                 formatDateTime(d.date),
                 `${d.user.fname} ${d.user.lname}`,
                 d.user.regCode,
@@ -79,6 +79,7 @@ const HistoryAdminPage = () => {
         const response = await fetch(
             `${ROUTE}?startDate=${format(startDate, FORMAT)}&endDate=${format(endDate, FORMAT)}`
         );
+        console.log(response);
         if (!response.ok) {
             throw new Error("Network response was not ok");
         }
@@ -86,14 +87,14 @@ const HistoryAdminPage = () => {
 
         const csvContent = [
             ["Date Time", "User Infected", "Region", "Province", "City", "Barangay", "Contacts"],
-            ...data.payload.map(d => [
+            ...data.payload.map((d: any) => [
                 formatDateTime(d.date),
                 `${d.user.name}`,
                 d.user.userProfile.regCode,
                 d.user.userProfile.provCode,
                 d.user.userProfile.citymunCode,
                 d.user.userProfile.brgyCode,
-                d.usersExposed.map((g) => (g.user.email)).join(", ")
+                d.usersExposed.map((g: any) => (g.user.email)).join(", ")
             ])
         ].map(e => e.join(",")).join("\n");
 

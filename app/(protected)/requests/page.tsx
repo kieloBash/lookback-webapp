@@ -6,7 +6,7 @@ const RequestsPage = async () => {
 
     if (role === "USER") redirect("/requests/user");
     else if (role === "MANAGEMENT") redirect("/requests/management");
-    else if (role === "ADMIN") redirect("/requests/admin");
+    else if (role === "ADMIN"|| role === "HEAD_ADMIN") redirect("/requests/admin");
 
     return null
 }

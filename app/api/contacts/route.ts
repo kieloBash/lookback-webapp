@@ -1,6 +1,7 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
+import bcrypt from "bcryptjs";
 
 const ROUTE_NAME = "Fetch Contact List";
 const ROUTE_STATUS = 200;
@@ -8,19 +9,36 @@ const SUCCESS_MESSAGE = "Successfully fetched list of contacts";
 
 export async function GET(request: Request) {
   try {
-    const user = await currentUser();
-
-    if (!user || !user.id) {
-      return new NextResponse(ROUTE_NAME + ": Unauthorized: No Access", {
-        status: 401,
-      });
-    }
-
     const { searchParams } = new URL(request.url || "");
+    const email = searchParams.get("email");
+    const password = searchParams.get("password");
     const startDateParam = searchParams.get("startDate");
     const endDateParam = searchParams.get("endDate");
     const startDate = startDateParam ? new Date(startDateParam) : undefined;
     const endDate = endDateParam ? new Date(endDateParam) : undefined;
+
+    if (!email || !password) {
+      return new NextResponse("Invalid: No Access", {
+        status: 401,
+      });
+    }
+
+    const currentUser = await db.user.findFirst({
+      where: { email, role: "ADMIN" },
+      select: { email: true, password: true },
+    });
+
+    if (!currentUser || !currentUser.password) {
+      return new NextResponse("Unauthorized: No Access", {
+        status: 401,
+      });
+    }
+    const isMatching = await bcrypt.compare(password, currentUser.password);
+    if (!isMatching) {
+      return new NextResponse("Unauthorized: Invalid Credentials", {
+        status: 401,
+      });
+    }
 
     const whereClause: any = {
       ...(startDate &&

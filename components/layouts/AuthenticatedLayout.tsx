@@ -7,6 +7,7 @@ import UserLayout from './UserLayout';
 import ManagementLayout from './ManagementLayout';
 import { SidebarProvider } from '../ui/sidebar';
 import AdminLayout from './AdminLayout';
+import HeadAdminLayout from './HeadAdminLayout';
 
 
 
@@ -33,7 +34,15 @@ const AuthenticatedLayout = async ({ children }: ILayoutProps) => {
                 </ManagementLayout>
             </SidebarProvider>
         )
-    } else if (user.role === "ADMIN") {
+    } else if (user.role === "HEAD_ADMIN") {
+        return (
+            <SidebarProvider>
+                <HeadAdminLayout>
+                    {children}
+                </HeadAdminLayout>
+            </SidebarProvider>
+        )
+    }else if (user.role === "ADMIN") {
         return (
             <SidebarProvider>
                 <AdminLayout>
@@ -45,7 +54,7 @@ const AuthenticatedLayout = async ({ children }: ILayoutProps) => {
 
 
     return (
-        <div>error</div>
+        <div>no role</div>
     )
 }
 

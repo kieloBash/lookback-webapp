@@ -9,7 +9,7 @@ import { UserRole } from '@prisma/client';
 const Layout = ({ children }: ILayoutProps) => {
     return (
         <OnboardedLayout>
-            <RoleGateLayout roles={[UserRole.ADMIN]}>
+            <RoleGateLayout roles={[UserRole.HEAD_ADMIN]}>
                 {children}
             </RoleGateLayout>
         </OnboardedLayout>
