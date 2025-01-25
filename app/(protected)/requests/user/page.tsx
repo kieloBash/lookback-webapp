@@ -31,6 +31,7 @@ export default function RequestPage() {
             dateOfTesting: new Date().toISOString().split('T')[0],
             symptoms: "",
             medicalImage: "",
+            contactNumber: "",
         },
     });
 
@@ -78,6 +79,13 @@ export default function RequestPage() {
                             label="Date of Testing Positive"
                             name="dateOfTesting"
                             description="Please indicate when you had your covid test"
+                            control={form.control}
+                            disabled={isLoading}
+                        />
+                        <FormInput
+                            label="Phone Number"
+                            name="contactNumber"
+                            placeholder="Enter a valid phone 11 digit phone number"
                             control={form.control}
                             disabled={isLoading}
                         />

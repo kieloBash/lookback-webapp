@@ -76,9 +76,11 @@ export async function POST(request: Request) {
           //exclude self
           const user = await db.user.findFirst({
             where: { userProfile: { id: userId } },
+            include: { userProfile: true },
           });
 
           if (user) {
+            console.log(user);
             contactUsers.push(user);
             await createNotification({
               userId: user.id,
@@ -88,6 +90,13 @@ export async function POST(request: Request) {
                 "You may have been exposed to someone who tested positive for COVID-19. Please monitor your health and consider getting tested.",
               type: "COVID",
             });
+
+            if (user.userProfile?.status === "NEGATIVE") {
+              await db.userProfile.update({
+                where: { userId: user.id },
+                data: { status: "EXPOSED" },
+              });
+            }
           }
         }
       }
@@ -96,6 +105,7 @@ export async function POST(request: Request) {
         where: { userId: existing.userId },
         data: {
           status: "POSITIVE",
+          dateTestedPositive: existing.dateOfTesting,
         },
       });
 
@@ -110,10 +120,24 @@ export async function POST(request: Request) {
 
       //TODO: record the contact list
       console.log(contactUsers);
+
+      await db.contact.create({
+        data: {
+          userInfectedId: existing.userId,
+          date: existing.dateOfTesting,
+          usersExposed: {
+            createMany: {
+              data: contactUsers.map((u) => ({ userId: u.id })),
+            },
+          },
+        },
+      });
+
       await db.request.update({
         where: { id: existing.id },
         data: { status: newStatus },
       });
+
       return NextResponse.json(
         {
           values: contactUsers.map((d) => ({ id: d.id, email: d.email })),

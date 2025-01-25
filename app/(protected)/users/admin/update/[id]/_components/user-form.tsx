@@ -118,7 +118,7 @@ const UserForm = ({ form, isLoading }: IProps) => {
                     value={form.watch("user.status")}
                     label='COVID Status'
                     name='user.status'
-                    array={["NEGATIVE", "POSITIVE"].map((d) => ({ id: d, value: d, label: d }))}
+                    array={["NEGATIVE", "POSITIVE","EXPOSED"].map((d) => ({ id: d, value: d, label: d }))}
                     control={form.control}
                     disabled={isLoading}
                 />

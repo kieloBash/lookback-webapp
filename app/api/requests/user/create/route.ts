@@ -35,6 +35,11 @@ export async function POST(request: Request) {
       },
     });
 
+    await db.user.update({
+      where: { id: user.id },
+      data: { contactNumber: fields.contactNumber },
+    });
+
     await createNotification({
       userId: user.id,
       date: new Date(),

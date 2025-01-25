@@ -55,11 +55,13 @@ const Row = ({ data: d }: IProps) => {
                 <UiCodeLabel value={d.user.userProfile.citymunCode} type="city" />
             </TableCell>
             <TableCell>
-                <Link href={`${domain}/_next/image?url=${d.medicalImages[0]}&w=1920&q=75`} target='_blank'>
-                    <div className="size-16 overflow-hidden rounded relative">
-                        <Image fill src={d.medicalImages[0]} alt='@medical' className='object-cover object-center size-full' />
-                    </div>
-                </Link>
+                {d.status === "PENDING" && (
+                    <Link href={`${domain}/_next/image?url=${d.medicalImages[0]}&w=1920&q=75`} target='_blank'>
+                        <div className="size-16 overflow-hidden rounded relative">
+                            <Image fill src={d.medicalImages[0]} alt='@medical' className='object-cover object-center size-full' />
+                        </div>
+                    </Link>
+                )}
             </TableCell>
             <TableCell>{d.symptoms}</TableCell>
             <TableCell className='text-right'>{d.status}</TableCell>

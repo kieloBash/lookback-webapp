@@ -11,6 +11,7 @@ enum UserRole {
   ADMIN
   MANAGEMENT
   USER
+  HEAD_ADMIN
 }
 
 model Account {
@@ -52,6 +53,8 @@ model User {
   //added
   notifications Notification[]
   requests      Request[]
+  infectedContacts Contact[]
+  exposedContacts ContactUser[]
 
   //user
   userProfile UserProfile?
@@ -95,6 +98,7 @@ model PasswordResetToken {
 enum CovidStatus {
   POSITIVE
   NEGATIVE
+  EXPOSED
 }
 
 model UserProfile {
@@ -115,6 +119,7 @@ model UserProfile {
 
   status  CovidStatus @default(NEGATIVE)
   history History[]
+  dateTestedPositive DateTime?
 
   @@index([regCode, provCode, citymunCode, brgyCode]) // Optimizes searches by location
   @@map("user-profiles")
@@ -203,3 +208,39 @@ model Request {
   @@index([userId])
   @@map("requests")
 }
+
+model Contact {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+
+  userInfectedId String @db.ObjectId
+  user           User   @relation(fields: [userInfectedId], references: [id], onDelete: Cascade)
+
+  usersExposed ContactUser[] // Explicit join table for many-to-many relationship
+
+  date       DateTime
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @updatedAt
+
+  @@map("contacts")
+}
+
+model ContactUser {
+  id        String  @id @default(auto()) @map("_id") @db.ObjectId
+  contactId String  @db.ObjectId
+  contact   Contact @relation(fields: [contactId], references: [id], onDelete: Cascade)
+  
+  userId String @db.ObjectId
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("contact_users")
+  @@unique([contactId, userId]) // Ensure unique combinations of contact and user
+}
+
+
+//add ng exposed status guds
+//request wt contactNumber guds
+//hide yung medical after accept/deny guds
+//all in one btn check of manual positive to negative 14 days
+//api contact
+//export contact list
+//admin > headadmin
