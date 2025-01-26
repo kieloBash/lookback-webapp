@@ -35,39 +35,39 @@ export async function POST(request: Request) {
     }
 
     if (newStatus === "QUALIFIED") {
-      // const userHistories = await db.history.findMany({
-      //   where: {
-      //     userId: existing.user?.userProfile?.id ?? "",
-      //     date: {
-      //       gte: subDays(existing.dateOfSymptoms, 14),
-      //       lte: endOfDay(new Date(existing.dateOfTesting)),
-      //     },
-      //   },
-      // });
+      const userHistories = await db.history.findMany({
+        where: {
+          userId: existing.user?.userProfile?.id ?? "",
+          date: {
+            gte: subDays(existing.dateOfSymptoms, 14),
+            lte: endOfDay(new Date(existing.dateOfTesting)),
+          },
+        },
+      });
 
-      // const affectedUserIds = new Set<string>();
+      const affectedUserIds = new Set<string>();
 
-      // for (const history of userHistories) {
-      //   const relatedHistories = await db.history.findMany({
-      //     where: {
-      //       managementId: history.managementId,
-      //       date: {
-      //         gte: history.date,
-      //         lte: addMinutes(history.date, 30),
-      //       },
-      //     },
-      //     include: { user: { select: { id: true } } },
-      //   });
+      for (const history of userHistories) {
+        const relatedHistories = await db.history.findMany({
+          where: {
+            managementId: history.managementId,
+            date: {
+              gte: history.date,
+              lte: addMinutes(history.date, 30),
+            },
+          },
+          include: { user: { select: { id: true } } },
+        });
 
-      //   relatedHistories.forEach((relatedHistory) => {
-      //     if (
-      //       relatedHistory.userId &&
-      //       relatedHistory.userId !== existing.userId
-      //     ) {
-      //       affectedUserIds.add(relatedHistory.userId);
-      //     }
-      //   });
-      // }
+        relatedHistories.forEach((relatedHistory) => {
+          if (
+            relatedHistory.userId &&
+            relatedHistory.userId !== existing.userId
+          ) {
+            affectedUserIds.add(relatedHistory.userId);
+          }
+        });
+      }
 
       // const contactUsers = [];
 
