@@ -45,6 +45,8 @@ export async function POST(request: Request) {
         },
       });
 
+      console.log(userHistories);
+
       const affectedUserIds = new Set<string>();
 
       for (const history of userHistories) {
@@ -70,6 +72,8 @@ export async function POST(request: Request) {
       }
       ///
       const contactUsers = [];
+
+      console.log(affectedUserIds);
 
       for (const userId of affectedUserIds) {
         if (existing.user?.userProfile?.id !== userId) {
@@ -123,17 +127,17 @@ export async function POST(request: Request) {
       // console.log(contactUsers);
 
       ///
-      await db.contact.create({
-        data: {
-          userInfectedId: existing.userId,
-          date: existing.dateOfTesting,
-          usersExposed: {
-            createMany: {
-              data: contactUsers.map((u) => ({ userId: u.id })),
-            },
-          },
-        },
-      });
+      // await db.contact.create({
+      //   data: {
+      //     userInfectedId: existing.userId,
+      //     date: existing.dateOfTesting,
+      //     usersExposed: {
+      //       createMany: {
+      //         data: contactUsers.map((u) => ({ userId: u.id })),
+      //       },
+      //     },
+      //   },
+      // });
       ///
 
       await db.request.update({
