@@ -35,71 +35,71 @@ export async function POST(request: Request) {
     }
 
     if (newStatus === "QUALIFIED") {
-      const userHistories = await db.history.findMany({
-        where: {
-          userId: existing.user?.userProfile?.id ?? "",
-          date: {
-            gte: subDays(existing.dateOfSymptoms, 14),
-            lte: endOfDay(new Date(existing.dateOfTesting)),
-          },
-        },
-      });
+      // const userHistories = await db.history.findMany({
+      //   where: {
+      //     userId: existing.user?.userProfile?.id ?? "",
+      //     date: {
+      //       gte: subDays(existing.dateOfSymptoms, 14),
+      //       lte: endOfDay(new Date(existing.dateOfTesting)),
+      //     },
+      //   },
+      // });
 
-      const affectedUserIds = new Set<string>();
+      // const affectedUserIds = new Set<string>();
 
-      for (const history of userHistories) {
-        const relatedHistories = await db.history.findMany({
-          where: {
-            managementId: history.managementId,
-            date: {
-              gte: history.date,
-              lte: addMinutes(history.date, 30),
-            },
-          },
-          include: { user: { select: { id: true } } },
-        });
+      // for (const history of userHistories) {
+      //   const relatedHistories = await db.history.findMany({
+      //     where: {
+      //       managementId: history.managementId,
+      //       date: {
+      //         gte: history.date,
+      //         lte: addMinutes(history.date, 30),
+      //       },
+      //     },
+      //     include: { user: { select: { id: true } } },
+      //   });
 
-        relatedHistories.forEach((relatedHistory) => {
-          if (
-            relatedHistory.userId &&
-            relatedHistory.userId !== existing.userId
-          ) {
-            affectedUserIds.add(relatedHistory.userId);
-          }
-        });
-      }
+      //   relatedHistories.forEach((relatedHistory) => {
+      //     if (
+      //       relatedHistory.userId &&
+      //       relatedHistory.userId !== existing.userId
+      //     ) {
+      //       affectedUserIds.add(relatedHistory.userId);
+      //     }
+      //   });
+      // }
 
-      const contactUsers = [];
+      // const contactUsers = [];
 
-      for (const userId of affectedUserIds) {
-        if (existing.user?.userProfile?.id !== userId) {
-          //exclude self
-          const user = await db.user.findFirst({
-            where: { userProfile: { id: userId } },
-            include: { userProfile: true },
-          });
+      // for (const userId of affectedUserIds) {
+      //   if (existing.user?.userProfile?.id !== userId) {
+      //     //exclude self
+      //     const user = await db.user.findFirst({
+      //       where: { userProfile: { id: userId } },
+      //       include: { userProfile: true },
+      //     });
 
-          if (user) {
-            console.log(user);
-            contactUsers.push(user);
-            await createNotification({
-              userId: user.id,
-              date: new Date(),
-              title: "COVID Exposure Alert",
-              message:
-                "You may have been exposed to someone who tested positive for COVID-19. Please monitor your health and consider getting tested.",
-              type: "COVID",
-            });
+      //     if (user) {
+      //       console.log(user);
+      //       contactUsers.push(user);
+      //       await createNotification({
+      //         userId: user.id,
+      //         date: new Date(),
+      //         title: "COVID Exposure Alert",
+      //         message:
+      //           "You may have been exposed to someone who tested positive for COVID-19. Please monitor your health and consider getting tested.",
+      //         type: "COVID",
+      //       });
 
-            if (user.userProfile?.status === "NEGATIVE") {
-              await db.userProfile.update({
-                where: { userId: user.id },
-                data: { status: "EXPOSED" },
-              });
-            }
-          }
-        }
-      }
+      //       if (user.userProfile?.status === "NEGATIVE") {
+      //         await db.userProfile.update({
+      //           where: { userId: user.id },
+      //           data: { status: "EXPOSED" },
+      //         });
+      //       }
+      //     }
+      //   }
+      // }
 
       await db.userProfile.update({
         where: { userId: existing.userId },
@@ -119,19 +119,19 @@ export async function POST(request: Request) {
       });
 
       //TODO: record the contact list
-      console.log(contactUsers);
+      // console.log(contactUsers);
 
-      await db.contact.create({
-        data: {
-          userInfectedId: existing.userId,
-          date: existing.dateOfTesting,
-          usersExposed: {
-            createMany: {
-              data: contactUsers.map((u) => ({ userId: u.id })),
-            },
-          },
-        },
-      });
+      // await db.contact.create({
+      //   data: {
+      //     userInfectedId: existing.userId,
+      //     date: existing.dateOfTesting,
+      //     usersExposed: {
+      //       createMany: {
+      //         data: contactUsers.map((u) => ({ userId: u.id })),
+      //       },
+      //     },
+      //   },
+      // });
 
       await db.request.update({
         where: { id: existing.id },
@@ -140,7 +140,8 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         {
-          values: contactUsers.map((d) => ({ id: d.id, email: d.email })),
+          // values: contactUsers.map((d) => ({ id: d.id, email: d.email })),
+          values: [],
           msg: SUCCESS_MESSAGE,
         },
         {

@@ -42,11 +42,11 @@ const Row = ({ data: d }: IProps) => {
             })
             .catch((e) => {
                 console.log(e)
-                toast({
-                    title: "Error",
-                    variant: "destructive",
-                    description: e.response,
-                })
+                // toast({
+                //     title: "Error",
+                //     variant: "destructive",
+                //     description: e.response,
+                // })
             })
             .finally(() => {
                 setIsLoading(false)
