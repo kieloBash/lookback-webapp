@@ -68,7 +68,7 @@ export async function POST(request: Request) {
           }
         });
       }
-///
+      ///
       const contactUsers = [];
 
       for (const userId of affectedUserIds) {
@@ -76,7 +76,7 @@ export async function POST(request: Request) {
           //exclude self
           const user = await db.user.findFirst({
             where: { userProfile: { id: userId } },
-            include: { userProfile: true },
+            include: { userProfile: { select: { status: true } } },
           });
 
           if (user) {
@@ -92,6 +92,7 @@ export async function POST(request: Request) {
             });
 
             if (user.userProfile?.status === "NEGATIVE") {
+              console.log(user.userProfile);
               await db.userProfile.update({
                 where: { userId: user.id },
                 data: { status: "EXPOSED" },
@@ -100,7 +101,7 @@ export async function POST(request: Request) {
           }
         }
       }
-///
+      ///
       await db.userProfile.update({
         where: { userId: existing.userId },
         data: {
@@ -121,17 +122,19 @@ export async function POST(request: Request) {
       //TODO: record the contact list
       // console.log(contactUsers);
 
-      // await db.contact.create({
-      //   data: {
-      //     userInfectedId: existing.userId,
-      //     date: existing.dateOfTesting,
-      //     usersExposed: {
-      //       createMany: {
-      //         data: contactUsers.map((u) => ({ userId: u.id })),
-      //       },
-      //     },
-      //   },
-      // });
+      ///
+      await db.contact.create({
+        data: {
+          userInfectedId: existing.userId,
+          date: existing.dateOfTesting,
+          usersExposed: {
+            createMany: {
+              data: contactUsers.map((u) => ({ userId: u.id })),
+            },
+          },
+        },
+      });
+      ///
 
       await db.request.update({
         where: { id: existing.id },
@@ -140,8 +143,8 @@ export async function POST(request: Request) {
 
       return NextResponse.json(
         {
-          // values: contactUsers.map((d) => ({ id: d.id, email: d.email })),
-          values: [],
+          values: contactUsers.map((d) => ({ id: d.id, email: d.email })),
+          // values: [],
           msg: SUCCESS_MESSAGE,
         },
         {
@@ -153,6 +156,7 @@ export async function POST(request: Request) {
         where: { userId: existing.userId },
         data: {
           status: "NEGATIVE",
+          dateTestedPositive: null,
         },
       });
       await createNotification({
