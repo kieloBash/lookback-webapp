@@ -78,7 +78,7 @@ export default function CovidStatusCard({ hasRequest, covidStatus }: IProps) {
                                 </li>
                             </>
                         )}
-                        {status === "POSITIVE" && (
+                        {status === "EXPOSED" && (
                             <>
                                 <span className="text-xs text-muted-foreground">Kindly do the following for COVID-19 exposure procedures:</span>
                                 <li className="flex justify-start items-center px-1 py-2 gap-2">

@@ -125,6 +125,17 @@ export async function POST(request: Request) {
 
       //TODO: record the contact list
       // console.log(contactUsers);
+      const newContact = await db.contact.create({
+        data: { userInfectedId: existing.userId, date: existing.dateOfTesting },
+      });
+
+      console.log(newContact);
+      await db.contactUser.createMany({
+        data: contactUsers.map((u) => ({
+          contactId: newContact.id,
+          userId: u.id,
+        })),
+      });
 
       ///
       // await db.contact.create({
