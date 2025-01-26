@@ -33,13 +33,13 @@ const ManagementLayout = ({ children }: ILayoutProps) => {
                 isActive: pathname.includes("/scanner/management"),
                 items: [],
             },
-            {
-                title: "Notifications",
-                url: "/notifications/management",
-                icon: BellIcon,
-                isActive: pathname.includes("/notifications/management"),
-                items: [],
-            },
+            // {
+            //     title: "Notifications",
+            //     url: "/notifications/management",
+            //     icon: BellIcon,
+            //     isActive: pathname.includes("/notifications/management"),
+            //     items: [],
+            // },
             {
                 title: "Settings",
                 url: "/settings/management",
@@ -59,7 +59,7 @@ const ManagementLayout = ({ children }: ILayoutProps) => {
                     <div className="w-full h-full pb-24">
                         {children}
                     </div>
-                    <div className="w-full h-24 fixed bottom-0 leftt-0 bg-sidebar border-t p-4 grid grid-cols-4 gap-2">
+                    <div className="w-full h-24 fixed bottom-0 leftt-0 bg-sidebar border-t p-4 grid grid-cols-3 gap-2">
                         {routes.map((r) => {
                             return (
                                 <Link href={r.url} key={r.title}>

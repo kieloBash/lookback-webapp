@@ -32,10 +32,12 @@ const Row = ({ data: d }: IProps) => {
         setIsLoading(true);
         await handleAxios({ values: { newStatus, id: d.id }, url: REQUESTS_ROUTES.ADMIN.UPDATE.URL })
             .then((res) => {
-                toast({
-                    title: "Contact List",
-                    description: res.map((d: any) => d.email).join(", "),
-                })
+                if (res.values) {
+                    toast({
+                        title: "Contact List",
+                        description: res.map((d: any) => d.email).join(", "),
+                    })
+                }
                 queryClient.invalidateQueries({ queryKey: [REQUESTS_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false });
             })
             .catch((e) => {
