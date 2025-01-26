@@ -68,39 +68,39 @@ export async function POST(request: Request) {
           }
         });
       }
+///
+      const contactUsers = [];
 
-      // const contactUsers = [];
+      for (const userId of affectedUserIds) {
+        if (existing.user?.userProfile?.id !== userId) {
+          //exclude self
+          const user = await db.user.findFirst({
+            where: { userProfile: { id: userId } },
+            include: { userProfile: true },
+          });
 
-      // for (const userId of affectedUserIds) {
-      //   if (existing.user?.userProfile?.id !== userId) {
-      //     //exclude self
-      //     const user = await db.user.findFirst({
-      //       where: { userProfile: { id: userId } },
-      //       include: { userProfile: true },
-      //     });
+          if (user) {
+            console.log(user);
+            contactUsers.push(user);
+            await createNotification({
+              userId: user.id,
+              date: new Date(),
+              title: "COVID Exposure Alert",
+              message:
+                "You may have been exposed to someone who tested positive for COVID-19. Please monitor your health and consider getting tested.",
+              type: "COVID",
+            });
 
-      //     if (user) {
-      //       console.log(user);
-      //       contactUsers.push(user);
-      //       await createNotification({
-      //         userId: user.id,
-      //         date: new Date(),
-      //         title: "COVID Exposure Alert",
-      //         message:
-      //           "You may have been exposed to someone who tested positive for COVID-19. Please monitor your health and consider getting tested.",
-      //         type: "COVID",
-      //       });
-
-      //       if (user.userProfile?.status === "NEGATIVE") {
-      //         await db.userProfile.update({
-      //           where: { userId: user.id },
-      //           data: { status: "EXPOSED" },
-      //         });
-      //       }
-      //     }
-      //   }
-      // }
-
+            if (user.userProfile?.status === "NEGATIVE") {
+              await db.userProfile.update({
+                where: { userId: user.id },
+                data: { status: "EXPOSED" },
+              });
+            }
+          }
+        }
+      }
+///
       await db.userProfile.update({
         where: { userId: existing.userId },
         data: {
