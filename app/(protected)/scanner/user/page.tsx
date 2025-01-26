@@ -7,6 +7,8 @@ import { useRouter } from 'next/navigation';
 
 import React, { useCallback, useEffect, useState } from 'react'
 import HistoryLogModal from './_components/log-modal';
+import { useQueryClient } from '@tanstack/react-query';
+import { HISTORY_ROUTES } from '@/routes/history.routes';
 
 const UserScannerPage = () => {
     const [scanned, setScanned] = useState<boolean>(false);
@@ -14,6 +16,7 @@ const UserScannerPage = () => {
     const [token, setToken] = useState("")
     const profile = useManagementProfileId({ id: token });
     const router = useRouter();
+    const queryClient = useQueryClient();
 
     const handleCheckQR = (res: IDetectedBarcode[]) => {
         if (res.length === 0) return null;
@@ -35,6 +38,7 @@ const UserScannerPage = () => {
                 .then((res) => {
                     setScanned(false);
                     setToken("");
+                    queryClient.invalidateQueries({ queryKey: [HISTORY_ROUTES.USER.FETCH_ALL.KEY], exact: false })
                     // router.push("/scanner");
                 })
                 .finally(() => { setUpdatingHistory(false) })
