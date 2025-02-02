@@ -22,6 +22,7 @@ import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 import emailjs from "emailjs-com";
 import { AlertModal } from './modal';
 import { Checkbox } from '@/components/ui/checkbox';
+import { TermsModal } from './terms';
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 const template_id = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
@@ -52,7 +53,14 @@ const RegisterForm = () => {
     }
 
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
-        if (!isTerms) return null;
+        if (!isTerms) {
+            toast({
+                variant: "destructive",
+                title: "Terms and Conditions",
+                description: "Please read and accept the terms and conditions to proceed.",
+            });
+            return null;
+        }
         toast({
             title: "Please wait",
             description: "Please wait while we process your request!",
@@ -169,12 +177,13 @@ const RegisterForm = () => {
                                                 setIsTerms(false);
                                             }
                                         }} />
-                                        <label
+                                        <TermsModal />
+                                        {/* <label
                                             htmlFor="terms"
                                             className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
                                         >
                                             Accept terms and conditions
-                                        </label>
+                                        </label> */}
                                     </div>
                                     <Button type="submit" className="w-full mt-2" disabled={isLoading}>
                                         <span className="">Register</span>

@@ -20,6 +20,7 @@ import Link from 'next/link';
 import LoadingIcon from '@/components/ui/loading-icon';
 
 import emailjs from "emailjs-com";
+import { TermsModal } from './terms';
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 const template_id = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
@@ -169,10 +170,7 @@ const LoginForm = () => {
                     </Form>
                 </CardContent>
             </Card>
-            <div className="text-balance text-center text-xs text-muted-foreground [&_a]:underline [&_a]:underline-offset-4 [&_a]:hover:text-primary  ">
-                By clicking continue, you agree to our <Link href="/terms-conditions">Terms of Service</Link>{" "}
-                and <Link href="/terms-conditions">Privacy Policy</Link>.
-            </div>
+            <TermsModal />
         </div>
     )
 
