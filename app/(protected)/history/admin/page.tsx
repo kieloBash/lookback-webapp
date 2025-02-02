@@ -127,7 +127,7 @@ const HistoryAdminPage = () => {
                             <DropdownMenuItem onClick={handleExportContacts}>Contact List</DropdownMenuItem>
                         </DropdownMenuContent>
                     </DropdownMenu>
-                    <AddModal />
+                    {/* <AddModal /> */}
                 </div>
                 <UiPaginatedButtons hasPrev={page > 1} hasNext={page < (data.totalPages ?? 0)} />
             </div>

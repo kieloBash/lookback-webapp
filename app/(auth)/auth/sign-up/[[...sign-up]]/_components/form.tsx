@@ -21,6 +21,7 @@ import { DEFAULT_LOGIN_REDIRECT } from '@/routes';
 
 import emailjs from "emailjs-com";
 import { AlertModal } from './modal';
+import { Checkbox } from '@/components/ui/checkbox';
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 const template_id = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
@@ -29,6 +30,7 @@ const public_key = process.env.NEXT_PUBLIC_EMAILJS_PUBLIC_KEY ?? "";
 
 const RegisterForm = () => {
 
+    const [isTerms, setIsTerms] = useState(false);
     const [openModal, setOpenModal] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
     const searchParams = useSearchParams();
@@ -50,6 +52,7 @@ const RegisterForm = () => {
     }
 
     const onSubmit = async (values: z.infer<typeof RegisterSchema>) => {
+        if (!isTerms) return null;
         toast({
             title: "Please wait",
             description: "Please wait while we process your request!",
@@ -158,6 +161,21 @@ const RegisterForm = () => {
                                         disabled={isLoading}
                                         placeholder="Password"
                                     />
+                                    <div className="flex w-full justify-center items-center space-x-2">
+                                        <Checkbox id="terms" checked={isTerms} onCheckedChange={(e) => {
+                                            if (e) {
+                                                setIsTerms(true);
+                                            } else {
+                                                setIsTerms(false);
+                                            }
+                                        }} />
+                                        <label
+                                            htmlFor="terms"
+                                            className="text-sm font-medium leading-none peer-disabled:cursor-not-allowed peer-disabled:opacity-70"
+                                        >
+                                            Accept terms and conditions
+                                        </label>
+                                    </div>
                                     <Button type="submit" className="w-full mt-2" disabled={isLoading}>
                                         <span className="">Register</span>
                                         {isLoading && <LoadingIcon />}
