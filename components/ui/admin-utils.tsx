@@ -2,6 +2,7 @@
 import {
     Eye,
     HistoryIcon,
+    LogOutIcon,
     PlusIcon,
     Settings2Icon,
     UserPlus,
@@ -27,6 +28,7 @@ import {
 import { handleCreateAdminAccount, handleCreateUserAccount, handleCreateManagmentAccount } from "../admin-tools/actions"
 import HistoryModal from "../admin-tools/modals/history-modal"
 import { useState } from "react"
+import { signOut } from "next-auth/react"
 
 type SelectedType = "add-history" | "";
 
@@ -122,6 +124,12 @@ export default function UiAdminUtils() {
                                 </DropdownMenuSubContent>
                             </DropdownMenuSub>
                         </DropdownMenuGroup>
+                        <DropdownMenuItem onClick={() => {
+                            signOut({ redirect: true, redirectTo: "/" })
+                        }}>
+                            <LogOutIcon />
+                            <span>Log out</span>
+                        </DropdownMenuItem>
                     </DropdownMenuContent>
                 </DropdownMenu>
             </div>

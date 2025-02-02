@@ -47,7 +47,7 @@ export default async function RootLayout({
               <main className="w-full relative min-h-screen">
                 {children}
               </main>
-              <UiAdminUtils />
+              {/* <UiAdminUtils /> */}
               <ThemeToggle />
             </ThemeProvider>
           </QueryProvider>

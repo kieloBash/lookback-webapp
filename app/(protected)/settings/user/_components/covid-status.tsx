@@ -3,7 +3,7 @@
 import { useMemo } from "react"
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { WormIcon as Virus, ShieldCheck, NotebookPen, ScanHeartIcon, AmbulanceIcon, CrossIcon, BandageIcon, HandHelpingIcon, SprayCanIcon, SpeechIcon } from 'lucide-react'
+import { WormIcon as Virus, ShieldCheck, NotebookPen, ScanHeartIcon, AmbulanceIcon, CrossIcon, BandageIcon, HandHelpingIcon, SprayCanIcon, SpeechIcon, ComputerIcon } from 'lucide-react'
 import { CovidStatus, RequestStatus } from "@prisma/client"
 import { useRouter } from "next/navigation"
 
@@ -79,6 +79,35 @@ export default function CovidStatusCard({ hasRequest, covidStatus }: IProps) {
                             </>
                         )}
                         {status === "EXPOSED" && (
+                            <>
+                                <span className="text-xs text-muted-foreground">Kindly do the following for COVID-19 exposure procedures:</span>
+                                <li className="flex justify-start items-center px-1 py-2 gap-2">
+                                    <div className="size-10 relative p-2 rounded bg-primary">
+                                        <ScanHeartIcon className="size-full" />
+                                    </div>
+                                    <h3 className="text-left text-sm w-full">Self quarantine for 7-14 days</h3>
+                                </li>
+                                <li className="flex justify-start items-center px-1 py-2 gap-2">
+                                    <div className="size-10 relative p-2 rounded bg-primary">
+                                        <BandageIcon className="size-full" />
+                                    </div>
+                                    <h3 className="text-left text-sm w-full">Wear face mask</h3>
+                                </li>
+                                <li className="flex justify-start items-center px-1 py-2 gap-2">
+                                    <div className="size-10 relative p-2 rounded bg-primary">
+                                        <CrossIcon className="size-full" />
+                                    </div>
+                                    <h3 className="text-left text-sm w-full">Follow the safety protocols regarding covid-19</h3>
+                                </li>
+                                <li className="flex justify-start items-center px-1 py-2 gap-2">
+                                    <div className="size-10 relative p-2 rounded bg-primary">
+                                        <ComputerIcon className="size-full" />
+                                    </div>
+                                    <h3 className="text-left text-sm w-full">Monitor and inform the LGU and the medical team about your everyday status.</h3>
+                                </li>
+                            </>
+                        )}
+                        {status === "POSITIVE" && (
                             <>
                                 <span className="text-xs text-muted-foreground">Kindly do the following for COVID-19 exposure procedures:</span>
                                 <li className="flex justify-start items-center px-1 py-2 gap-2">

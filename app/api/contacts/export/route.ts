@@ -32,6 +32,8 @@ export async function GET(request: Request) {
         }),
     };
 
+    console.log(whereClause);
+
     const response: any = {
       payload: [],
     };
@@ -39,46 +41,52 @@ export async function GET(request: Request) {
     const [data] = await Promise.all([
       await db.contact.findMany({
         where: whereClause,
-        select: {
-          date: true,
-          user: {
-            select: {
-              name: true,
-              email: true,
-              contactNumber: true,
-              userProfile: {
-                select: {
-                  regCode: true,
-                  provCode: true,
-                  citymunCode: true,
-                  brgyCode: true,
-                },
-              },
-            },
-          },
-          usersExposed: {
-            select: {
-              user: {
-                select: {
-                  name: true,
-                  email: true,
-                  contactNumber: true,
-                  userProfile: {
-                    select: {
-                      regCode: true,
-                      provCode: true,
-                      citymunCode: true,
-                      brgyCode: true,
-                    },
-                  },
-                },
-              },
-            },
-          },
+        include: {
+          user: true,
+          usersExposed: true,
         },
+        // select: {
+        //   date: true,
+        //   user: {
+        //     select: {
+        //       name: true,
+        //       email: true,
+        //       contactNumber: true,
+        //       userProfile: {
+        //         select: {
+        //           regCode: true,
+        //           provCode: true,
+        //           citymunCode: true,
+        //           brgyCode: true,
+        //         },
+        //       },
+        //     },
+        //   },
+        //   usersExposed: {
+        //     select: {
+        //       user: {
+        //         select: {
+        //           name: true,
+        //           email: true,
+        //           contactNumber: true,
+        //           userProfile: {
+        //             select: {
+        //               regCode: true,
+        //               provCode: true,
+        //               citymunCode: true,
+        //               brgyCode: true,
+        //             },
+        //           },
+        //         },
+        //       },
+        //     },
+        //   },
+        // },
         orderBy: { date: "desc" },
       }),
     ]);
+
+    console.log(data);
 
     const formatData = data.map((d) => {
       return {
