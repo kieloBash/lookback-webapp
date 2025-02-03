@@ -72,7 +72,7 @@ const Row = ({ data: d }: IProps) => {
 
                     toast({ description: `Making contact tracing record...` });
                     const res4 = await axios.post(`${url}/contact-tracing`, { userIds, diagnosedId: user_histories[0].userId, dateOfTesting: d.dateOfTesting });
-                    console.log(res4);
+                    console.log(res4); 
                 } else {
                     toast({ title: "No Affected Users", description: `There were no affected users detected from the system.` });
                 }

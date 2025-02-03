@@ -2,6 +2,12 @@ import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { NextResponse } from "next/server";
 import bcrypt from "bcryptjs";
+import {
+  getBarangayDescription,
+  getCityDescription,
+  getProvinceDescription,
+  getRegionDescription,
+} from "@/lib/utils";
 
 const ROUTE_NAME = "Fetch Contact List";
 const ROUTE_STATUS = 200;
@@ -24,7 +30,7 @@ export async function GET(request: Request) {
     }
 
     const currentUser = await db.user.findFirst({
-      where: { email, role: "ADMIN" },
+      where: { email, role: { in: ["ADMIN", "HEAD_ADMIN"] } },
       select: { email: true, password: true },
     });
 
@@ -101,6 +107,39 @@ export async function GET(request: Request) {
     const formatData = data.map((d) => {
       return {
         ...d,
+        user: {
+          ...d.user,
+          userProfile: {
+            regCode: getRegionDescription(d.user.userProfile?.regCode ?? ""),
+            provCode: getProvinceDescription(
+              d.user.userProfile?.provCode ?? ""
+            ),
+            citymunCode: getCityDescription(
+              d.user.userProfile?.citymunCode ?? ""
+            ),
+            brgyCode: getBarangayDescription(
+              d.user.userProfile?.brgyCode ?? ""
+            ),
+          },
+        },
+        usersExposed: d.usersExposed.map((dd) => ({
+          ...dd,
+          user: {
+            ...dd.user,
+            userProfile: {
+              regCode: getRegionDescription(dd.user.userProfile?.regCode ?? ""),
+              provCode: getProvinceDescription(
+                dd.user.userProfile?.provCode ?? ""
+              ),
+              citymunCode: getCityDescription(
+                dd.user.userProfile?.citymunCode ?? ""
+              ),
+              brgyCode: getBarangayDescription(
+                dd.user.userProfile?.brgyCode ?? ""
+              ),
+            },
+          },
+        })),
       };
     });
 

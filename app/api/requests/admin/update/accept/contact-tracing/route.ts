@@ -24,12 +24,24 @@ export async function POST(request: Request) {
     }
 
     if (userIds.length <= 0) {
-      return new NextResponse("No Affected Users", { status: ROUTE_STATUS });
+      return new NextResponse("No Affected Users", { status: 400 });
+    }
+
+    const diagnosedUser = await db.userProfile.findFirst({
+      where: { id: diagnosedId },
+    });
+
+    if (!diagnosedUser) {
+      return new NextResponse("No Diagnosed User found!", { status: 400 });
     }
 
     const newContact = await db.contact.create({
-      data: { userInfectedId: diagnosedId, date: new Date(dateOfTesting) },
+      data: {
+        userInfectedId: diagnosedUser.userId,
+        date: new Date(dateOfTesting),
+      },
     });
+    console.log(newContact);
     await db.contactUser.createMany({
       data: userIds.map((u) => ({
         contactId: newContact.id,

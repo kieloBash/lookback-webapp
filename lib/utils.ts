@@ -4,6 +4,10 @@ import { twMerge } from "tailwind-merge";
 import axios from "axios";
 import { SortOrder } from "@/types/lib.type";
 import { format, parse } from "date-fns";
+import { PROVINCES_DATA } from "@/public/constants/provinces";
+import { REGIONS_DATA } from "@/public/constants/regions";
+import { CITY_DATA } from "@/public/constants/city";
+import { BARANGAY_DATA } from "@/public/constants/barangay";
 
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
@@ -140,4 +144,24 @@ export function sortByProperty<T>(
 
     throw new Error("Unsupported property type for sorting");
   });
+}
+
+export function getProvinceDescription(provCode: any) {
+  const d = PROVINCES_DATA.find((d) => d.provCode === provCode);
+  return d ? d.provDesc : "Province not found";
+}
+
+export function getRegionDescription(regCode: any) {
+  const d = REGIONS_DATA.find((d) => d.regCode === regCode);
+  return d ? d.regDesc : "Region not found";
+}
+
+export function getCityDescription(citymunCode: any) {
+  const d = CITY_DATA.find((d) => d.citymunCode === citymunCode);
+  return d ? d.citymunDesc : "City not found";
+}
+
+export function getBarangayDescription(brgyCode: any) {
+  const d = BARANGAY_DATA.find((d) => d.brgyCode === brgyCode);
+  return d ? d.brgyDesc : "Barangay not found";
 }

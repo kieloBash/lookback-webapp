@@ -1,5 +1,11 @@
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import {
+  getBarangayDescription,
+  getCityDescription,
+  getProvinceDescription,
+  getRegionDescription,
+} from "@/lib/utils";
 import { NextResponse } from "next/server";
 
 const ROUTE_NAME = "Fetch Contact List";
@@ -41,56 +47,83 @@ export async function GET(request: Request) {
     const [data] = await Promise.all([
       await db.contact.findMany({
         where: whereClause,
-        include: {
-          user: true,
-          usersExposed: true,
+        select: {
+          date: true,
+          user: {
+            select: {
+              name: true,
+              email: true,
+              contactNumber: true,
+              userProfile: {
+                select: {
+                  regCode: true,
+                  provCode: true,
+                  citymunCode: true,
+                  brgyCode: true,
+                },
+              },
+            },
+          },
+          usersExposed: {
+            select: {
+              user: {
+                select: {
+                  name: true,
+                  email: true,
+                  contactNumber: true,
+                  userProfile: {
+                    select: {
+                      regCode: true,
+                      provCode: true,
+                      citymunCode: true,
+                      brgyCode: true,
+                    },
+                  },
+                },
+              },
+            },
+          },
         },
-        // select: {
-        //   date: true,
-        //   user: {
-        //     select: {
-        //       name: true,
-        //       email: true,
-        //       contactNumber: true,
-        //       userProfile: {
-        //         select: {
-        //           regCode: true,
-        //           provCode: true,
-        //           citymunCode: true,
-        //           brgyCode: true,
-        //         },
-        //       },
-        //     },
-        //   },
-        //   usersExposed: {
-        //     select: {
-        //       user: {
-        //         select: {
-        //           name: true,
-        //           email: true,
-        //           contactNumber: true,
-        //           userProfile: {
-        //             select: {
-        //               regCode: true,
-        //               provCode: true,
-        //               citymunCode: true,
-        //               brgyCode: true,
-        //             },
-        //           },
-        //         },
-        //       },
-        //     },
-        //   },
-        // },
         orderBy: { date: "desc" },
       }),
     ]);
 
-    console.log(data);
-
     const formatData = data.map((d) => {
       return {
         ...d,
+        user: {
+          ...d.user,
+          userProfile: {
+            regCode: getRegionDescription(d.user.userProfile?.regCode ?? ""),
+            provCode: getProvinceDescription(
+              d.user.userProfile?.provCode ?? ""
+            ),
+            citymunCode: getCityDescription(
+              d.user.userProfile?.citymunCode ?? ""
+            ),
+            brgyCode: getBarangayDescription(
+              d.user.userProfile?.brgyCode ?? ""
+            ),
+          },
+        },
+        usersExposed: d.usersExposed.map((dd) => ({
+          ...dd,
+          user: {
+            ...dd.user,
+            userProfile: {
+              regCode: getRegionDescription(dd.user.userProfile?.regCode ?? ""),
+              provCode: getProvinceDescription(
+                dd.user.userProfile?.provCode ?? ""
+              ),
+              citymunCode: getCityDescription(
+                dd.user.userProfile?.citymunCode ?? ""
+              ),
+              brgyCode: getBarangayDescription(
+                dd.user.userProfile?.brgyCode ?? ""
+              ),
+            },
+          },
+        })),
       };
     });
 
