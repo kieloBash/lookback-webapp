@@ -51,14 +51,17 @@ const HistoryAdminPage = () => {
         if (data.payload?.length === 0 || !data.payload) return;
 
         const csvContent = [
-            ["Date Time", "User", "Region", "Province", "City", "Barangay"],
+            ["Date Time", "User", "Region", "Province", "City", "Barangay", "Email", "Number", "Status"],
             ...data.payload.map((d: any) => [
                 formatDateTime(d.date),
                 `${d.user.fname} ${d.user.lname}`,
                 d.user.regCode,
                 d.user.provCode,
                 d.user.citymunCode,
-                d.user.brgyCode
+                d.user.brgyCode,
+                d.user.user.email,
+                d.user.user.contactNumber,
+                d.user.status
             ])
         ].map(e => e.join(",")).join("\n");
 
@@ -156,16 +159,20 @@ const HistoryAdminPage = () => {
                                         <TableCell className="font-medium">{formatDateTime(d.date)}</TableCell>
                                         <TableCell>{d.user.fname} {d.user.lname}</TableCell>
                                         <TableCell>
-                                            <UiCodeLabel value={d.user.regCode} type="region" />
+                                            {d.user.regCode}
+                                            {/* <UiCodeLabel value={d.user.regCode} type="region" /> */}
                                         </TableCell>
                                         <TableCell>
-                                            <UiCodeLabel value={d.user.provCode} type="province" />
+                                            {d.user.provCode}
+                                            {/* <UiCodeLabel value={d.user.provCode} type="province" /> */}
                                         </TableCell>
                                         <TableCell>
-                                            <UiCodeLabel value={d.user.citymunCode} type="city" />
+                                            {d.user.citymunCode}
+                                            {/* <UiCodeLabel value={d.user.citymunCode} type="city" /> */}
                                         </TableCell>
                                         <TableCell>
-                                            <UiCodeLabel value={d.user.brgyCode} type="barangay" />
+                                            {d.user.brgyCode}
+                                            {/* <UiCodeLabel value={d.user.brgyCode} type="barangay" /> */}
                                         </TableCell>
                                     </TableRow>
                                 )

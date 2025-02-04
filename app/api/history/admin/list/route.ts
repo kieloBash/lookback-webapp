@@ -4,6 +4,13 @@ import { db } from "@/lib/db";
 import { endOfMonth, startOfMonth } from "date-fns";
 import { NextResponse } from "next/server";
 
+import {
+  getBarangayDescription,
+  getCityDescription,
+  getProvinceDescription,
+  getRegionDescription,
+} from "@/lib/utils";
+
 const ROUTE_NAME = "Fetch History List";
 const ROUTE_STATUS = 200;
 const SUCCESS_MESSAGE = "Successfully fetched list of history";
@@ -65,6 +72,7 @@ export async function GET(request: Request) {
         select: {
           id: true,
           date: true,
+
           user: {
             select: {
               id: true,
@@ -77,6 +85,12 @@ export async function GET(request: Request) {
               citymunCode: true,
               brgyCode: true,
               status: true,
+              user: {
+                select: {
+                  email: true,
+                  contactNumber: true,
+                },
+              },
             },
           },
         },
@@ -88,6 +102,21 @@ export async function GET(request: Request) {
     const formatData = data.map((d) => {
       return {
         ...d,
+        user: {
+          ...d.user,
+          regCode: getRegionDescription(d.user?.regCode ?? "")
+            .split(",")
+            .join(" "),
+          provCode: getProvinceDescription(d.user?.provCode ?? "")
+            .split(",")
+            .join(" "),
+          citymunCode: getCityDescription(d.user?.citymunCode ?? "")
+            .split(",")
+            .join(" "),
+          brgyCode: getBarangayDescription(d.user?.brgyCode ?? "")
+            .split(",")
+            .join(" "),
+        },
       };
     });
 
