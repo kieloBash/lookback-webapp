@@ -21,6 +21,7 @@ import LoadingIcon from '@/components/ui/loading-icon';
 
 import emailjs from "emailjs-com";
 import { TermsModal } from './terms';
+import axios from 'axios';
 
 const domain = process.env.NEXT_PUBLIC_APP_URL;
 const template_id = process.env.NEXT_PUBLIC_EMAILJS_TEMPLATE_ID ?? "";
@@ -51,47 +52,94 @@ const LoginForm = () => {
             description: "Please wait while we process your request!",
         });
         setIsLoading(true)
-        const res = await handleLoginAccount(values)
-        if (res.success) {
-            await signIn("credentials", {
-                email: values.email,
-                password: values.password,
-                redirectTo: DEFAULT_LOGIN_REDIRECT,
-            }).then(() => {
-                toast({
-                    title: "Success!",
-                    description: res.success,
-                });
-            })
-            form.reset();
-        } else if (res.error_verify) {
-            const confirmLink = `${domain}/auth/new-verification?token=${res.token}`;
-            const templateParams = {
-                app_name: APP_NAME,
-                app_email: APP_EMAIL,
-                to_email: values.email,
-                to_name: "",
-                link: confirmLink
-            }
-            await emailjs.send(service_id, template_id, templateParams, public_key)
-                .then(() => {
+
+        try {
+
+            const res = await axios.post("/api/auth/login", values);
+            if (res.data.token) {
+                const confirmLink = `${domain}/auth/new-verification?token=${res.data.token}`;
+                const templateParams = {
+                    app_name: APP_NAME,
+                    app_email: APP_EMAIL,
+                    to_email: values.email,
+                    to_name: "",
+                    link: confirmLink
+                }
+                await emailjs.send(service_id, template_id, templateParams, public_key)
+                    .then(() => {
+                        toast({
+                            title: "Verify your Account!",
+                            description: "An email verification has been sent to your account!",
+                        });
+                    })
+                    .catch((error: any) => {
+                        console.error("Failed to send email:", error);
+                        throw new Error("Could not send verification email.");
+                    })
+                // 2025-02-03T07:07:59.387Z
+            } else {
+                await signIn("credentials", {
+                    email: values.email,
+                    password: values.password,
+                    redirectTo: DEFAULT_LOGIN_REDIRECT,
+                }).then(() => {
                     toast({
-                        title: "Verify your Account!",
-                        description: res.error_verify,
+                        title: "Success!",
+                        description: "Welcome to LookBack!",
                     });
                 })
-                .catch((error: any) => {
-                    console.error("Failed to send email:", error);
-                    throw new Error("Could not send verification email.");
-                })
-        }
-        else {
+                form.reset();
+            }
+
+
+        } catch (error: any) {
             toast({
                 title: "An error occured!",
                 variant: "destructive",
-                description: res.error,
+                description: error.response.data,
             });
         }
+
+        // if (res.success) {
+        //     await signIn("credentials", {
+        //         email: values.email,
+        //         password: values.password,
+        //         redirectTo: DEFAULT_LOGIN_REDIRECT,
+        //     }).then(() => {
+        //         toast({
+        //             title: "Success!",
+        //             description: res.success,
+        //         });
+        //     })
+        //     form.reset();
+        // } else if (res.error_verify && res.token) {
+        //     const confirmLink = `${domain}/auth/new-verification?token=${res.token}`;
+        //     const templateParams = {
+        //         app_name: APP_NAME,
+        //         app_email: APP_EMAIL,
+        //         to_email: values.email,
+        //         to_name: "",
+        //         link: confirmLink
+        //     }
+        //     await emailjs.send(service_id, template_id, templateParams, public_key)
+        //         .then(() => {
+        //             toast({
+        //                 title: "Verify your Account!",
+        //                 description: res.error_verify,
+        //             });
+        //         })
+        //         .catch((error: any) => {
+        //             console.error("Failed to send email:", error);
+        //             throw new Error("Could not send verification email.");
+        //         })
+        // }
+        // else {
+        //     toast({
+        //         title: "An error occured!",
+        //         variant: "destructive",
+        //         description: res.error,
+        //     });
+        // }
         setIsLoading(false)
     };
 
