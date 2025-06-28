@@ -22,7 +22,7 @@ const UserRolesForm = ({ form }: IProps) => {
             <div className="flex justify-center items-center gap-2">
                 <Button type="button" onClick={() => handleChangeRole("USER")} className='size-56 p-2 flex flex-col justify-center items-center' variant={currentRole === "USER" ? "default" : "outline"}>
                     <User2Icon className='size-16' />
-                    <span className="text-lg text-wrap">User</span>
+                    <span className="text-lg text-wrap">Contact</span>
                 </Button>
                 <Button type="button" onClick={() => handleChangeRole("MANAGEMENT")} className='size-56 p-2 flex flex-col justify-center items-center' variant={currentRole === "MANAGEMENT" ? "default" : "outline"}>
                     <HospitalIcon className='size-16' />
