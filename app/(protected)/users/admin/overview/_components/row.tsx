@@ -39,9 +39,9 @@ const Row = ({ data: d, handleAction }: IProps) => {
                 {data?.userProfile && (
                     <>
                         <div className="px-2 py-1 text-xs rounded-full border">{data.userProfile.status}</div>
-                        {data.userProfile?.dateTestedPositive && (
+                        {/* {data.userProfile?.dateTestedPositive && (
                             <span className="">{formatDate(data.userProfile?.dateTestedPositive, FORMAT)}</span>
-                        )}
+                        )} */}
                     </>
                 )}
             </TableCell>
