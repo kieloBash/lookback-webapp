@@ -22,14 +22,15 @@ import { handleAxios } from '@/lib/utils'
 import { toast } from '@/hooks/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { USERS_ROUTES } from '@/routes/users.routes'
+import UiSearch from '@/components/ui/search'
 
 
 const AdminOverviewPage = () => {
-    const queryClient = useQueryClient();
     const searchParams = useSearchParams();
     const status = searchParams.get("statusFilter") || "ALL";
+    const search = searchParams.get("search") || "";
 
-    const data = useAdminUsers({ filter: status });
+    const data = useAdminUsers({ filter: status, searchTerm: search });
     const [selectedData, setSelectedData] = useState<any>(undefined);
     const [action, setAction] = useState<IActionType>("");
 
@@ -63,7 +64,8 @@ const AdminOverviewPage = () => {
                     open={selectedData && action === "delete"}
                     setOpen={handleReset}
                 />}
-            <div className="w-full flex justify-end items-center py-2 gap-2">
+            <div className="w-full flex justify-between items-center py-2 gap-2">
+                <UiSearch className='h-9 max-w-md' handleResetPage={() => { }} placeholder='Search name of user...' />
                 <StatusFilter />
                 {/* <Button type='button' size={"sm"} onClick={handleResetStatus}>Reset Status Users</Button> */}
             </div>

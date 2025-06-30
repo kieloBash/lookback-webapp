@@ -26,6 +26,9 @@ export async function GET(request: Request) {
     const whereClause: any = {
       id: { notIn: [user.id] },
       ...(statusFilter !== "ALL" && { role: statusFilter as any }),
+      ...(searchTerm && {
+        name: { contains: searchTerm, mode: "insensitive" },
+      }),
     };
 
     const response: ApiResponse = {
