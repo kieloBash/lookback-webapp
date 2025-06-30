@@ -45,15 +45,15 @@ const AdminOverviewPage = () => {
         setAction("");
     }
 
-    const handleResetStatus = async () => {
-        await handleAxios({ values: {}, url: "/api/users/admin/update/reset" })
-            .then((res) => {
-                queryClient.invalidateQueries({ queryKey: [USERS_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
-            })
-            .catch((e) => {
-                toast({ description: e.response });
-            })
-    }
+    // const handleResetStatus = async () => {
+    //     await handleAxios({ values: {}, url: "/api/users/admin/update/reset" })
+    //         .then((res) => {
+    //             queryClient.invalidateQueries({ queryKey: [USERS_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
+    //         })
+    //         .catch((e) => {
+    //             toast({ description: e.response });
+    //         })
+    // }
 
     return (
         <section className="w-full h-full p-4 flex justify-start items-center flex-col">
