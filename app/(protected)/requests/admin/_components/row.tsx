@@ -139,14 +139,14 @@ const Row = ({ data: d }: IProps) => {
             </TableCell>
             <TableCell>{d.symptoms}</TableCell>
             <TableCell className='text-right'>{d.status}</TableCell>
-            <TableCell>
+            {/* <TableCell>
                 {d.status === "PENDING" && (
                     <div className="flex justify-end items-center gap-2">
                         <Button disabled={isLoading} type='button' size={"sm"} variant={"outline"} onClick={() => handleChangeStatus("QUALIFIED")}>Accept</Button>
                         <Button disabled={isLoading} type='button' size={"sm"} variant={"destructive"} onClick={() => handleChangeStatus("DISQUALIFIED")}>Deny</Button>
                     </div>
                 )}
-            </TableCell>
+            </TableCell> */}
         </TableRow>
     )
 }
