@@ -22,13 +22,13 @@ const HeadAdminLayout = ({ children }: ILayoutProps) => {
                 isActive: pathname.includes("/history/admin"),
                 items: [],
             },
-            {
-                title: "Requests",
-                url: "/requests/admin",
-                icon: MessageCircleMore,
-                isActive: pathname.includes("/requests/admin"),
-                items: [],
-            },
+            // {
+            //     title: "Requests",
+            //     url: "/requests/admin",
+            //     icon: MessageCircleMore,
+            //     isActive: pathname.includes("/requests/admin"),
+            //     items: [],
+            // },
             {
                 title: "Users",
                 url: "/users/admin/overview",
