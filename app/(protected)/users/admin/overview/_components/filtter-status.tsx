@@ -40,7 +40,7 @@ const StatusFilter = ({ className }: IProps) => {
                 <SelectGroup>
                     <SelectLabel>Status</SelectLabel>
                     <SelectItem value="ALL">All</SelectItem>
-                    <SelectItem value="USER">User</SelectItem>
+                    <SelectItem value="USER">Contact</SelectItem>
                     <SelectItem value="MANAGEMENT">Management</SelectItem>
                     <SelectItem value="ADMIN">Admin</SelectItem>
                 </SelectGroup>

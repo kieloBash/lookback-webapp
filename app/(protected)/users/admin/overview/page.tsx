@@ -65,7 +65,7 @@ const AdminOverviewPage = () => {
                 />}
             <div className="w-full flex justify-end items-center py-2 gap-2">
                 <StatusFilter />
-                <Button type='button' size={"sm"} onClick={handleResetStatus}>Reset Status Users</Button>
+                {/* <Button type='button' size={"sm"} onClick={handleResetStatus}>Reset Status Users</Button> */}
             </div>
             <div className="w-full lg:max-w-none max-w-xs">
                 <Table>
