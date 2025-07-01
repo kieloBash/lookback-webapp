@@ -24,12 +24,12 @@ const ManagementHistoryPage = () => {
                     <TableHeader>
                         <TableRow>
                             <TableHead className="w-[170px]">Date Time</TableHead>
-                            <TableHead>User</TableHead>
+                            {/* <TableHead>User</TableHead> */}
                             <TableHead>Region</TableHead>
                             <TableHead>Province</TableHead>
                             <TableHead>City</TableHead>
                             <TableHead>Barangay</TableHead>
-                            <TableHead className='text-right'>Status</TableHead>
+                            {/* <TableHead className='text-right'>Status</TableHead> */}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -37,7 +37,7 @@ const ManagementHistoryPage = () => {
                             return (
                                 <TableRow key={d.id}>
                                     <TableCell className="font-medium">{formatDateTime(d.date)}</TableCell>
-                                    <TableCell>{d.user.fname} {d.user.lname}</TableCell>
+                                    {/* <TableCell>{d.user.fname} {d.user.lname}</TableCell> */}
                                     <TableCell>
                                         <UiCodeLabel value={d.user.regCode} type="region" />
                                     </TableCell>
@@ -50,7 +50,7 @@ const ManagementHistoryPage = () => {
                                     <TableCell>
                                         <UiCodeLabel value={d.user.brgyCode} type="barangay" />
                                     </TableCell>
-                                    <TableCell className="text-right">{d.user.status}</TableCell>
+                                    {/* <TableCell className="text-right">{d.user.status}</TableCell> */}
                                 </TableRow>
                             )
                         })}
