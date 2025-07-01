@@ -24,11 +24,11 @@ const UserHistoryPage = () => {
                     <TableHeader>
                         <TableRow>
                             <TableHead className="w-[170px]">Date Time</TableHead>
-                            <TableHead>Management</TableHead>
                             <TableHead>Region</TableHead>
                             <TableHead>Province</TableHead>
                             <TableHead>City</TableHead>
                             <TableHead>Barangay</TableHead>
+                            <TableHead>Establishment</TableHead>
                             {/* <TableHead className='text-right'>No Covid Days</TableHead> */}
                         </TableRow>
                     </TableHeader>
@@ -37,7 +37,6 @@ const UserHistoryPage = () => {
                             return (
                                 <TableRow key={d.id}>
                                     <TableCell className="font-medium">{formatDateTime(d.date)}</TableCell>
-                                    <TableCell>{d.management.user.name}</TableCell>
                                     <TableCell>
                                         <UiCodeLabel value={d.management.regCode} type="region" />
                                     </TableCell>
@@ -50,6 +49,7 @@ const UserHistoryPage = () => {
                                     <TableCell>
                                         <UiCodeLabel value={d.management.brgyCode} type="barangay" />
                                     </TableCell>
+                                    <TableCell>{d.management.user.name}</TableCell>
                                     {/* <TableCell className="text-right">{d.management.daysWithoutCovid}</TableCell> */}
                                 </TableRow>
                             )

@@ -49,7 +49,7 @@ const StatusFilter = ({ className }: IProps) => {
             { label: "Management", value: "MANAGEMENT" },
             { label: "Admin", value: "ADMIN" }
         ];
-    }, [])
+    }, [role])
 
     return (
         <Select value={status} onValueChange={onChange}>
