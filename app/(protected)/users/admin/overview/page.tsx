@@ -23,11 +23,14 @@ import { toast } from '@/hooks/use-toast'
 import { useQueryClient } from '@tanstack/react-query'
 import { USERS_ROUTES } from '@/routes/users.routes'
 import UiSearch from '@/components/ui/search'
+import { useCurrentRole } from '@/lib/hooks'
+import { UserRole } from '@prisma/client'
 
 
 const AdminOverviewPage = () => {
+    const role = useCurrentRole();
     const searchParams = useSearchParams();
-    const status = searchParams.get("statusFilter") || "ALL";
+    const status = searchParams.get("statusFilter") || role === UserRole.ADMIN ? "USER" : "ALL";
     const search = searchParams.get("search") || "";
 
     const data = useAdminUsers({ filter: status, searchTerm: search });
@@ -66,7 +69,9 @@ const AdminOverviewPage = () => {
                 />}
             <div className="w-full flex justify-between items-center py-2 gap-2">
                 <UiSearch className='h-9 max-w-md' handleResetPage={() => { }} placeholder='Search name of user...' />
-                <StatusFilter />
+                {role !== UserRole.ADMIN && (
+                    <StatusFilter />
+                )}
                 {/* <Button type='button' size={"sm"} onClick={handleResetStatus}>Reset Status Users</Button> */}
             </div>
             <div className="w-full lg:max-w-none max-w-xs">
