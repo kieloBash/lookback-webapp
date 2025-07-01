@@ -28,7 +28,7 @@ const RequestsAdminPage = () => {
                             <TableHead className=''>Medical</TableHead>
                             <TableHead className="w-[320px]">Symptoms</TableHead>
                             <TableHead className='text-right'>Status</TableHead>
-                            <TableHead className='text-right'></TableHead>
+                            {/* <TableHead className='text-right'></TableHead> */}
                         </TableRow>
                     </TableHeader>
                     <TableBody>

@@ -47,11 +47,13 @@ const HistoryAdminPage = () => {
 
     const data = useAdminHistory({ page, limit: 20, startDate, endDate, searchTerm: search });
 
+    console.log({ data })
+
     const handleExportHistory = () => {
         if (data.payload?.length === 0 || !data.payload) return;
 
         const csvContent = [
-            ["Date Time", "User", "Region", "Province", "City", "Barangay", "Email", "Number", "Status"],
+            ["Date Time", "User", "Region", "Province", "City", "Barangay", "Email", "Number", "Status", "Establishment"],
             ...data.payload.map((d: any) => [
                 formatDateTime(d.date),
                 `${d.user.fname} ${d.user.lname}`,
@@ -61,9 +63,12 @@ const HistoryAdminPage = () => {
                 d.user.brgyCode,
                 d.user.user.email,
                 d.user.user.contactNumber,
-                d.user.status
+                d.user.status,
+                d.management.user.name
             ])
         ].map(e => e.join(",")).join("\n");
+
+        console.log(csvContent)
 
         const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
         const url = URL.createObjectURL(blob);
@@ -97,7 +102,8 @@ const HistoryAdminPage = () => {
                 d.user.userProfile.provCode,
                 d.user.userProfile.citymunCode,
                 d.user.userProfile.brgyCode,
-                d.usersExposed.map((g: any) => (g.user.email)).join(", ")
+                d.usersExposed.map((g: any) => (g.user.email)).join(", "),
+                // d.management.user.name
             ])
         ].map(e => e.join(",")).join("\n");
 
@@ -111,6 +117,8 @@ const HistoryAdminPage = () => {
         link.click();
         document.body.removeChild(link);
     }
+
+    // const handleGenerateReport = async (historyId: string) => { }
 
     return (
         <article className="w-full p-4">
@@ -144,6 +152,8 @@ const HistoryAdminPage = () => {
                             <TableHead>Province</TableHead>
                             <TableHead>City</TableHead>
                             <TableHead>Barangay</TableHead>
+                            <TableHead>Establishment</TableHead>
+                            {/* <TableHead>Actions</TableHead> */}
                         </TableRow>
                     </TableHeader>
                     <TableBody>
@@ -174,6 +184,14 @@ const HistoryAdminPage = () => {
                                             {d.user.brgyCode}
                                             {/* <UiCodeLabel value={d.user.brgyCode} type="barangay" /> */}
                                         </TableCell>
+                                        <TableCell>
+                                            {d?.management?.user?.name}
+                                        </TableCell>
+                                        {/* <TableCell>
+                                            <Button onClick={() => handleGenerateReport(d.id)} variant={"default"} size={"sm"} type='button'>
+                                                Generate Report
+                                            </Button>
+                                        </TableCell> */}
                                     </TableRow>
                                 )
                             })}

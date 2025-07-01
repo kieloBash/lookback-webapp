@@ -11,7 +11,7 @@ export async function GET(request: Request) {
   try {
     const user = await currentUser();
 
-    if (!user || !user.id || user.role !== "HEAD_ADMIN") {
+    if (!user || !user.id || (user.role !== "HEAD_ADMIN" && user.role !== "ADMIN")) {
       return new NextResponse(ROUTE_NAME + ": Unauthorized: No Access", {
         status: 401,
       });
@@ -23,9 +23,18 @@ export async function GET(request: Request) {
     const searchTerm = searchParams.get("searchTerm") || "";
     const statusFilter = searchParams.get("filter") || "ALL";
 
+    if (user.role === "ADMIN" && (statusFilter !== "ALL" && statusFilter !== "USER")) {
+      return new NextResponse(ROUTE_NAME + ": Unauthorized: No Access for these filters", {
+        status: 401,
+      });
+    }
+
     const whereClause: any = {
       id: { notIn: [user.id] },
       ...(statusFilter !== "ALL" && { role: statusFilter as any }),
+      ...(searchTerm && {
+        name: { contains: searchTerm, mode: "insensitive" },
+      }),
     };
 
     const response: ApiResponse = {

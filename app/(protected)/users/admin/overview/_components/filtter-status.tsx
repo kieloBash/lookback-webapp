@@ -1,5 +1,5 @@
 'use client'
-import React from 'react'
+import React, { useMemo } from 'react'
 import { usePathname, useRouter, useSearchParams } from 'next/navigation';
 import {
     Select,
@@ -10,6 +10,8 @@ import {
     SelectTrigger,
     SelectValue,
 } from "@/components/ui/select"
+import { useCurrentRole } from '@/lib/hooks';
+import { UserRole } from '@prisma/client';
 
 
 interface IProps {
@@ -21,6 +23,8 @@ const StatusFilter = ({ className }: IProps) => {
     const pathname = usePathname();
     const searchParams = useSearchParams();
 
+    const role = useCurrentRole();
+
     const status = searchParams.get("statusFilter") || "ALL";
 
     const onChange = (newStatus: string) => {
@@ -31,6 +35,22 @@ const StatusFilter = ({ className }: IProps) => {
         router.push(`${pathname}?${currentParams.toString()}`);
     }
 
+    const FILTERS = useMemo(() => {
+
+        if (role === UserRole.ADMIN) {
+            return [
+                { label: "Contact", value: "USER" },
+            ];
+        }
+
+        return [
+            { label: "All", value: "ALL" },
+            { label: "Contact", value: "USER" },
+            { label: "Management", value: "MANAGEMENT" },
+            { label: "Admin", value: "ADMIN" }
+        ];
+    }, [role])
+
     return (
         <Select value={status} onValueChange={onChange}>
             <SelectTrigger className="w-[180px]">
@@ -39,10 +59,9 @@ const StatusFilter = ({ className }: IProps) => {
             <SelectContent className={className}>
                 <SelectGroup>
                     <SelectLabel>Status</SelectLabel>
-                    <SelectItem value="ALL">All</SelectItem>
-                    <SelectItem value="USER">User</SelectItem>
-                    <SelectItem value="MANAGEMENT">Management</SelectItem>
-                    <SelectItem value="ADMIN">Admin</SelectItem>
+                    {FILTERS.map(({ label, value }) =>
+                        <SelectItem key={value} value={value}>{label}</SelectItem>
+                    )}
                 </SelectGroup>
             </SelectContent>
         </Select>

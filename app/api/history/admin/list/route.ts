@@ -93,6 +93,11 @@ export async function GET(request: Request) {
               },
             },
           },
+          management: {
+            select: {
+              user: true
+            }
+          }
         },
         orderBy: { date: "desc" },
       }),
@@ -117,6 +122,9 @@ export async function GET(request: Request) {
             .split(",")
             .join(" "),
         },
+        management: {
+          user: { ...d.management.user }
+        }
       };
     });
 
