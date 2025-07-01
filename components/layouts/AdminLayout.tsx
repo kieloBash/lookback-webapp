@@ -22,6 +22,18 @@ const AdminLayout = ({ children }: ILayoutProps) => {
                 isActive: pathname.includes("/history/admin"),
                 items: [],
             },
+            {
+                title: "Users",
+                url: "/users/admin/overview",
+                icon: User2Icon,
+                isActive: pathname.includes("/users/admin"),
+                items: [
+                    {
+                        title: "Overview",
+                        url: "/users/admin/overview",
+                    },
+                ],
+            },
         ]
     }, [pathname])
 
