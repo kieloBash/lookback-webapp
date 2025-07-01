@@ -1,9 +1,10 @@
 "use client";
 
-import { FETCH_INTERVAL } from "@/lib/utils";
+import { FETCH_INTERVAL, FORMAT } from "@/lib/utils";
 import { HISTORY_ROUTES } from "@/routes/history.routes";
 import { FullHistoryType } from "@/types/user.type";
 import { useQuery, keepPreviousData } from "@tanstack/react-query";
+import { endOfMonth, format, startOfMonth } from "date-fns";
 
 const ROUTE = HISTORY_ROUTES.MANAGEMENT.FETCH_ALL.URL;
 const KEY = HISTORY_ROUTES.MANAGEMENT.FETCH_ALL.KEY;
@@ -21,6 +22,9 @@ export type FetchParams = {
     limit?: number;
     filter?: string;
     searchTerm?: string;
+
+    startDate?: Date;
+    endDate?: Date;
 };
 
 const fetchData = async ({
@@ -28,9 +32,13 @@ const fetchData = async ({
     limit = default_limit,
     filter = default_filter,
     searchTerm = "",
+
+
+    startDate = startOfMonth(new Date()),
+    endDate = endOfMonth(new Date()),
 }: FetchParams): Promise<ApiResponse> => {
     const response = await fetch(
-        `${ROUTE}?page=${page}&limit=${limit}&filter=${filter}&searchTerm=${searchTerm}`
+        `${ROUTE}?page=${page}&limit=${limit}&filter=${filter}&searchTerm=${searchTerm}&startDate=${format(startDate, FORMAT)}&endDate=${format(endDate, FORMAT)}`
     );
     if (!response.ok) {
         throw new Error("Network response was not ok");
@@ -44,16 +52,19 @@ interface IProps {
     filter?: string,
     searchTerm?: string,
     select?: any
+
+    startDate?: Date;
+    endDate?: Date;
 }
 
 const useManagementHistory = (
-    { page = 1, limit = default_limit, filter = default_filter, searchTerm = "", select }: IProps
+    { page = 1, limit = default_limit, filter = default_filter, searchTerm = "", select, startDate = startOfMonth(new Date()), endDate = endOfMonth(new Date()) }: IProps
 ) => {
 
     const { data, error, isLoading, isFetching, isError } = useQuery<ApiResponse>({
-        queryKey: [KEY, page, limit, filter, searchTerm],
+        queryKey: [KEY, page, limit, filter, searchTerm, format(startDate, FORMAT), format(endDate, FORMAT)],
         queryFn: () =>
-            fetchData({ page, limit, filter, searchTerm }),
+            fetchData({ page, limit, filter, searchTerm, startDate, endDate }),
         staleTime: INTERVAL,
         refetchOnWindowFocus: false,
         placeholderData: keepPreviousData,

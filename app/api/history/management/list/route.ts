@@ -1,6 +1,7 @@
 import { ApiResponse } from "@/hooks/management/use-history";
 import { currentUser } from "@/lib/auth";
 import { db } from "@/lib/db";
+import { endOfMonth, startOfMonth } from "date-fns";
 import { NextResponse } from "next/server";
 
 const ROUTE_NAME = "Fetch History List";
@@ -23,7 +24,20 @@ export async function GET(request: Request) {
     const searchTerm = searchParams.get("searchTerm") || "";
     const statusFilter = searchParams.get("filter") || "ALL";
 
+    const startDateParam = searchParams.get("startDate");
+    const endDateParam = searchParams.get("endDate");
+    const startDate = startDateParam
+      ? new Date(startDateParam)
+      : startOfMonth(new Date());
+    const endDate = endDateParam
+      ? new Date(endDateParam)
+      : endOfMonth(new Date());
+
     const whereClause: any = {
+      date: {
+        gte: startDate,
+        lte: endDate,
+      },
       management: {
         userId: user.id,
       },

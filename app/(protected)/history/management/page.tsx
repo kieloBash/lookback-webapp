@@ -14,11 +14,34 @@ import {
 import useManagementHistory from '@/hooks/management/use-history'
 import { formatDateTime } from '@/lib/utils'
 import UiCodeLabel from '@/components/ui-project/code-label';
+import { useSearchParams } from 'next/navigation'
+import { endOfMonth, startOfMonth } from 'date-fns'
+import { UiDatePickerRange } from '@/components/ui/date-range'
+import UiLoading from '@/components/ui/loading-page'
 
 const ManagementHistoryPage = () => {
-    const data = useManagementHistory({});
+    const searchParams = useSearchParams();
+
+
+    const startDateParam = searchParams.get("startDate");
+    const endDateParam = searchParams.get("endDate");
+    const startDate = startDateParam ? startOfMonth(new Date(startDateParam)) : startOfMonth(new Date());
+    const endDate = endDateParam ? endOfMonth(new Date(endDateParam)) : endOfMonth(new Date());
+
+
+    const data = useManagementHistory({ startDate, endDate, });
+
+    if (data.isLoading || data.isFetching) {
+        return <UiLoading type='page' />
+    }
+
     return (
         <section className="w-full h-full p-4 flex justify-start items-center flex-col">
+            <div className="w-full flex justify-start items-center py-2">
+                <div className="flex justify-start gap-2 items-start">
+                    <UiDatePickerRange defaultStartDate={startDate} defaultEndDate={endDate} />
+                </div>
+            </div>
             <div className="w-full lg:max-w-none max-w-xs">
                 <Table>
                     <TableHeader>
