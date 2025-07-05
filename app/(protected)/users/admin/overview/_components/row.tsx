@@ -4,7 +4,7 @@ import {
     TableCell,
     TableRow,
 } from "@/components/ui/table"
-import { User } from '@prisma/client';
+import { CovidStatus, User } from '@prisma/client';
 
 import {
     DropdownMenu,
@@ -29,6 +29,7 @@ interface IProps {
 
 const Row = ({ data: d, handleAction }: IProps) => {
     const data = d as any
+
     return (
         <TableRow>
             <TableCell>{data.role}</TableCell>
@@ -63,6 +64,34 @@ const Row = ({ data: d, handleAction }: IProps) => {
                                 Edit
                             </DropdownMenuItem>
                         </Link>
+                        {data?.userProfile?.status === CovidStatus.NEGATIVE && (
+                            <DropdownMenuItem
+                                onClick={() => handleAction(data, "change-status-positive")}
+                            >
+                                Update to positive
+                            </DropdownMenuItem>
+                        )}
+                        {data?.userProfile?.status === CovidStatus.POSITIVE && (
+                            <DropdownMenuItem
+                                onClick={() => handleAction(data, "change-status-negative")}
+                            >
+                                Update to negative
+                            </DropdownMenuItem>
+                        )}
+                        {data?.userProfile?.status === CovidStatus.EXPOSED && (
+                            <>
+                                <DropdownMenuItem
+                                    onClick={() => handleAction(data, "change-status-positive")}
+                                >
+                                    Update to positive
+                                </DropdownMenuItem>
+                                <DropdownMenuItem
+                                    onClick={() => handleAction(data, "change-status-negative")}
+                                >
+                                    Update to negative
+                                </DropdownMenuItem>
+                            </>
+                        )}
                         <DropdownMenuItem
                             onClick={() => handleAction(data, "delete")}
                         >
