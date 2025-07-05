@@ -114,14 +114,14 @@ const UserForm = ({ form, isLoading }: IProps) => {
                     control={form.control}
                     disabled={isLoading}
                 />
-                <FormSelect
+                {/* <FormSelect
                     value={form.watch("user.status")}
                     label='COVID Status'
                     name='user.status'
                     array={["NEGATIVE", "POSITIVE","EXPOSED"].map((d) => ({ id: d, value: d, label: d }))}
                     control={form.control}
                     disabled={isLoading}
-                />
+                /> */}
             </div>
             <FormComboBox
                 label="Region"
