@@ -1,6 +1,6 @@
 import { Loader2, Activity } from "lucide-react"
 
-export default function MainLoadingPage() {
+export default function MainLoadingPage({ message }: { message?: string }) {
     return (
         <div className="min-h-screen flex items-center justify-center p-4">
             <div className="text-center space-y-8 max-w-md w-full">
@@ -24,7 +24,7 @@ export default function MainLoadingPage() {
                     {/* Loading Text */}
                     <div className="space-y-2">
                         <p className="text-gray-700 font-medium">Loading...</p>
-                        <p className="text-gray-500 text-sm">Sit back and relax</p>
+                        <p className="text-gray-500 text-sm">{message ? message : "Sit back and relax"}</p>
                     </div>
                 </div>
             </div>

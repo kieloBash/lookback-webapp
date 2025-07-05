@@ -160,7 +160,7 @@ const HistoryAdminPage = () => {
                         <UiDataLoader
                             isLoading={data.isLoading || data.isFetching}
                             length={data.payload?.length}
-                            columns={6}
+                            columns={7}
                             type='table'
                         >
                             {data.payload?.map((d) => {

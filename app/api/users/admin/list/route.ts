@@ -52,6 +52,7 @@ export async function GET(request: Request) {
 
           userProfile: {
             select: {
+              id: true,
               status: true,
               dateTestedPositive: true,
             },
