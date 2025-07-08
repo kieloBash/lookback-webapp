@@ -91,8 +91,17 @@ export default function CovidUpdateModal({ open, setOpen, contactData }: IProps)
         try {
             const user_histories = await handleUserHistoryAPI();
             const userIds = await handleRelatedHistory(user_histories);
+
+            console.log({ user_histories, userIds })
             await handleNotify({ user_histories, userIds })
-            await handleUpdateFinal({ user_histories })
+
+            if (user_histories.length > 0)
+                await handleUpdateFinal({ user_histories })
+            else {
+                //UPDATE ONLY THE USER
+                await handleUpdateOwn()
+            }
+
             await queryClient.invalidateQueries({ queryKey: [USERS_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
             setOpen(false)
         } catch (error) {
@@ -143,6 +152,7 @@ export default function CovidUpdateModal({ open, setOpen, contactData }: IProps)
     }
 
     const handleNotify = async ({ userIds, user_histories }: { userIds: any[], user_histories: any[] }) => {
+        console.log("HANDLENOTIFY")
         if (userIds.length > 0) {
             setLoadingMessage(`Sending notifications to affected users...`)
 
@@ -164,6 +174,17 @@ export default function CovidUpdateModal({ open, setOpen, contactData }: IProps)
 
         setLoadingMessage(`Updating request...`)
         const res5 = await axios.post(`${url}/last`, { userId: user_histories[0].userId, dateOfTesting: formData.dateOfTesting });
+        console.log(res5);
+
+        setLoadingMessage(`Success!`)
+        toast({ description: "Success!" });
+    }
+
+    const handleUpdateOwn = async () => {
+        await sleep(2000);
+
+        setLoadingMessage(`Updating request...`)
+        const res5 = await axios.post(`${url}/own`, { userId: contactData.id });
         console.log(res5);
 
         setLoadingMessage(`Success!`)

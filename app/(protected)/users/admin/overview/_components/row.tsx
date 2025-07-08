@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 
 import {
     TableCell,
@@ -30,6 +30,8 @@ interface IProps {
 const Row = ({ data: d, handleAction }: IProps) => {
     const data = d as any
 
+    const [open, setOpen] = useState(false)
+
     return (
         <TableRow>
             <TableCell>{data.role}</TableCell>
@@ -48,8 +50,8 @@ const Row = ({ data: d, handleAction }: IProps) => {
             </TableCell>
             <TableCell>{data.email}</TableCell>
             <TableCell className='flex justify-end items-center'>
-                <DropdownMenu>
-                    <DropdownMenuTrigger asChild>
+                <DropdownMenu open={open} onOpenChange={setOpen}>
+                    <DropdownMenuTrigger asChild onClick={() => setOpen(true)}>
                         <Button variant="ghost" className="h-8 w-8 p-0">
                             <span className="sr-only">Open menu</span>
                             <MoreHorizontalIcon />
@@ -59,21 +61,30 @@ const Row = ({ data: d, handleAction }: IProps) => {
                         <DropdownMenuLabel>Actions</DropdownMenuLabel>
                         <Link href={`/users/admin/update/${data.id}`}>
                             <DropdownMenuItem
-                                onClick={() => handleAction(data, "update")}
+                                onClick={() => {
+                                    setOpen(false)
+                                    handleAction(data, "update")
+                                }}
                             >
                                 Edit
                             </DropdownMenuItem>
                         </Link>
                         {data?.userProfile?.status === CovidStatus.NEGATIVE && (
                             <DropdownMenuItem
-                                onClick={() => handleAction(data, "change-status-positive")}
+                                onClick={() => {
+                                    setOpen(false)
+                                    handleAction(data, "change-status-positive")
+                                }}
                             >
                                 Update to positive
                             </DropdownMenuItem>
                         )}
                         {data?.userProfile?.status === CovidStatus.POSITIVE && (
                             <DropdownMenuItem
-                                onClick={() => handleAction(data, "change-status-negative")}
+                                onClick={() => {
+                                    setOpen(false)
+                                    handleAction(data, "change-status-negative")
+                                }}
                             >
                                 Update to negative
                             </DropdownMenuItem>
@@ -81,19 +92,28 @@ const Row = ({ data: d, handleAction }: IProps) => {
                         {data?.userProfile?.status === CovidStatus.EXPOSED && (
                             <>
                                 <DropdownMenuItem
-                                    onClick={() => handleAction(data, "change-status-positive")}
+                                    onClick={() => {
+                                        setOpen(false)
+                                        handleAction(data, "change-status-positive")
+                                    }}
                                 >
                                     Update to positive
                                 </DropdownMenuItem>
                                 <DropdownMenuItem
-                                    onClick={() => handleAction(data, "change-status-negative")}
+                                    onClick={() => {
+                                        setOpen(false)
+                                        handleAction(data, "change-status-negative")
+                                    }}
                                 >
                                     Update to negative
                                 </DropdownMenuItem>
                             </>
                         )}
                         <DropdownMenuItem
-                            onClick={() => handleAction(data, "delete")}
+                            onClick={() => {
+                                setOpen(false)
+                                handleAction(data, "delete")
+                            }}
                         >
                             Delete
                         </DropdownMenuItem>
