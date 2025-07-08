@@ -15,7 +15,7 @@ export async function POST(request: Request) {
 
     console.log({ user })
 
-    if (!user || !user.id || user.role !== "HEAD_ADMIN") {
+    if (!user || !user.id) {
       return new NextResponse(ROUTE_NAME + ": No Access", { status: 401 });
     }
 

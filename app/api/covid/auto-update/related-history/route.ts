@@ -13,7 +13,7 @@ export async function POST(request: Request) {
   try {
     const user = await currentUser();
 
-    if (!user || !user.id || user.role !== "HEAD_ADMIN") {
+    if (!user || !user.id) {
       return new NextResponse(ROUTE_NAME + ": No Access", { status: 401 });
     }
 
