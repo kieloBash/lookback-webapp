@@ -53,7 +53,9 @@ const HistoryAdminPage = () => {
         if (data.payload?.length === 0 || !data.payload) return;
 
         const csvContent = [
-            ["Date Time", "User", "Region", "Province", "City", "Barangay", "Email", "Number", "Status", "Establishment"],
+            ["Date Time", "User", "Region", "Province", "City", "Barangay", "Email",
+                // "Number", 
+                "Status", "Establishment"],
             ...data.payload.map((d: any) => [
                 formatDateTime(d.date),
                 `${d.user.fname} ${d.user.lname}`,
@@ -62,7 +64,7 @@ const HistoryAdminPage = () => {
                 d.user.citymunCode,
                 d.user.brgyCode,
                 d.user.user.email,
-                d.user.user.contactNumber,
+                // d.user.user.contactNumber,
                 d.user.status,
                 d.management.user.name
             ])
