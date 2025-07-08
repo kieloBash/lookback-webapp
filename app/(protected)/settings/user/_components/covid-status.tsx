@@ -140,7 +140,7 @@ export default function CovidStatusCard({ hasRequest, covidStatus }: IProps) {
                 </div>
             </CardContent>
             <CardFooter className="w-full flex justify-center items-center">
-                <Button
+                {/* <Button
                     disabled={status !== "NEGATIVE" && status !== "EXPOSED"}
                     onClick={() => router.push("/requests")}
                     type="button"
@@ -150,7 +150,7 @@ export default function CovidStatusCard({ hasRequest, covidStatus }: IProps) {
                     {status === "NEGATIVE" && <span>I have been diagnosed</span>}
                     {status === "POSITIVE" && <span>Please Stay Safe and Quarantine</span>}
                     {status === "EXPOSED" && <span>Please Conduct a COVID Test</span>}
-                </Button>
+                </Button> */}
             </CardFooter>
         </Card>
     )
