@@ -15,17 +15,23 @@ export async function POST(request: Request) {
     }
 
     const body = await request.json();
-    const { userId } = body;
+    const { userId, status } = body;
 
     console.log({ userId })
+    let title = "COVID Positive Alert"
+    let message = "You may have contracted COVID-19 disease."
+
+    if (status === "NEGATIVE") {
+      title = "COVID Negetaive Alert"
+      message = "Contact is now negative, please stay safe and recover!"
+    }
 
     const notification = await db.notification.create({
       data: {
         userId,
         date: new Date(),
-        title: "COVID Positive Alert",
-        message:
-          "You may have contracted COVID-19 disease.",
+        title,
+        message,
         type: "COVID",
       }
     })
@@ -33,7 +39,7 @@ export async function POST(request: Request) {
     const updatedStatus = await db.userProfile.update({
       where: { userId },
       data: {
-        status: "POSITIVE"
+        status
       }
     })
 

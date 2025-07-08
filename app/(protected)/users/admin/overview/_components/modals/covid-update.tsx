@@ -184,7 +184,7 @@ export default function CovidUpdateModal({ open, setOpen, contactData }: IProps)
         await sleep(2000);
 
         setLoadingMessage(`Updating request...`)
-        const res5 = await axios.post(`${url}/own`, { userId: contactData.id });
+        const res5 = await axios.post(`${url}/own`, { userId: contactData.id, status: "POSITIVE" });
         console.log(res5);
 
         setLoadingMessage(`Success!`)

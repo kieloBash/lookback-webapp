@@ -21,16 +21,51 @@ import { IActionType } from '@/types/global';
 import Link from 'next/link';
 import { formatDate } from 'date-fns';
 import { FORMAT } from '@/lib/utils';
+import axios from 'axios';
+import { toast } from '@/hooks/use-toast';
+import UiLoading from '@/components/ui/loading-page';
+import { useQueryClient } from '@tanstack/react-query';
+import { USERS_ROUTES } from '@/routes/users.routes';
 
 interface IProps {
     data: User;
     handleAction: (data: any, action: IActionType) => void
 }
 
+const url = `/api/covid/auto-update`
+
+
 const Row = ({ data: d, handleAction }: IProps) => {
     const data = d as any
 
     const [open, setOpen] = useState(false)
+    const [isLoading, setIsLoading] = useState(false)
+    const [loadingMessage, setLoadingMessage] = useState("");
+    const queryClient = useQueryClient();
+
+    async function handleUpdateNegative() {
+        setIsLoading(true)
+        try {
+            setLoadingMessage(`Updating request...`)
+            const res5 = await axios.post(`${url}/own`, { userId: data.id, status: "NEGATIVE" });
+            console.log(res5);
+
+            setLoadingMessage(`Success!`)
+            toast({ description: "Success!" });
+
+            await queryClient.invalidateQueries({ queryKey: [USERS_ROUTES.ADMIN.FETCH_ALL.KEY], exact: false })
+
+        } catch (error) {
+            console.log({ error })
+            toast({ description: `Something went wrong` });
+        } finally {
+            setIsLoading(false)
+        }
+    }
+
+    if (isLoading) {
+        return <UiLoading type='page' message={loadingMessage} />
+    }
 
     return (
         <TableRow>
@@ -84,6 +119,7 @@ const Row = ({ data: d, handleAction }: IProps) => {
                                 onClick={() => {
                                     setOpen(false)
                                     handleAction(data, "change-status-negative")
+                                    handleUpdateNegative()
                                 }}
                             >
                                 Update to negative
@@ -103,6 +139,7 @@ const Row = ({ data: d, handleAction }: IProps) => {
                                     onClick={() => {
                                         setOpen(false)
                                         handleAction(data, "change-status-negative")
+                                        handleUpdateNegative()
                                     }}
                                 >
                                     Update to negative
@@ -120,7 +157,7 @@ const Row = ({ data: d, handleAction }: IProps) => {
                     </DropdownMenuContent>
                 </DropdownMenu>
             </TableCell>
-        </TableRow>
+        </TableRow >
     )
 }
 
