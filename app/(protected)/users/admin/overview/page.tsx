@@ -35,8 +35,10 @@ import CovidUpdateModal from './_components/modals/covid-update'
 const AdminOverviewPage = () => {
     const role = useCurrentRole();
     const searchParams = useSearchParams();
-    const status = searchParams.get("statusFilter") || role === UserRole.ADMIN ? "USER" : "ALL";
+    const status = role === UserRole.ADMIN ? "USER" : searchParams.get("statusFilter") ?? "ALL";
     const search = searchParams.get("search") || "";
+
+    console.log({ status })
 
     const data = useAdminUsers({ filter: status, searchTerm: search });
     const [selectedData, setSelectedData] = useState<any>(undefined);
